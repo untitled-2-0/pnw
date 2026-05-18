@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="uk">
+  <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Звіти | Pizza na Wypasie CRM</title><link rel="stylesheet" href="src/styles.css" /></head>
+  <body>
+    <div class="app-layout">
+      <aside class="sidebar">
+        <a class="app-brand" href="dashboard.html"><div class="brand-mark">PW</div><div><strong>Pizza na Wypasie</strong><span>Адмінська CRM</span></div></a>
+        <div class="nav-section">Адмін-панель</div>
+        <nav class="side-nav" aria-label="Основна навігація">
+          <a data-nav href="dashboard.html"><span class="nav-icon">DB</span>Дашборд</a>
+          <a data-nav href="inventory.html"><span class="nav-icon">SK</span>Склад</a>
+          <a data-nav href="ingredients.html"><span class="nav-icon">IN</span>Інгредієнти</a>
+          <a data-nav href="recipes.html"><span class="nav-icon">RC</span>Рецепти</a>
+          <a data-nav href="deliveries.html"><span class="nav-icon">DL</span>Поставки</a>
+          <a data-nav href="orders.html"><span class="nav-icon">OR</span>Замовлення</a>
+          <a data-nav href="write-offs.html"><span class="nav-icon">WO</span>Списання</a>
+          <a data-nav href="reports.html"><span class="nav-icon">RP</span>Звіти</a>
+          <a data-nav href="admin.html"><span class="nav-icon">ST</span>Налаштування</a>
+        </nav>
+      </aside>
+      <div>
+        <header class="topbar"><input class="search" type="search" placeholder="Пошук звіту" /><div class="topbar-actions"><button class="btn ghost" data-toast="Експорт PDF розпочато">PDF</button><button class="btn primary" data-toast="Експорт Excel розпочато">Excel</button></div></header>
+        <main class="content">
+          <header class="page-head"><div class="page-title"><p class="eyebrow">Епік 11 Звіти</p><h1>Звіти та аналітика</h1><p>Виторг, витрати інгредієнтів, план/факт, маржинальність піц і втрати за причинами.</p></div><div class="segmented"><a class="active" href="#">Виторг</a><a href="#">Використання</a><a href="#">Маржа</a></div></header>
+          <section class="grid two">
+            <article class="card"><div class="card-head"><h2>Виторг за днями</h2><span class="tag success">+12% до попереднього періоду</span></div><div class="chart"><span class="bar" style="height:42%"></span><span class="bar" style="height:61%"></span><span class="bar" style="height:55%"></span><span class="bar" style="height:72%"></span><span class="bar" style="height:69%"></span><span class="bar" style="height:91%"></span><span class="bar" style="height:79%"></span></div></article>
+            <article class="table-card"><div class="table-head"><h2>Використання інгредієнтів: план / факт</h2></div><table><thead><tr><th>Інгредієнт</th><th>План</th><th>Факт</th><th>Різниця</th></tr></thead><tbody><tr><td>Моцарела</td><td>18.2 кг</td><td>19.1 кг</td><td><span class="status warn">+4.9%</span></td></tr><tr><td>Пепероні</td><td>6.4 кг</td><td>7.3 кг</td><td><span class="status danger">+14%</span></td></tr><tr><td>Томатний соус</td><td>11.7 л</td><td>11.4 л</td><td><span class="status ok">-2.5%</span></td></tr></tbody></table></article>
+          </section>
+        </main>
+      </div>
+    </div>
+    <div class="toast" role="status"></div><script src="src/app.js?v=local-save-1"></script>
+  </body>
+</html>

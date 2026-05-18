@@ -1,0 +1,17 @@
+<!doctype html><html lang="uk"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Поставки | Pizza na Wypasie CRM</title><link rel="stylesheet" href="src/styles.css" /></head><body><div class="app-layout"><aside class="sidebar">
+        <a class="app-brand" href="dashboard.html"><div class="brand-mark">PW</div><div><strong>Pizza na Wypasie</strong><span>Адмінська CRM</span></div></a>
+        <div class="nav-section">Адмін-панель</div>
+        <nav class="side-nav" aria-label="Основна навігація">
+          <a data-nav href="dashboard.html"><span class="nav-icon">DB</span>Дашборд</a>
+          <a data-nav href="inventory.html"><span class="nav-icon">SK</span>Склад</a>
+          <a data-nav href="ingredients.html"><span class="nav-icon">IN</span>Інгредієнти</a>
+          <a data-nav href="recipes.html"><span class="nav-icon">RC</span>Рецепти</a>
+          <a data-nav href="deliveries.html"><span class="nav-icon">DL</span>Поставки</a>
+          <a data-nav href="orders.html"><span class="nav-icon">OR</span>Замовлення</a>
+          <a data-nav href="write-offs.html"><span class="nav-icon">WO</span>Списання</a>
+          <a data-nav href="reports.html"><span class="nav-icon">RP</span>Звіти</a>
+          <a data-nav href="admin.html"><span class="nav-icon">ST</span>Налаштування</a>
+        </nav>
+      </aside><div>
+<header class="topbar"><input class="search" type="search" placeholder="Постачальник або номер накладної" /><div class="topbar-actions"><button class="btn ghost" type="button" data-export="deliveries">Експорт Excel</button><label class="btn ghost">Імпорт CSV/Excel<input type="file" accept=".csv,text/csv" data-import="deliveries" hidden /></label></div></header>
+<main class="content"><header class="page-head"><div class="page-title"><p class="eyebrow">Приймання поставки</p><h1>Поставки</h1><p>Додавай поставки, партії, кількість і термін придатності.</p></div><button class="btn ghost" type="button" data-reset="deliveries">Скинути демо</button></header><section class="grid two"><article class="table-card"><div class="table-head"><h2>Журнал поставок</h2></div><table><thead><tr><th>Постачальник</th><th>Накладна</th><th>Інгредієнт</th><th>Кількість</th><th>Термін</th></tr></thead><tbody data-table="deliveries"></tbody></table></article><form class="card form-stack" data-entity="deliveries"><div class="card-head"><h2>Додати поставку</h2><span class="tag info">Склад</span></div><div class="form-row"><div class="field"><label>Постачальник</label><input name="supplier" value="Сир і молочні продукти" /></div><div class="field"><label>Накладна</label><input name="invoice" value="FV/2026/0518" /></div></div><div class="form-row"><div class="field"><label>Інгредієнт</label><input name="item" value="Моцарела" /></div><div class="field"><label>Кількість</label><input name="qty" value="12 кг" /></div></div><div class="field"><label>Термін придатності</label><input name="expiry" type="date" value="2026-05-21" /></div><button class="btn primary" type="submit">Додати поставку</button></form></section></main></div></div><div class="toast" role="status"></div><script src="src/app.js?v=local-save-1"></script></body></html>

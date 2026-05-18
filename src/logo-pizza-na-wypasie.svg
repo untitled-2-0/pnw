@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-labelledby="title desc">
+  <title id="title">Pizza Na Wypasie logo</title>
+  <desc id="desc">A pizza slice and smiling cow mascot with Pizza Na Wypasie lettering.</desc>
+  <rect width="240" height="240" rx="28" fill="#f4c414"/>
+  <g filter="url(#shadow)">
+    <path d="M38 65c41-23 93-27 140-8 8 3 13 10 14 18 2 18-3 40-12 60-11 25-30 47-57 58-21 9-45 10-68 2-7-3-10-10-8-17l18-57-35-36c-6-6-4-16 8-20z" fill="#fff" stroke="#fff" stroke-width="20" stroke-linejoin="round"/>
+    <path d="M42 74c39-20 86-24 129-7-4 46-29 93-73 111l-18-57-38-47z" fill="#f6aa1c" stroke="#42110d" stroke-width="7" stroke-linejoin="round"/>
+    <path d="M42 74l38 47m0 0l18 57m-18-57l91-54m-91 54l83 10m-83-10l-45 9m45-9l-3-58" fill="none" stroke="#42110d" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="68" cy="99" r="9" fill="#d72d31" stroke="#42110d" stroke-width="4"/>
+    <circle cx="104" cy="86" r="7" fill="#24a85a" stroke="#42110d" stroke-width="4"/>
+    <circle cx="126" cy="105" r="8" fill="#d72d31" stroke="#42110d" stroke-width="4"/>
+    <circle cx="83" cy="142" r="7" fill="#24a85a" stroke="#42110d" stroke-width="4"/>
+    <circle cx="124" cy="151" r="6" fill="#d72d31" stroke="#42110d" stroke-width="4"/>
+    <path d="M134 40c9-8 22-6 31 5 12-8 29-7 44 2-12 20-31 23-45 16-14 7-31 2-30-23z" fill="#fff9e8" stroke="#42110d" stroke-width="7" stroke-linejoin="round"/>
+    <path d="M126 66c4-21 26-33 48-24 17 7 26 27 21 48l-6 27c-5 22-25 37-48 34-22-3-37-21-34-43l3-24c1-8 7-15 16-18z" fill="#fff9e8" stroke="#42110d" stroke-width="7"/>
+    <ellipse cx="153" cy="113" rx="43" ry="27" fill="#e3b17d" stroke="#42110d" stroke-width="7"/>
+    <circle cx="137" cy="112" r="5" fill="#42110d"/>
+    <circle cx="170" cy="112" r="5" fill="#42110d"/>
+    <circle cx="147" cy="73" r="13" fill="#42110d"/>
+    <path d="M128 94c3 4 8 4 11 0m36 0c3 4 8 4 11 0M124 139c18 13 40 13 57 0" fill="none" stroke="#42110d" stroke-width="6" stroke-linecap="round"/>
+    <path d="M71 160c-17 2-27 19-23 35 38 13 104 10 146-8 3-18-8-34-29-35-23 18-65 26-94 8z" fill="#42110d"/>
+    <text x="120" y="185" text-anchor="middle" font-family="Georgia, serif" font-size="43" font-weight="900" font-style="italic" fill="#f6aa1c" stroke="#42110d" stroke-width="2">Pizza</text>
+    <text x="120" y="213" text-anchor="middle" font-family="Georgia, serif" font-size="28" font-weight="900" font-style="italic" fill="#2fb45f" stroke="#42110d" stroke-width="1.4">Na Wypasie</text>
+  </g>
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="4" flood-color="#42110d" flood-opacity=".25"/>
+    </filter>
+  </defs>
+</svg>

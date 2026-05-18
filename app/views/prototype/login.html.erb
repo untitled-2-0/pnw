@@ -1,0 +1,16 @@
+<main class="auth-shell">
+  <section class="auth-visual" aria-labelledby="login-title">
+    <div class="brand-lockup"><div class="brand-mark">PW</div><div><strong>Pizza na Wypasie</strong><span>Адмінський контроль складу і кухні</span></div></div>
+    <div class="auth-copy"><p class="eyebrow">Адмінська система</p><h1 id="login-title">Один адмінський центр керування</h1><p>Адміністратор бачить залишки, рецепти, поставки, замовлення, списання, звіти та керує користувачами в налаштуваннях.</p></div>
+  </section>
+  <section class="auth-form">
+    <h2>Вхід адміністратора</h2>
+    <p>Додаткових користувачів можна створити після входу в налаштуваннях.</p>
+    <%= form_with url: dashboard_path, method: :get, class: "form-stack" do %>
+      <div class="field"><label>Електронна пошта або імʼя користувача</label><input value="admin@pizza.test"></div>
+      <div class="field"><label>Пароль</label><input type="password" value="wypasione123"></div>
+      <div class="check-row"><label><input type="checkbox" checked> Запамʼятати мене</label><%= link_to "Забув пароль?", forgot_password_path %></div>
+      <button class="btn primary" type="submit">Увійти</button>
+    <% end %>
+  </section>
+</main>

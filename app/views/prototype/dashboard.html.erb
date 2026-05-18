@@ -1,0 +1,16 @@
+<main class="content">
+  <header class="page-head">
+    <div class="page-title"><p class="eyebrow">US-010 Дашборд адміністратора</p><h1>Бізнес одним екраном</h1><p>Виторг, замовлення, топ-піци, алерти й позиції для дозамовлення.</p></div>
+    <button class="btn primary" data-toast="Експорт поставлено в чергу">Експорт</button>
+  </header>
+  <section class="grid kpi">
+    <article class="card kpi-card"><span>Виторг сьогодні</span><strong>8 420 зл</strong><em class="trend">+12%</em></article>
+    <article class="card kpi-card"><span>Замовлення</span><strong>146</strong><em class="trend">+9%</em></article>
+    <article class="card kpi-card"><span>Середній чек</span><strong>57,67 зл</strong><em class="trend down">-3%</em></article>
+    <article class="card kpi-card"><span>Дозамовити</span><strong>7</strong><em class="trend down">критично</em></article>
+  </section>
+  <section class="grid two" style="margin-top:18px">
+    <article class="card"><div class="card-head"><h2>Виторг за 7 днів</h2></div><div class="chart"><span class="bar" style="height:45%"></span><span class="bar" style="height:58%"></span><span class="bar" style="height:51%"></span><span class="bar" style="height:70%"></span><span class="bar" style="height:64%"></span><span class="bar" style="height:88%"></span><span class="bar" style="height:76%"></span></div></article>
+    <article class="notice"><strong>Критичні залишки</strong><span>4 інгредієнти нижче мінімального залишку.</span><%= link_to "Створити замовлення постачальнику", deliveries_path, class: "btn primary" %></article>
+  </section>
+</main>

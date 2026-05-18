@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="uk">
+  <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Інгредієнти | Pizza na Wypasie CRM</title><link rel="stylesheet" href="src/styles.css" /></head>
+  <body>
+    <div class="app-layout">
+      <aside class="sidebar">
+        <a class="app-brand" href="dashboard.html"><div class="brand-mark">PW</div><div><strong>Pizza na Wypasie</strong><span>Адмінська CRM</span></div></a>
+        <div class="nav-section">Адмін-панель</div>
+        <nav class="side-nav" aria-label="Основна навігація">
+          <a data-nav href="dashboard.html"><span class="nav-icon">DB</span>Дашборд</a>
+          <a data-nav href="inventory.html"><span class="nav-icon">SK</span>Склад</a>
+          <a data-nav href="ingredients.html"><span class="nav-icon">IN</span>Інгредієнти</a>
+          <a data-nav href="recipes.html"><span class="nav-icon">RC</span>Рецепти</a>
+          <a data-nav href="deliveries.html"><span class="nav-icon">DL</span>Поставки</a>
+          <a data-nav href="orders.html"><span class="nav-icon">OR</span>Замовлення</a>
+          <a data-nav href="write-offs.html"><span class="nav-icon">WO</span>Списання</a>
+          <a data-nav href="reports.html"><span class="nav-icon">RP</span>Звіти</a>
+          <a data-nav href="admin.html"><span class="nav-icon">ST</span>Налаштування</a>
+        </nav>
+      </aside>
+      <div>
+        <header class="topbar"><input class="search" type="search" placeholder="Пошук інгредієнта" /><div class="topbar-actions"><button class="btn ghost" type="button" data-export="ingredients">Експорт Excel</button><label class="btn ghost">Імпорт CSV/Excel<input type="file" accept=".csv,text/csv" data-import="ingredients" hidden /></label></div></header>
+        <main class="content">
+          <header class="page-head"><div class="page-title"><p class="eyebrow">Каталог складу</p><h1>Інгредієнти</h1><p>Додавай сировину, мінімальні залишки, одиниці виміру й постачальників.</p></div><button class="btn ghost" type="button" data-reset="ingredients">Скинути демо</button></header>
+          <section class="grid two">
+            <article class="table-card"><div class="table-head"><h2>Поточні інгредієнти</h2></div><table><thead><tr><th>Інгредієнт</th><th>Категорія</th><th>Залишок</th><th>Мінімум</th><th>Постачальник</th><th>Статус</th></tr></thead><tbody data-table="ingredients"></tbody></table></article>
+            <form class="card form-stack" data-entity="ingredients"><div class="card-head"><h2>Додати інгредієнт</h2><span class="tag info">Склад</span></div><div class="form-row"><div class="field"><label>Назва</label><input name="name" value="Сир чедер" /></div><div class="field"><label>Категорія</label><select name="category"><option>Сир</option><option>М'ясо</option><option>Овочі</option><option>Соуси</option></select></div></div><div class="form-row"><div class="field"><label>Одиниця</label><select name="unit"><option>кг</option><option>л</option><option>шт</option></select></div><div class="field"><label>Мінімум</label><input name="min" value="6" /></div></div><div class="form-row"><div class="field"><label>Поточний залишок</label><input name="stock" value="12" /></div><div class="field"><label>Постачальник</label><input name="supplier" value="Сир і молочні продукти" /></div></div><button class="btn primary" type="submit">Зберегти інгредієнт</button></form>
+          </section>
+        </main></div>
+    </div>
+    <div class="toast" role="status"></div><script src="src/app.js?v=local-save-1"></script>
+  </body>
+</html>

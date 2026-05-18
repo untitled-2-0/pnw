@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="uk">
+  <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Замовлення | Pizza na Wypasie CRM</title><link rel="stylesheet" href="src/styles.css" /></head>
+  <body>
+    <div class="app-layout">
+      <aside class="sidebar">
+        <a class="app-brand" href="dashboard.html"><div class="brand-mark">PW</div><div><strong>Pizza na Wypasie</strong><span>Адмінська CRM</span></div></a>
+        <div class="nav-section">Адмін-панель</div>
+        <nav class="side-nav" aria-label="Основна навігація">
+          <a data-nav href="dashboard.html"><span class="nav-icon">DB</span>Дашборд</a>
+          <a data-nav href="inventory.html"><span class="nav-icon">SK</span>Склад</a>
+          <a data-nav href="ingredients.html"><span class="nav-icon">IN</span>Інгредієнти</a>
+          <a data-nav href="recipes.html"><span class="nav-icon">RC</span>Рецепти</a>
+          <a data-nav href="deliveries.html"><span class="nav-icon">DL</span>Поставки</a>
+          <a data-nav href="orders.html"><span class="nav-icon">OR</span>Замовлення</a>
+          <a data-nav href="write-offs.html"><span class="nav-icon">WO</span>Списання</a>
+          <a data-nav href="reports.html"><span class="nav-icon">RP</span>Звіти</a>
+          <a data-nav href="admin.html"><span class="nav-icon">ST</span>Налаштування</a>
+        </nav>
+      </aside>
+      <div>
+        <header class="topbar"><input class="search" type="search" placeholder="Пошук замовлення" /><div class="topbar-actions"><button class="btn ghost" type="button" data-export="orders">Експорт Excel</button><label class="btn ghost">Імпорт CSV/Excel<input type="file" accept=".csv,text/csv" data-import="orders" hidden /></label></div></header>
+        <main class="content">
+          <header class="page-head"><div class="page-title"><p class="eyebrow">Замовлення та авто-списання</p><h1>Замовлення</h1><p>Створюй замовлення, резервуй залишки й експортуй список для Excel.</p></div><button class="btn ghost" type="button" data-reset="orders">Скинути демо</button></header>
+          <section class="grid two">
+            <article class="table-card"><div class="table-head"><h2>Список замовлень</h2></div><table><thead><tr><th>Номер</th><th>Тип</th><th>Позиції</th><th>Статус</th><th>Коментар</th></tr></thead><tbody data-table="orders"></tbody></table></article>
+            <form class="card form-stack" data-entity="orders"><div class="card-head"><h2>Додати замовлення</h2><span class="tag info">Адмін</span></div><div class="form-row"><div class="field"><label>Номер</label><input name="number" value="1054" /></div><div class="field"><label>Тип</label><select name="type"><option>Зал</option><option>Із собою</option><option>Доставка</option></select></div></div><div class="field"><label>Позиції</label><input name="items" value="Піца Гриль x1" /></div><div class="field"><label>Статус</label><select name="status"><option>Нове</option><option>В роботі</option><option>Готово</option></select></div><div class="field"><label>Коментар</label><textarea name="note">Без цибулі, гострий соус окремо.</textarea></div><button class="btn primary" type="submit">Створити замовлення</button></form>
+          </section>
+        </main></div>
+    </div>
+    <div class="toast" role="status"></div><script src="src/app.js?v=local-save-1"></script>
+  </body>
+</html>

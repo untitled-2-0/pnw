@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="uk">
+  <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Рецепти | Pizza na Wypasie CRM</title><link rel="stylesheet" href="src/styles.css" /></head>
+  <body>
+    <div class="app-layout">
+      <aside class="sidebar">
+        <a class="app-brand" href="dashboard.html"><div class="brand-mark">PW</div><div><strong>Pizza na Wypasie</strong><span>Адмінська CRM</span></div></a>
+        <div class="nav-section">Адмін-панель</div>
+        <nav class="side-nav" aria-label="Основна навігація">
+          <a data-nav href="dashboard.html"><span class="nav-icon">DB</span>Дашборд</a>
+          <a data-nav href="inventory.html"><span class="nav-icon">SK</span>Склад</a>
+          <a data-nav href="ingredients.html"><span class="nav-icon">IN</span>Інгредієнти</a>
+          <a data-nav href="recipes.html"><span class="nav-icon">RC</span>Рецепти</a>
+          <a data-nav href="deliveries.html"><span class="nav-icon">DL</span>Поставки</a>
+          <a data-nav href="orders.html"><span class="nav-icon">OR</span>Замовлення</a>
+          <a data-nav href="write-offs.html"><span class="nav-icon">WO</span>Списання</a>
+          <a data-nav href="reports.html"><span class="nav-icon">RP</span>Звіти</a>
+          <a data-nav href="admin.html"><span class="nav-icon">ST</span>Налаштування</a>
+        </nav>
+      </aside>
+      <div>
+        <header class="topbar"><input class="search" type="search" placeholder="Пошук рецепту" /><div class="topbar-actions"><button class="btn ghost" type="button" data-export="recipes">Експорт Excel</button><label class="btn ghost">Імпорт CSV/Excel<input type="file" accept=".csv,text/csv" data-import="recipes" hidden /></label></div></header>
+        <main class="content">
+          <header class="page-head"><div class="page-title"><p class="eyebrow">Меню та рецепти</p><h1>Рецепти й собівартість</h1><p>Створюй піци, додавай грамування інгредієнтів і контролюй маржу.</p></div><button class="btn ghost" type="button" data-reset="recipes">Скинути демо</button></header>
+          <section class="grid two">
+            <article class="table-card"><div class="table-head"><h2>Активні піци</h2></div><table><thead><tr><th>Піца</th><th>Ціна</th><th>Собівартість</th><th>Склад</th></tr></thead><tbody data-table="recipes"></tbody></table></article>
+            <form class="card form-stack" data-entity="recipes"><div class="card-head"><h2>Додати рецепт</h2><span class="tag info">Версія v1</span></div><div class="form-row"><div class="field"><label>Назва піци</label><input name="name" value="Піца Фірмова" /></div><div class="field"><label>Ціна продажу</label><input name="price" value="39.99" /></div></div><div class="field"><label>Собівартість</label><input name="cost" value="15.40" /></div><div class="field"><label>Інгредієнти та грамування</label><textarea name="ingredients">Тісто 1 шт; моцарела 140 г; пепероні 70 г; томатний соус 85 мл</textarea></div><button class="btn primary" type="submit">Зберегти рецепт</button></form>
+          </section>
+        </main></div>
+    </div>
+    <div class="toast" role="status"></div><script src="src/app.js?v=local-save-1"></script>
+  </body>
+</html>

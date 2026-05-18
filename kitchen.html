@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="uk">
+  <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Кухонна черга | Pizza na Wypasie CRM</title><link rel="stylesheet" href="src/styles.css" /></head>
+  <body>
+    <div class="app-layout">
+      <aside class="sidebar">
+        <a class="app-brand" href="dashboard.html"><div class="brand-mark">PW</div><div><strong>Pizza na Wypasie</strong><span>Адмінська CRM</span></div></a>
+        <div class="nav-section">Адмін-панель</div>
+        <nav class="side-nav" aria-label="Основна навігація">
+          <a data-nav href="dashboard.html"><span class="nav-icon">DB</span>Дашборд</a>
+          <a data-nav href="inventory.html"><span class="nav-icon">SK</span>Склад</a>
+          <a data-nav href="ingredients.html"><span class="nav-icon">IN</span>Інгредієнти</a>
+          <a data-nav href="recipes.html"><span class="nav-icon">RC</span>Рецепти</a>
+          <a data-nav href="deliveries.html"><span class="nav-icon">DL</span>Поставки</a>
+          <a data-nav href="orders.html"><span class="nav-icon">OR</span>Замовлення</a>
+          <a data-nav href="write-offs.html"><span class="nav-icon">WO</span>Списання</a>
+          <a data-nav href="reports.html"><span class="nav-icon">RP</span>Звіти</a>
+          <a data-nav href="admin.html"><span class="nav-icon">ST</span>Налаштування</a>
+        </nav>
+      </aside>
+      <div>
+        <header class="topbar"><input class="search" type="search" placeholder="Номер замовлення" /><div class="topbar-actions"><a class="btn ghost" href="orders.html">Всі замовлення</a><a class="user-chip" href="profile.html"><span class="avatar">DM</span><strong>Дмитро</strong></a></div></header>
+        <main class="content">
+          <header class="page-head"><div class="page-title"><p class="eyebrow">Кухонна черга</p><h1>Черга піц</h1><p>Великі кнопки, зрозумілі статуси інгредієнтів і списання сировини в момент натискання «Готово».</p></div></header>
+          <section class="grid two">
+            <article class="card">
+              <div class="card-head"><h2>Наступні в роботі</h2><span class="tag warning">FIFO</span></div>
+              <div class="list">
+                <div class="list-row"><div><strong>#1048 Піца Гриль</strong><span>2 шт, обіцяно на 12:40</span></div><span class="status ok">достатньо</span></div>
+                <div class="list-row"><div><strong>#1049 Веганська BBQ</strong><span>1 шт, обіцяно на 12:42</span></div><span class="status warn">останні порції</span></div>
+                <div class="list-row"><div><strong>#1051 Пепероні</strong><span>3 шт, обіцяно на 12:48</span></div><span class="status danger">немає пепероні</span></div>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-head"><h2>Рецепт: Піца Гриль</h2><span class="tag info">Замовлення #1048</span></div>
+              <div class="recipe-grid">
+                <div class="recipe-item"><strong>Кулька тіста</strong><p>1 шт</p></div>
+                <div class="recipe-item"><strong>Гірчичний соус</strong><p>70 мл</p></div>
+                <div class="recipe-item"><strong>Сир моцарела</strong><p>140 г</p></div>
+                <div class="recipe-item"><strong>Ковбаса</strong><p>90 г</p></div>
+              </div>
+              <div class="actions" style="margin-top: 18px"><button class="btn ghost" data-toast="Піцу позначено як розпочату">Почати готувати</button><button class="btn primary" data-toast="Інгредієнти зарезервовано і списано за рецептом">Готово</button></div>
+            </article>
+          </section>
+        </main>
+      </div>
+    </div>
+    <div class="toast" role="status"></div><script src="src/app.js?v=local-save-1"></script>
+  </body>
+</html>

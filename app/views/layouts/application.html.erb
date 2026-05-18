@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pizza na Wypasie CRM</title>
+    <%= stylesheet_link_tag "prototype", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+  </head>
+  <body>
+    <div class="app-layout">
+      <aside class="sidebar">
+        <%= link_to dashboard_path, class: "app-brand" do %>
+          <div class="brand-mark">PW</div>
+          <div><strong>Pizza na Wypasie</strong><span>Адмінська CRM</span></div>
+        <% end %>
+        <div class="nav-section">Адмін-панель</div>
+        <nav class="side-nav" aria-label="Основна навігація">
+          <% @nav_items.each do |icon, label, path| %>
+            <%= link_to path, class: nav_active?(path) do %>
+              <span class="nav-icon"><%= icon %></span><%= label %>
+            <% end %>
+          <% end %>
+        </nav>
+      </aside>
+      <div>
+        <header class="topbar">
+          <input class="search" type="search" placeholder="Пошук у CRM">
+          <div class="topbar-actions">
+            <%= link_to "7 алертів", alerts_path, class: "btn ghost" %>
+            <%= link_to profile_path, class: "user-chip" do %>
+              <span class="avatar">AN</span><strong>Анастасія</strong>
+            <% end %>
+          </div>
+        </header>
+        <%= yield %>
+      </div>
+    </div>
+    <div class="toast" role="status"></div>
+  </body>
+</html>

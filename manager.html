@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Операційна зміна | Pizza na Wypasie CRM</title>
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+  <body>
+    <div class="app-layout">
+      <aside class="sidebar">
+        <a class="app-brand" href="dashboard.html"><div class="brand-mark">PW</div><div><strong>Pizza na Wypasie</strong><span>Адмінська CRM</span></div></a>
+        <div class="nav-section">Адмін-панель</div>
+        <nav class="side-nav" aria-label="Основна навігація">
+          <a data-nav href="dashboard.html"><span class="nav-icon">DB</span>Дашборд</a>
+          <a data-nav href="inventory.html"><span class="nav-icon">SK</span>Склад</a>
+          <a data-nav href="ingredients.html"><span class="nav-icon">IN</span>Інгредієнти</a>
+          <a data-nav href="recipes.html"><span class="nav-icon">RC</span>Рецепти</a>
+          <a data-nav href="deliveries.html"><span class="nav-icon">DL</span>Поставки</a>
+          <a data-nav href="orders.html"><span class="nav-icon">OR</span>Замовлення</a>
+          <a data-nav href="write-offs.html"><span class="nav-icon">WO</span>Списання</a>
+          <a data-nav href="reports.html"><span class="nav-icon">RP</span>Звіти</a>
+          <a data-nav href="admin.html"><span class="nav-icon">ST</span>Налаштування</a>
+        </nav>
+      </aside>
+      <div>
+        <header class="topbar"><input class="search" type="search" placeholder="Пошук активного замовлення" /><div class="topbar-actions"><a class="btn ghost" href="alerts.html">Живі алерти</a><a class="user-chip" href="profile.html"><span class="avatar">OL</span><strong>Олег</strong></a></div></header>
+        <main class="content">
+          <header class="page-head">
+            <div class="page-title"><p class="eyebrow">Операційний перегляд</p><h1>Зміна зараз</h1><p>Активні замовлення, затримки, співробітники й швидкі дії без переходу в глибокі налаштування.</p></div>
+            <div class="actions"><a class="btn primary" href="write-offs.html">Списати брак</a><a class="btn ghost" href="deliveries.html">Прийняти товар</a><button class="btn danger" data-toast="Чекліст закриття зміни відкрито">Закрити зміну</button></div>
+          </header>
+          <section class="grid kpi">
+            <article class="card kpi-card"><span>Готується</span><strong>12</strong><em class="trend">live</em></article>
+            <article class="card kpi-card"><span>Готово</span><strong>48</strong><em class="trend">+6</em></article>
+            <article class="card kpi-card"><span>Середній час</span><strong>14 хв</strong><em class="trend">норма</em></article>
+            <article class="card kpi-card"><span>Виторг зміни</span><strong>4 890 зл</strong><em class="trend">+8%</em></article>
+          </section>
+          <section class="grid two" style="margin-top: 18px">
+            <article class="table-card">
+              <div class="table-head"><h2>Жива стрічка замовлень</h2><span class="tag info">Демо WebSocket</span></div>
+              <table><thead><tr><th>Замовлення</th><th>Статус</th><th>Час</th><th>Кухня</th></tr></thead><tbody>
+                <tr><td>#1048 Піца Гриль x2</td><td><span class="status warn">В роботі</span></td><td>11 хв</td><td>Дмитро</td></tr>
+                <tr><td>#1049 Веганська BBQ</td><td><span class="status danger">Затримка</span></td><td>22 хв</td><td>Марія</td></tr>
+                <tr><td>#1050 Кальцоне</td><td><span class="status ok">Готово</span></td><td>9 хв</td><td>Дмитро</td></tr>
+              </tbody></table>
+            </article>
+            <aside class="grid">
+              <article class="notice"><strong>Низькі залишки</strong><span>Пепероні вистачить приблизно на 18 порцій.</span><a class="btn primary" href="deliveries.html">Дозамовити</a></article>
+              <article class="card"><div class="card-head"><h2>На зміні</h2></div><div class="list"><div class="list-row"><strong>Дмитро</strong><span>Піцайоло</span></div><div class="list-row"><strong>Іра</strong><span>Склад</span></div><div class="list-row"><strong>Олег</strong><span>Менеджер</span></div></div></article>
+            </aside>
+          </section>
+        </main>
+      </div>
+    </div>
+    <div class="toast" role="status"></div><script src="src/app.js?v=local-save-1"></script>
+  </body>
+</html>

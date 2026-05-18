@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="uk">
+  <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Дашборд складу | Pizza na Wypasie CRM</title><link rel="stylesheet" href="src/styles.css" /></head>
+  <body>
+    <div class="app-layout">
+      <aside class="sidebar">
+        <a class="app-brand" href="dashboard.html"><div class="brand-mark">PW</div><div><strong>Pizza na Wypasie</strong><span>Адмінська CRM</span></div></a>
+        <div class="nav-section">Адмін-панель</div>
+        <nav class="side-nav" aria-label="Основна навігація">
+          <a data-nav href="dashboard.html"><span class="nav-icon">DB</span>Дашборд</a>
+          <a data-nav href="inventory.html"><span class="nav-icon">SK</span>Склад</a>
+          <a data-nav href="ingredients.html"><span class="nav-icon">IN</span>Інгредієнти</a>
+          <a data-nav href="recipes.html"><span class="nav-icon">RC</span>Рецепти</a>
+          <a data-nav href="deliveries.html"><span class="nav-icon">DL</span>Поставки</a>
+          <a data-nav href="orders.html"><span class="nav-icon">OR</span>Замовлення</a>
+          <a data-nav href="write-offs.html"><span class="nav-icon">WO</span>Списання</a>
+          <a data-nav href="reports.html"><span class="nav-icon">RP</span>Звіти</a>
+          <a data-nav href="admin.html"><span class="nav-icon">ST</span>Налаштування</a>
+        </nav>
+      </aside>
+      <div>
+        <header class="topbar"><input class="search" type="search" placeholder="Пошук партії або постачальника" /><div class="topbar-actions"><a class="btn ghost" href="alerts.html">Алерти терміну придатності</a><a class="user-chip" href="profile.html"><span class="avatar">IR</span><strong>Іра</strong></a></div></header>
+        <main class="content">
+          <header class="page-head"><div class="page-title"><p class="eyebrow">US-013 Дашборд складу</p><h1>Склад без сюрпризів</h1><p>Що замовити, що прийняти сьогодні і які партії використати першими за FEFO.</p></div><a class="btn primary" href="deliveries.html">Створити замовлення постачальнику</a></header>
+          <section class="grid three">
+            <article class="card"><div class="card-head"><h2>Нижче мінімального залишку</h2></div><div class="list"><div class="list-row"><strong>Пепероні</strong><span>+8 кг</span></div><div class="list-row"><strong>Печериці</strong><span>+6 кг</span></div><div class="list-row"><strong>Oliwa czosnkowa</strong><span>+3 l</span></div></div></article>
+            <article class="card"><div class="card-head"><h2>Очікувані поставки</h2></div><div class="list"><div class="list-row"><strong>Сир і молочні продукти</strong><span>сьогодні 09:30</span></div><div class="list-row"><strong>Warzywa fresh</strong><span>завтра 07:40</span></div></div></article>
+            <article class="card"><div class="card-head"><h2>Скоро прострочиться</h2></div><div class="list"><div class="list-row"><strong>Моцарела партія MZ-18</strong><span class="tag warning">2 дні</span></div><div class="list-row"><strong>Соус BBQ партія BQ-04</strong><span class="tag danger">сьогодні</span></div></div></article>
+          </section>
+        </main>
+      </div>
+    </div>
+    <script src="src/app.js?v=local-save-1"></script>
+  </body>
+</html>

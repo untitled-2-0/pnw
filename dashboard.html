@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Дашборд адміністратора | Pizza na Wypasie CRM</title>
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+  <body>
+    <div class="app-layout">
+      <aside class="sidebar">
+        <a class="app-brand" href="dashboard.html"><div class="brand-mark">PW</div><div><strong>Pizza na Wypasie</strong><span>Адмінська CRM</span></div></a>
+        <div class="nav-section">Адмін-панель</div>
+        <nav class="side-nav" aria-label="Основна навігація">
+          <a data-nav href="dashboard.html"><span class="nav-icon">DB</span>Дашборд</a>
+          <a data-nav href="inventory.html"><span class="nav-icon">SK</span>Склад</a>
+          <a data-nav href="ingredients.html"><span class="nav-icon">IN</span>Інгредієнти</a>
+          <a data-nav href="recipes.html"><span class="nav-icon">RC</span>Рецепти</a>
+          <a data-nav href="deliveries.html"><span class="nav-icon">DL</span>Поставки</a>
+          <a data-nav href="orders.html"><span class="nav-icon">OR</span>Замовлення</a>
+          <a data-nav href="write-offs.html"><span class="nav-icon">WO</span>Списання</a>
+          <a data-nav href="reports.html"><span class="nav-icon">RP</span>Звіти</a>
+          <a data-nav href="admin.html"><span class="nav-icon">ST</span>Налаштування</a>
+        </nav>
+      </aside>
+
+      <div>
+        <header class="topbar">
+          <input class="search" type="search" placeholder="Пошук піци, інгредієнта або дії" />
+          <div class="topbar-actions">
+            <a class="btn ghost" href="alerts.html">7 алертів</a>
+            <a class="user-chip" href="profile.html"><span class="avatar">AN</span><strong>Анастасія</strong></a>
+          </div>
+        </header>
+
+        <main class="content">
+          <header class="page-head">
+            <div class="page-title">
+              <p class="eyebrow">US-010 Дашборд адміністратора</p>
+              <h1>Бізнес одним екраном</h1>
+              <p>Виторг, замовлення, критичні залишки, топ-піци й потреба в дозамовленні з автооновленням кожні 60 секунд.</p>
+            </div>
+            <div class="actions">
+              <div class="segmented" aria-label="Період">
+                <a class="active" href="#">Сьогодні</a>
+                <a href="#">Тиждень</a>
+                <a href="#">Місяць</a>
+              </div>
+              <button class="btn primary" data-toast="Експорт Excel поставлено в чергу">Експорт</button>
+            </div>
+          </header>
+
+          <section class="grid kpi" aria-label="Ключові показники">
+            <article class="card kpi-card"><span>Виторг сьогодні</span><strong>8 420 зл</strong><em class="trend">+12%</em></article>
+            <article class="card kpi-card"><span>Замовлення</span><strong>146</strong><em class="trend">+9%</em></article>
+            <article class="card kpi-card"><span>Середній чек</span><strong>57,67 зл</strong><em class="trend down">-3%</em></article>
+            <article class="card kpi-card"><span>Потрібно дозамовити</span><strong>7</strong><em class="trend down">критично</em></article>
+          </section>
+
+          <section class="grid two" style="margin-top: 18px">
+            <article class="card">
+              <div class="card-head">
+                <h2>Виторг за 7 днів</h2>
+                <div class="segmented"><a class="active" href="#">7 днів</a><a href="#">30 днів</a></div>
+              </div>
+              <div class="chart" aria-label="Виторг chart">
+                <span class="bar" style="height: 45%"></span>
+                <span class="bar" style="height: 58%"></span>
+                <span class="bar" style="height: 51%"></span>
+                <span class="bar" style="height: 70%"></span>
+                <span class="bar" style="height: 64%"></span>
+                <span class="bar" style="height: 88%"></span>
+                <span class="bar" style="height: 76%"></span>
+              </div>
+            </article>
+
+            <aside class="grid">
+              <article class="notice">
+                <strong>Критичні залишки</strong>
+                <span>Моцарела, пепероні, халапеньйо і 4 позиції нижче мінімального залишку.</span>
+                <a class="btn primary" href="deliveries.html">Створити замовлення</a>
+              </article>
+              <article class="card">
+                <div class="card-head"><h2>Топ-5 піц</h2></div>
+                <div class="list">
+                  <div class="list-row"><strong>Піца Гриль</strong><span>42 шт</span></div>
+                  <div class="list-row"><strong>Куряча BBQ</strong><span>37 шт</span></div>
+                  <div class="list-row"><strong>Сирний шал</strong><span>31 шт</span></div>
+                  <div class="list-row"><strong>Vege Spicy Beef</strong><span>28 шт</span></div>
+                  <div class="list-row"><strong>Кальцоне</strong><span>19 шт</span></div>
+                </div>
+              </article>
+            </aside>
+          </section>
+        </main>
+      </div>
+    </div>
+    <div class="toast" role="status"></div>
+    <script src="src/app.js?v=local-save-1"></script>
+  </body>
+</html>
