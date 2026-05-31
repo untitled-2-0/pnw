@@ -1,14 +1,102 @@
 <!doctype html>
 <html lang="uk">
-  <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Профіль | Pizza na Wypasie CRM</title><link rel="stylesheet" href="src/styles.css" /></head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Профіль | Pizza na Wypasie CRM</title>
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
   <body>
-    <main class="content">
-      <header class="page-head"><div class="page-title"><p class="eyebrow">US-003 / US-004</p><h1>Профіль користувача</h1><p>Електронна пошта і роль лише для читання, особисті дані редагуються, вихід потребує підтвердження.</p></div><a class="btn ghost" href="dashboard.html">Назад</a></header>
-      <section class="grid two">
-        <article class="card"><div class="card-head"><h2>Анастасія</h2><span class="avatar">AN</span></div><form class="form-stack"><div class="form-row"><div class="field"><label>ПІБ</label><input value="Анастасія Коваль" /></div><div class="field"><label>Телефон</label><input value="+48 600 000 000" /></div></div><div class="form-row"><div class="field"><label>Електронна пошта</label><input value="owner@pizza.test" readonly /></div><div class="field"><label>Роль</label><input value="адміністратор / власниця" readonly /></div></div><button class="btn primary" type="button" data-toast="Профіль збережено">Зберегти</button></form></article>
-        <article class="card"><div class="card-head"><h2>Безпека</h2></div><form class="form-stack"><div class="field"><label>Поточний пароль</label><input type="password" /></div><div class="field"><label>Новий пароль</label><input type="password" /></div><button class="btn ghost" type="button" data-toast="Пароль змінено">Змінити пароль</button><button class="btn danger" type="button" data-route="index.html">Вийти</button></form></article>
-      </section>
-    </main>
-    <div class="toast" role="status"></div><script src="src/app.js?v=local-save-1"></script>
+    <div class="app-layout">
+      <aside class="sidebar">
+        <a class="app-brand" href="dashboard.html"><div class="brand-mark">PW</div><div><strong>Pizza na Wypasie</strong><span>Адмінська CRM</span></div></a>
+        <div class="nav-section">Адмін-панель</div>
+        <nav class="side-nav" aria-label="Основна навігація">
+          <a data-nav href="dashboard.html"><span class="nav-icon">DB</span>Дашборд</a>
+          <a data-nav href="inventory.html"><span class="nav-icon">SK</span>Склад</a>
+          <a data-nav href="ingredients.html"><span class="nav-icon">IN</span>Інгредієнти</a>
+          <a data-nav href="recipes.html"><span class="nav-icon">RC</span>Рецепти</a>
+          <a data-nav href="deliveries.html"><span class="nav-icon">PS</span>Поставки</a>
+          <a data-nav href="orders.html"><span class="nav-icon">OR</span>Замовлення</a>
+          <a data-nav href="customers.html"><span class="nav-icon">CL</span>Клієнти</a>
+          <a data-nav href="customer-deliveries.html"><span class="nav-icon">DL</span>Доставки</a>
+          <a data-nav href="write-offs.html"><span class="nav-icon">WO</span>Списання</a>
+          <a data-nav href="reports.html"><span class="nav-icon">RP</span>Звіти</a>
+          <a data-nav href="admin.html"><span class="nav-icon">ST</span>Налаштування</a>
+        </nav>
+      </aside>
+      <div>
+        <header class="topbar">
+          <input class="search" type="search" placeholder="Пошук..." />
+          <div class="topbar-actions"><!-- core auto-injects user chip + "Вийти" --></div>
+        </header>
+
+        <main class="content">
+          <header class="page-head">
+            <div class="page-title">
+              <p class="eyebrow">Профіль · Сесія</p>
+              <h1>Мій профіль</h1>
+              <p>Поточна сесія, зміна пароля та мова інтерфейсу. Прототип: автентифікація демо-рівня без сервера.</p>
+            </div>
+          </header>
+
+          <section class="grid two">
+            <article class="card form-stack">
+              <div class="card-head"><h2>Поточна сесія</h2><span class="tag info" data-session-status>Активна</span></div>
+              <div class="list">
+                <div class="list-row"><span class="metric-label">Користувач</span><strong data-session-name>—</strong></div>
+                <div class="list-row"><span class="metric-label">Електронна пошта</span><strong data-session-email>—</strong></div>
+                <div class="list-row"><span class="metric-label">Вхід виконано</span><strong data-session-login>—</strong></div>
+              </div>
+              <p class="muted-line">Сесія зберігається локально у вашому браузері.</p>
+              <button class="btn danger" type="button" data-logout>Вийти</button>
+            </article>
+
+            <article class="card form-stack">
+              <div class="card-head"><h2>Змінити пароль</h2><span class="tag info">Безпека</span></div>
+              <form class="form-stack" data-password-form>
+                <div class="field"><label>Поточний пароль</label><input name="currentPassword" type="password" autocomplete="current-password" placeholder="••••••••" /></div>
+                <div class="field"><label>Новий пароль</label><input name="newPassword" type="password" autocomplete="new-password" placeholder="••••••••" /></div>
+                <div class="field"><label>Повторіть новий пароль</label><input name="confirmPassword" type="password" autocomplete="new-password" placeholder="••••••••" /></div>
+                <button class="btn primary" type="submit" data-toast="Пароль змінено (демо)">Змінити пароль</button>
+              </form>
+
+              <div class="card-head"><h2>Мова інтерфейсу</h2><span class="tag info">Інтерфейс</span></div>
+              <div class="field">
+                <label>Мова</label>
+                <select data-language-select aria-label="Мова інтерфейсу">
+                  <option value="uk">Українська</option>
+                  <option value="pl">Польська</option>
+                  <option value="en">Англійська</option>
+                </select>
+              </div>
+              <p class="muted-line">Зміна мови застосовується одразу до всього інтерфейсу.</p>
+            </article>
+          </section>
+        </main>
+      </div>
+    </div>
+    <div class="toast" role="status"></div>
+    <script src="src/app.js?v=rebuild-1"></script>
+    <script>
+      (function () {
+        if (!window.CRM) return;
+        var session = CRM.session() || {};
+        var nameEl = document.querySelector("[data-session-name]");
+        var emailEl = document.querySelector("[data-session-email]");
+        var loginEl = document.querySelector("[data-session-login]");
+        if (nameEl) nameEl.textContent = session.name || "—";
+        if (emailEl) emailEl.textContent = session.email || "—";
+        if (loginEl) loginEl.textContent = session.loginAt ? CRM.formatDateTime(session.loginAt) : "—";
+        // Demo password form: no real effect; the submit button carries data-toast (core-wired).
+        var form = document.querySelector("[data-password-form]");
+        if (form) {
+          form.addEventListener("submit", function (event) {
+            event.preventDefault();
+            form.reset();
+          });
+        }
+      })();
+    </script>
   </body>
 </html>

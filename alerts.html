@@ -2,14 +2,188 @@
 <html lang="uk">
   <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Сповіщення | Pizza na Wypasie CRM</title><link rel="stylesheet" href="src/styles.css" /></head>
   <body>
-    <main class="content">
-      <header class="page-head"><div class="page-title"><p class="eyebrow">Епік 10 Сповіщення</p><h1>Сповіщення та алерти</h1><p>Низькі залишки, прострочення, ранковий дайджест і анти-спам по тому самому інгредієнту.</p></div><a class="btn ghost" href="dashboard.html">Назад</a></header>
-      <section class="grid three">
-        <article class="notice"><strong>Пепероні нижче мінімального залишку</strong><span>5.8 кг з 8 кг мінімуму. Повтор не раніше ніж через 4 години.</span><a class="btn primary" href="deliveries.html">Створити замовлення постачальнику</a></article>
-        <article class="notice"><strong>Соус BBQ прострочується сьогодні</strong><span>Партію BQ-04 треба використати або списати до кінця дня.</span><a class="btn danger" href="write-offs.html">Списати</a></article>
-        <article class="card"><strong>Notification preferences</strong><p>In-app, email, push; quiet hours 22:00-08:00.</p><button class="btn primary" data-toast="Тестове сповіщення надіслано">Тестове сповіщення</button></article>
-      </section>
-    </main>
-    <div class="toast" role="status"></div><script src="src/app.js?v=local-save-1"></script>
+    <div class="app-layout">
+      <aside class="sidebar">
+        <a class="app-brand" href="dashboard.html"><div class="brand-mark">PW</div><div><strong>Pizza na Wypasie</strong><span>Адмінська CRM</span></div></a>
+        <div class="nav-section">Адмін-панель</div>
+        <nav class="side-nav" aria-label="Основна навігація">
+          <a data-nav href="dashboard.html"><span class="nav-icon">DB</span>Дашборд</a>
+          <a data-nav href="inventory.html"><span class="nav-icon">SK</span>Склад</a>
+          <a data-nav href="ingredients.html"><span class="nav-icon">IN</span>Інгредієнти</a>
+          <a data-nav href="recipes.html"><span class="nav-icon">RC</span>Рецепти</a>
+          <a data-nav href="deliveries.html"><span class="nav-icon">PS</span>Поставки</a>
+          <a data-nav href="orders.html"><span class="nav-icon">OR</span>Замовлення</a>
+          <a data-nav href="customers.html"><span class="nav-icon">CL</span>Клієнти</a>
+          <a data-nav href="customer-deliveries.html"><span class="nav-icon">DL</span>Доставки</a>
+          <a data-nav href="write-offs.html"><span class="nav-icon">WO</span>Списання</a>
+          <a data-nav href="reports.html"><span class="nav-icon">RP</span>Звіти</a>
+          <a data-nav href="admin.html"><span class="nav-icon">ST</span>Налаштування</a>
+        </nav>
+      </aside>
+      <div>
+        <header class="topbar">
+          <input class="search" type="search" placeholder="Пошук сповіщення" />
+          <div class="topbar-actions"></div>
+        </header>
+        <main class="content">
+          <header class="page-head">
+            <div class="page-title">
+              <p class="eyebrow">Епік 10 · Сповіщення</p>
+              <h1>Сповіщення та алерти</h1>
+              <p>Низькі залишки, прострочення термінів придатності, невдалі доставки та нові замовлення — зібрані з реальних даних прототипу.</p>
+            </div>
+            <a class="btn ghost" href="dashboard.html">Назад</a>
+          </header>
+
+          <section class="card form-stack" data-section="low">
+            <div class="card-head"><h2>Низькі залишки</h2><span class="tag info" data-count="low">0</span></div>
+            <div class="grid three" data-alert-list="low"></div>
+          </section>
+
+          <section class="card form-stack" data-section="expiry">
+            <div class="card-head"><h2>Прострочення та терміни придатності</h2><span class="tag warning" data-count="expiry">0</span></div>
+            <div class="grid three" data-alert-list="expiry"></div>
+          </section>
+
+          <section class="card form-stack" data-section="failed">
+            <div class="card-head"><h2>Невдалі доставки</h2><span class="tag danger" data-count="failed">0</span></div>
+            <div class="grid three" data-alert-list="failed"></div>
+          </section>
+
+          <section class="card form-stack" data-section="orders">
+            <div class="card-head"><h2>Нові замовлення</h2><span class="tag success" data-count="orders">0</span></div>
+            <div class="grid three" data-alert-list="orders"></div>
+          </section>
+
+          <section class="card form-stack">
+            <div class="card-head"><h2>Налаштування сповіщень</h2><span class="tag info">Канали</span></div>
+            <div class="list" data-settings-readout></div>
+            <div class="check-row">
+              <button class="btn primary" type="button" data-toast="Тестове сповіщення надіслано">Тестове сповіщення</button>
+              <a class="btn ghost" href="admin.html#notifications">Змінити налаштування</a>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+    <div class="toast" role="status"></div>
+    <script src="src/app.js?v=rebuild-1"></script>
+    <script>
+      (function () {
+        if (!window.CRM) return;
+
+        function esc(value) {
+          return String(value == null ? "" : value).replace(/[&<>"']/g, function (ch) {
+            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+          });
+        }
+
+        function dayDiff(dateStr) {
+          if (!dateStr) return null;
+          var target = new Date(dateStr + "T00:00:00");
+          if (isNaN(target.getTime())) return null;
+          var now = new Date();
+          var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+          return Math.round((target.getTime() - today.getTime()) / 86400000);
+        }
+
+        function emptyCard(text) {
+          return '<article class="notice"><strong>Немає сповіщень</strong><span>' + esc(text) + "</span></article>";
+        }
+
+        function setCount(key, n) {
+          var badge = document.querySelector('[data-count="' + key + '"]');
+          if (badge) badge.textContent = String(n);
+        }
+
+        function fill(key, cards, emptyText) {
+          var box = document.querySelector('[data-alert-list="' + key + '"]');
+          if (!box) return;
+          setCount(key, cards.length);
+          box.innerHTML = cards.length ? cards.join("") : emptyCard(emptyText);
+        }
+
+        /* ---- Low stock (NOTIF-1): CRM.lowStock() ---- */
+        var lowCards = CRM.lowStock().map(function (item) {
+          var snap = CRM.snapshot(item.name);
+          var have = snap && snap.display ? snap.display : (CRM.num(item.stock) + " " + (item.unit || ""));
+          return (
+            '<article class="notice">' +
+            "<strong>" + esc(item.name) + " — нижче мінімуму</strong>" +
+            "<span>Залишок: " + esc(have) + " · мінімум: " + esc(CRM.num(item.min) + " " + (item.unit || "")) + "</span>" +
+            '<a class="btn primary" href="deliveries.html">Створити замовлення постачальнику</a>' +
+            "</article>"
+          );
+        });
+        fill("low", lowCards, "Усі залишки вищі за мінімальний рівень.");
+
+        /* ---- Expiry within 3 days (supplier deliveries) ---- */
+        var expiryCards = CRM.read("deliveries")
+          .map(function (d) { return { row: d, diff: dayDiff(d.expiry) }; })
+          .filter(function (e) { return e.diff !== null && e.diff <= 3; })
+          .sort(function (a, b) { return a.diff - b.diff; })
+          .map(function (e) {
+            var d = e.row;
+            var when;
+            if (e.diff < 0) when = "прострочено " + Math.abs(e.diff) + " дн. тому";
+            else if (e.diff === 0) when = "термін спливає сьогодні";
+            else when = "термін спливає через " + e.diff + " дн.";
+            var meta = [d.invoice, d.supplier].filter(Boolean).join(" · ");
+            return (
+              '<article class="notice">' +
+              "<strong>" + esc(d.item || "Партія") + " — " + esc(when) + "</strong>" +
+              "<span>" + esc(d.qty || "") + (d.expiry ? " · до " + esc(CRM.formatDate(d.expiry)) : "") + (meta ? " · " + esc(meta) : "") + "</span>" +
+              '<a class="btn danger" href="write-offs.html">Списати</a>' +
+              "</article>"
+            );
+          });
+        fill("expiry", expiryCards, "Немає партій із терміном придатності в межах 3 днів.");
+
+        /* ---- Failed customer deliveries (status Невдало) ---- */
+        var failedCards = CRM.read("customerDeliveries")
+          .filter(function (d) { return !d.archived && d.status === "Невдало"; })
+          .map(function (d) {
+            var label = d.orderLabel || (d.orderIds || []).join(", ") || "Доставка";
+            var meta = [d.driver, d.address].filter(Boolean).join(" · ");
+            return (
+              '<article class="notice">' +
+              "<strong>Невдала доставка " + esc(label) + "</strong>" +
+              "<span>" + (meta ? esc(meta) : "") + (d.outcomeNotes ? " · " + esc(d.outcomeNotes) : "") + "</span>" +
+              '<a class="btn primary" href="customer-deliveries.html">Переглянути доставку</a>' +
+              "</article>"
+            );
+          });
+        fill("failed", failedCards, "Немає невдалих доставок.");
+
+        /* ---- New orders (status Нове) ---- */
+        var orderCards = CRM.read("orders")
+          .filter(function (o) { return o.status === "Нове"; })
+          .map(function (o) {
+            var num = o.number ? "#" + o.number : (o.id || "Замовлення");
+            var meta = [o.customerName, o.deliveryDate ? "доставка " + CRM.formatDate(o.deliveryDate) : ""].filter(Boolean).join(" · ");
+            return (
+              '<article class="notice">' +
+              "<strong>Нове замовлення " + esc(num) + "</strong>" +
+              "<span>" + (meta ? esc(meta) : "") + (o.total != null && o.total !== "" ? " · " + esc(CRM.money(o.total)) : "") + "</span>" +
+              '<a class="btn primary" href="orders.html">Опрацювати замовлення</a>' +
+              "</article>"
+            );
+          });
+        fill("orders", orderCards, "Немає нових замовлень в очікуванні.");
+
+        /* ---- Notification settings readout (CRM.settings) ---- */
+        var s = CRM.settings();
+        function flag(on) { return on ? '<span class="status ok">Увімкнено</span>' : '<span class="status warn">Вимкнено</span>'; }
+        var readout = document.querySelector("[data-settings-readout]");
+        if (readout) {
+          readout.innerHTML = [
+            ['<div class="list-row"><span>В застосунку (in-app)</span>', flag(s.notifInApp), "</div>"].join(""),
+            ['<div class="list-row"><span>Email</span>', flag(s.notifEmail), "</div>"].join(""),
+            ['<div class="list-row"><span>Push</span>', flag(s.notifPush), "</div>"].join(""),
+            ['<div class="list-row"><span>Тихі години</span><span class="status info">', esc(s.quietHours || "—"), "</span></div>"].join("")
+          ].join("");
+        }
+      })();
+    </script>
   </body>
 </html>

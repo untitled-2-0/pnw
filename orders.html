@@ -9,18 +9,17 @@
   <body>
     <div class="app-layout">
       <aside class="sidebar">
-        <a class="app-brand" href="dashboard.html">
-          <div class="brand-mark">PW</div>
-          <div><strong>Pizza na Wypasie</strong><span>Адмінська CRM</span></div>
-        </a>
+        <a class="app-brand" href="dashboard.html"><div class="brand-mark">PW</div><div><strong>Pizza na Wypasie</strong><span>Адмінська CRM</span></div></a>
         <div class="nav-section">Адмін-панель</div>
         <nav class="side-nav" aria-label="Основна навігація">
           <a data-nav href="dashboard.html"><span class="nav-icon">DB</span>Дашборд</a>
           <a data-nav href="inventory.html"><span class="nav-icon">SK</span>Склад</a>
           <a data-nav href="ingredients.html"><span class="nav-icon">IN</span>Інгредієнти</a>
           <a data-nav href="recipes.html"><span class="nav-icon">RC</span>Рецепти</a>
-          <a data-nav href="deliveries.html"><span class="nav-icon">DL</span>Поставки</a>
+          <a data-nav href="deliveries.html"><span class="nav-icon">PS</span>Поставки</a>
           <a data-nav href="orders.html"><span class="nav-icon">OR</span>Замовлення</a>
+          <a data-nav href="customers.html"><span class="nav-icon">CL</span>Клієнти</a>
+          <a data-nav href="customer-deliveries.html"><span class="nav-icon">DL</span>Доставки</a>
           <a data-nav href="write-offs.html"><span class="nav-icon">WO</span>Списання</a>
           <a data-nav href="reports.html"><span class="nav-icon">RP</span>Звіти</a>
           <a data-nav href="admin.html"><span class="nav-icon">ST</span>Налаштування</a>
@@ -41,7 +40,7 @@
             <div class="page-title">
               <p class="eyebrow">Замовлення та API-синхронізація</p>
               <h1>Замовлення</h1>
-              <p>Підтягуй замовлення з центру робочого дня, перевіряй піцу, додатки, ціну й параметри, а потім експортуй список для Excel.</p>
+              <p>Створюй замовлення з позиціями і клієнтом, веди статуси, скасовуй з причиною та переглядай деталі. Або підтягуй замовлення з центру через API.</p>
             </div>
             <button class="btn ghost" type="button" data-reset="orders">Скинути демо</button>
           </header>
@@ -73,54 +72,77 @@
               <p class="muted-line" data-sync-meta>Очікує синхронізації</p>
             </article>
 
-            <form class="card form-stack" data-entity="orders">
+            <form class="card form-stack" data-entity="orders" data-custom-submit="true" data-order-form>
               <div class="card-head">
-                <h2>Додати вручну</h2>
+                <h2>Нове замовлення</h2>
                 <span class="tag info">Адмін</span>
               </div>
               <div class="form-row">
                 <div class="field">
                   <label>Номер</label>
-                  <input name="number" value="1054" />
+                  <input name="number" required />
                 </div>
                 <div class="field">
-                  <label>Ціна, zł</label>
-                  <input name="price" value="42.99" />
+                  <label>Клієнт</label>
+                  <select name="customerSelect" data-customer-select></select>
                 </div>
               </div>
-              <div class="field">
-                <label>Піца</label>
-                <input name="pizza" value="Піца Гриль x1" />
+              <div class="form-row" data-new-customer hidden>
+                <div class="field">
+                  <label>Ім'я нового клієнта</label>
+                  <input data-new-customer-name placeholder="Напр. Іван Левчук" />
+                </div>
+                <div class="field">
+                  <label>Контакт</label>
+                  <input data-new-customer-contact placeholder="+48 ... або email" />
+                </div>
               </div>
-              <div class="field">
-                <label>Додатки</label>
-                <input name="additionals" value="Соус часниковий, подвійний сир" />
+              <div class="field" data-new-customer-address-field hidden>
+                <label>Адреса нового клієнта</label>
+                <input data-new-customer-address placeholder="Місто, вулиця, № будинку" />
               </div>
               <div class="form-row">
                 <div class="field">
-                  <label>Статус</label>
-                  <select name="status">
-                    <option>Нове</option>
-                    <option>В роботі</option>
-                    <option>Готово</option>
-                  </select>
+                  <label>Дата замовлення</label>
+                  <input name="orderDate" type="date" />
                 </div>
                 <div class="field">
-                  <label>Джерело</label>
-                  <select name="source">
-                    <option>Локально</option>
-                    <option>Телефон</option>
-                    <option>API центр</option>
-                  </select>
+                  <label>Дата доставки</label>
+                  <input name="deliveryDate" type="date" />
                 </div>
               </div>
+
               <div class="field">
-                <label>Інші параметри</label>
-                <textarea name="parameters">Без цибулі, гострий соус окремо.</textarea>
+                <label>Позиції замовлення</label>
+                <div class="item-rows" data-item-rows></div>
+                <button class="btn ghost xs" type="button" data-add-item>+ Додати позицію</button>
               </div>
-              <button class="btn primary" type="submit">Створити замовлення</button>
+
+              <div class="cost-readout">
+                <div><span>Позицій</span><strong data-items-count>0</strong></div>
+                <div><span>Сума замовлення</span><strong data-order-total>0,00 zł</strong></div>
+              </div>
+
+              <div class="field">
+                <label>Нотатки</label>
+                <textarea name="notes" placeholder="Без цибулі, гострий соус окремо."></textarea>
+              </div>
+              <div class="field">
+                <label>Статус</label>
+                <select name="status" data-status-select></select>
+              </div>
+              <button class="btn primary" type="submit" data-order-submit>Створити замовлення</button>
             </form>
           </section>
+
+          <section class="filters">
+            <select data-filter aria-label="Статус замовлення" data-status-filter>
+              <option value="all">Усі статуси</option>
+            </select>
+            <span class="muted-line" data-result-count></span>
+          </section>
+
+          <section class="card" data-order-detail-panel hidden></section>
 
           <section class="table-card">
             <div class="table-head">
@@ -131,12 +153,14 @@
               <thead>
                 <tr>
                   <th>№</th>
-                  <th>Піца</th>
-                  <th>Додатки</th>
-                  <th>Ціна</th>
-                  <th>Параметри</th>
+                  <th>Клієнт</th>
+                  <th>Позиції</th>
+                  <th>Сума</th>
+                  <th>Дата</th>
+                  <th>Доставка</th>
                   <th>Статус</th>
                   <th>Джерело</th>
+                  <th>Дії</th>
                 </tr>
               </thead>
               <tbody data-table="orders"></tbody>
@@ -146,6 +170,361 @@
       </div>
     </div>
     <div class="toast" role="status"></div>
-    <script src="src/app.js?v=api-sync-1"></script>
+    <script src="src/app.js?v=orders-rebuild-1"></script>
+    <script>
+      (function () {
+        if (!window.CRM) return;
+
+        var form = document.querySelector("[data-order-form]");
+        var statuses = CRM.ORDER_STATUSES || [];
+        var todayISO = new Date().toISOString().slice(0, 10);
+
+        /* ---- status <select> in the form + status <select data-filter> ---- */
+        var statusSelect = form ? form.querySelector("[data-status-select]") : null;
+        if (statusSelect) {
+          statusSelect.innerHTML = statuses.map(function (s) {
+            return "<option>" + s + "</option>";
+          }).join("");
+        }
+        var statusFilter = document.querySelector("[data-status-filter]");
+        if (statusFilter) {
+          statusFilter.innerHTML = '<option value="all">Усі статуси</option>' +
+            statuses.map(function (s) { return "<option>" + s + "</option>"; }).join("");
+          statusFilter.addEventListener("change", CRM.applyDomFilter);
+        }
+
+        /* ---- next order number ---- */
+        function nextOrderNumber() {
+          var max = 1000;
+          CRM.read("orders").forEach(function (o) {
+            var n = parseInt(String(o.number || "").replace(/[^\d]/g, ""), 10);
+            if (!isNaN(n) && n > max) max = n;
+          });
+          return String(max + 1);
+        }
+
+        /* ---- customer <select> with "+ Новий клієнт" ---- */
+        var customerSelect = form ? form.querySelector("[data-customer-select]") : null;
+        var newCustomerRow = form ? form.querySelector("[data-new-customer]") : null;
+        var newCustomerAddressField = form ? form.querySelector("[data-new-customer-address-field]") : null;
+        var newCustomerName = form ? form.querySelector("[data-new-customer-name]") : null;
+        var newCustomerContact = form ? form.querySelector("[data-new-customer-contact]") : null;
+        var newCustomerAddress = form ? form.querySelector("[data-new-customer-address]") : null;
+
+        function populateCustomerSelect(selectedName) {
+          if (!customerSelect) return;
+          var rows = CRM.read("customers").filter(function (c) { return !c.archived; });
+          var opts = rows.map(function (c) {
+            var sel = selectedName && c.name === selectedName ? " selected" : "";
+            return '<option value="' + c.name.replace(/"/g, "&quot;") + '"' + sel + ">" + c.name + "</option>";
+          }).join("");
+          customerSelect.innerHTML =
+            '<option value="">— Оберіть клієнта —</option>' +
+            opts +
+            '<option value="__new__">+ Новий клієнт</option>';
+          if (selectedName && rows.every(function (c) { return c.name !== selectedName; })) {
+            // editing an order whose customer is not in the list: keep its name as a one-off option
+            var extra = document.createElement("option");
+            extra.value = selectedName;
+            extra.textContent = selectedName;
+            extra.selected = true;
+            customerSelect.insertBefore(extra, customerSelect.lastElementChild);
+          }
+          toggleNewCustomer();
+        }
+
+        function toggleNewCustomer() {
+          var isNew = customerSelect && customerSelect.value === "__new__";
+          if (newCustomerRow) newCustomerRow.hidden = !isNew;
+          if (newCustomerAddressField) newCustomerAddressField.hidden = !isNew;
+        }
+        if (customerSelect) customerSelect.addEventListener("change", toggleNewCustomer);
+
+        /* ---- dynamic line items ---- */
+        var itemRows = form ? form.querySelector("[data-item-rows]") : null;
+
+        function recipeOptions(selected) {
+          var recipes = CRM.read("recipes").filter(function (r) { return !r.archived; });
+          return '<option value="">— Піца / позиція —</option>' + recipes.map(function (r) {
+            var sel = selected && r.name === selected ? " selected" : "";
+            return '<option value="' + r.name.replace(/"/g, "&quot;") + '"' + sel + ">" +
+              r.name + " (" + CRM.money(r.price) + ")</option>";
+          }).join("");
+        }
+
+        function addItemRow(recipe, qty) {
+          if (!itemRows) return;
+          var wrap = document.createElement("div");
+          wrap.className = "item-row";
+          wrap.innerHTML =
+            '<select data-item-recipe>' + recipeOptions(recipe) + "</select>" +
+            '<input type="number" min="1" step="1" data-item-qty placeholder="К-сть" value="' + (qty || "1") + '" />' +
+            '<input data-item-price placeholder="Ціна" readonly />' +
+            '<button class="btn danger xs" type="button" data-remove-item>×</button>';
+          itemRows.appendChild(wrap);
+          syncRowPrice(wrap);
+          recalcTotal();
+        }
+
+        function recipePrice(name) {
+          var recipe = CRM.read("recipes").find(function (r) { return r.name === name; });
+          return recipe ? CRM.toNumber(recipe.price) : 0;
+        }
+
+        function syncRowPrice(rowEl) {
+          var recipeEl = rowEl.querySelector("[data-item-recipe]");
+          var priceEl = rowEl.querySelector("[data-item-price]");
+          if (recipeEl && priceEl) {
+            var price = recipePrice(recipeEl.value);
+            priceEl.value = recipeEl.value ? CRM.num(price) : "";
+          }
+        }
+
+        function rowsData() {
+          if (!itemRows) return [];
+          return [].slice.call(itemRows.querySelectorAll(".item-row")).map(function (rowEl) {
+            var recipe = (rowEl.querySelector("[data-item-recipe]") || {}).value || "";
+            var qty = (rowEl.querySelector("[data-item-qty]") || {}).value || "0";
+            return { recipe: recipe, qty: qty, price: String(recipePrice(recipe)) };
+          }).filter(function (it) { return it.recipe; });
+        }
+
+        function recalcTotal() {
+          var total = rowsData().reduce(function (sum, it) {
+            return sum + CRM.toNumber(it.price) * CRM.toNumber(it.qty);
+          }, 0);
+          var count = rowsData().length;
+          var totalNode = form.querySelector("[data-order-total]");
+          var countNode = form.querySelector("[data-items-count]");
+          if (totalNode) totalNode.textContent = CRM.money(total);
+          if (countNode) countNode.textContent = String(count);
+          return total;
+        }
+
+        if (itemRows) {
+          itemRows.addEventListener("change", function (e) {
+            var rowEl = e.target.closest(".item-row");
+            if (!rowEl) return;
+            if (e.target.matches("[data-item-recipe]")) syncRowPrice(rowEl);
+            recalcTotal();
+          });
+          itemRows.addEventListener("input", function (e) {
+            if (e.target.matches("[data-item-qty]")) recalcTotal();
+          });
+          itemRows.addEventListener("click", function (e) {
+            if (e.target.closest("[data-remove-item]")) {
+              var rowEl = e.target.closest(".item-row");
+              if (rowEl) rowEl.remove();
+              if (!itemRows.querySelector(".item-row")) addItemRow();
+              recalcTotal();
+            }
+          });
+        }
+        var addItemBtn = form ? form.querySelector("[data-add-item]") : null;
+        if (addItemBtn) addItemBtn.addEventListener("click", function () { addItemRow(); });
+
+        /* ---- reset the form to a blank "new order" state ---- */
+        function resetForm() {
+          if (!form) return;
+          delete form.dataset.editId;
+          form.reset();
+          form.elements.number.value = nextOrderNumber();
+          form.elements.orderDate.value = todayISO;
+          if (form.elements.status) form.elements.status.value = statuses[0] || "Нове";
+          if (itemRows) itemRows.innerHTML = "";
+          addItemRow();
+          populateCustomerSelect("");
+          var submitBtn = form.querySelector("[data-order-submit]");
+          if (submitBtn) submitBtn.textContent = "Створити замовлення";
+          var head = form.querySelector(".card-head h2");
+          if (head) head.textContent = "Нове замовлення";
+          recalcTotal();
+        }
+
+        /* ---- submit: build the order object and upsert ---- */
+        if (form) {
+          form.addEventListener("submit", function (event) {
+            event.preventDefault();
+            var number = (form.elements.number.value || "").trim();
+            if (!number) {
+              form.elements.number.classList.add("invalid");
+              CRM.toast("Вкажіть номер замовлення");
+              return;
+            }
+            form.elements.number.classList.remove("invalid");
+
+            var items = rowsData();
+            if (!items.length) {
+              CRM.toast("Додайте хоча б одну позицію");
+              return;
+            }
+
+            // new customer?
+            var customerName = "";
+            var customerContact = "";
+            if (customerSelect && customerSelect.value === "__new__") {
+              customerName = (newCustomerName && newCustomerName.value.trim()) || "";
+              customerContact = (newCustomerContact && newCustomerContact.value.trim()) || "";
+              var address = (newCustomerAddress && newCustomerAddress.value.trim()) || "";
+              if (!customerName) {
+                if (newCustomerName) newCustomerName.classList.add("invalid");
+                CRM.toast("Вкажіть ім'я нового клієнта");
+                return;
+              }
+              CRM.upsert("customers", { name: customerName, contact: customerContact, address: address });
+            } else if (customerSelect) {
+              customerName = customerSelect.value || "";
+              var existing = CRM.read("customers").find(function (c) { return c.name === customerName; });
+              customerContact = existing ? (existing.contact || "") : "";
+            }
+
+            var total = items.reduce(function (sum, it) {
+              return sum + CRM.toNumber(it.price) * CRM.toNumber(it.qty);
+            }, 0);
+
+            var editId = form.dataset.editId;
+            var obj = {
+              number: number,
+              customerName: customerName,
+              customerContact: customerContact,
+              orderDate: form.elements.orderDate.value || todayISO,
+              deliveryDate: form.elements.deliveryDate.value || "",
+              items: items,
+              total: total.toFixed(2),
+              notes: (form.elements.notes.value || "").trim(),
+              status: (form.elements.status && form.elements.status.value) || statuses[0] || "Нове",
+              source: "Локально"
+            };
+
+            if (editId) {
+              obj.id = editId;
+              var prev = CRM.byId("orders", editId);
+              obj.statusHistory = (prev && prev.statusHistory) || [{ status: obj.status, at: new Date().toISOString() }];
+            } else {
+              obj.statusHistory = [{ status: obj.status, at: new Date().toISOString() }];
+            }
+
+            CRM.upsert("orders", obj);
+            CRM.toast(editId ? "Замовлення оновлено" : "Замовлення створено");
+            resetForm();
+          });
+
+          /* ---- repopulate dynamic parts when editing (core fills native fields) ---- */
+          form.addEventListener("crm:edit", function (event) {
+            var row = event.detail || {};
+            populateCustomerSelect(row.customerName || "");
+            if (itemRows) {
+              itemRows.innerHTML = "";
+              var items = row.items && row.items.length ? row.items : [];
+              if (items.length) {
+                items.forEach(function (it) { addItemRow(it.recipe, it.qty); });
+              } else {
+                addItemRow();
+              }
+            }
+            if (form.elements.status && row.status) form.elements.status.value = row.status;
+            var submitBtn = form.querySelector("[data-order-submit]");
+            if (submitBtn) submitBtn.textContent = "Зберегти зміни";
+            recalcTotal();
+          });
+        }
+
+        /* ---- ORD-5: order detail panel (status timeline, linked delivery, advance) ---- */
+        var panel = document.querySelector("[data-order-detail-panel]");
+
+        function linkedDelivery(orderId) {
+          return CRM.read("customerDeliveries").find(function (d) {
+            return (d.orderIds || []).some(function (oid) { return String(oid) === String(orderId); });
+          });
+        }
+
+        function renderDetail(order) {
+          if (!panel || !order) return;
+          var idx = statuses.indexOf(order.status);
+          // advance only along the active flow; "Доставлено"/"Скасовано" are terminal
+          var nextStatus = idx >= 0 && idx < statuses.indexOf("Доставлено") ? statuses[idx + 1] : null;
+          var itemsHtml = (order.items || []).map(function (it) {
+            return "<li>" + it.recipe + " ×" + it.qty + " — " +
+              CRM.money(CRM.toNumber(it.price) * CRM.toNumber(it.qty)) + "</li>";
+          }).join("") || "<li>—</li>";
+
+          var history = (order.statusHistory || []).slice().reverse();
+          var timelineHtml = history.length ? history.map(function (h) {
+            return '<div class="timeline-item"><span class="muted-line">' +
+              CRM.formatDateTime(h.at) + '</span><strong>' + h.status + "</strong></div>";
+          }).join("") : '<div class="timeline-item"><span class="muted-line">—</span><strong>' +
+            (order.status || "Нове") + "</strong></div>";
+
+          var delivery = linkedDelivery(order.id);
+          var deliveryHtml = delivery
+            ? "<p class=\"muted-line\">Доставка " + (delivery.orderLabel || "") + " · водій " +
+              (delivery.driver || "—") + " · " + CRM.formatDate(delivery.scheduledDate) + " " +
+              (delivery.window || "") + " · статус: <strong>" + (delivery.status || "—") + "</strong></p>"
+            : '<p class="muted-line">Призначеної доставки клієнту ще немає.</p>';
+
+          var actionsHtml = "";
+          if (nextStatus) {
+            actionsHtml += '<button class="btn primary" type="button" data-advance-status data-id="' +
+              order.id + '" data-next="' + nextStatus + '">Далі: ' + nextStatus + "</button>";
+          }
+          if (order.status !== "Скасовано") {
+            actionsHtml += ' <button class="btn danger" type="button" data-cancel-order data-id="' +
+              order.id + '">Скасувати</button>';
+          }
+          actionsHtml += ' <button class="btn ghost" type="button" data-close-detail>Закрити</button>';
+
+          panel.innerHTML =
+            '<div class="card-head"><h2>Замовлення #' + (order.number || "") + "</h2>" +
+              '<span class="tag info">' + (order.source || "Локально") + "</span></div>" +
+            '<div class="grid two">' +
+              "<div>" +
+                "<p><strong>Клієнт:</strong> " + (order.customerName || "—") +
+                  (order.customerContact ? " · " + order.customerContact : "") + "</p>" +
+                "<p class=\"muted-line\">Замовлення: " + CRM.formatDate(order.orderDate) +
+                  " · Доставка: " + CRM.formatDate(order.deliveryDate) + "</p>" +
+                "<p><strong>Статус:</strong> " + (order.status || "Нове") + "</p>" +
+                "<ul>" + itemsHtml + "</ul>" +
+                "<p><strong>Сума:</strong> " + CRM.money(order.total || "0") + "</p>" +
+                (order.notes ? '<p class="muted-line">Нотатки: ' + order.notes + "</p>" : "") +
+                deliveryHtml +
+                '<div class="check-row" style="margin-top:12px">' + actionsHtml + "</div>" +
+              "</div>" +
+              '<div><div class="card-head"><h2>Історія статусів</h2></div>' +
+                '<div class="timeline">' + timelineHtml + "</div></div>" +
+            "</div>";
+          panel.hidden = false;
+          panel.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+
+        document.addEventListener("crm:order-detail", function (event) {
+          renderDetail(event.detail);
+        });
+
+        if (panel) {
+          panel.addEventListener("click", function (event) {
+            var advance = event.target.closest("[data-advance-status]");
+            var cancel = event.target.closest("[data-cancel-order]");
+            var close = event.target.closest("[data-close-detail]");
+            if (advance) {
+              CRM.setOrderStatus(advance.dataset.id, advance.dataset.next);
+              renderDetail(CRM.byId("orders", advance.dataset.id));
+            } else if (cancel) {
+              var reason = window.prompt("Причина скасування замовлення:", "");
+              if (reason === null) return;
+              CRM.setOrderStatus(cancel.dataset.id, "Скасовано");
+              CRM.audit("orders", cancel.dataset.id, "cancel", "Причина: " + (reason.trim() || "не вказано"));
+              CRM.toast("Замовлення скасовано, інгредієнти повернено на склад");
+              renderDetail(CRM.byId("orders", cancel.dataset.id));
+            } else if (close) {
+              panel.hidden = true;
+              panel.innerHTML = "";
+            }
+          });
+        }
+
+        /* ---- init blank form ---- */
+        resetForm();
+      })();
+    </script>
   </body>
 </html>

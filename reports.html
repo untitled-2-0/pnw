@@ -11,24 +11,381 @@
           <a data-nav href="inventory.html"><span class="nav-icon">SK</span>Склад</a>
           <a data-nav href="ingredients.html"><span class="nav-icon">IN</span>Інгредієнти</a>
           <a data-nav href="recipes.html"><span class="nav-icon">RC</span>Рецепти</a>
-          <a data-nav href="deliveries.html"><span class="nav-icon">DL</span>Поставки</a>
+          <a data-nav href="deliveries.html"><span class="nav-icon">PS</span>Поставки</a>
           <a data-nav href="orders.html"><span class="nav-icon">OR</span>Замовлення</a>
+          <a data-nav href="customers.html"><span class="nav-icon">CL</span>Клієнти</a>
+          <a data-nav href="customer-deliveries.html"><span class="nav-icon">DL</span>Доставки</a>
           <a data-nav href="write-offs.html"><span class="nav-icon">WO</span>Списання</a>
           <a data-nav href="reports.html"><span class="nav-icon">RP</span>Звіти</a>
           <a data-nav href="admin.html"><span class="nav-icon">ST</span>Налаштування</a>
         </nav>
       </aside>
       <div>
-        <header class="topbar"><input class="search" type="search" placeholder="Пошук звіту" /><div class="topbar-actions"><button class="btn ghost" data-toast="Експорт PDF розпочато">PDF</button><button class="btn primary" data-toast="Експорт Excel розпочато">Excel</button></div></header>
+        <header class="topbar"><input class="search" type="search" placeholder="Пошук звіту" /><div class="topbar-actions"><button class="btn ghost" type="button" data-toast="Експорт PDF розпочато">PDF</button><button class="btn primary" type="button" data-export-active>Excel</button></div></header>
         <main class="content">
-          <header class="page-head"><div class="page-title"><p class="eyebrow">Епік 11 Звіти</p><h1>Звіти та аналітика</h1><p>Виторг, витрати інгредієнтів, план/факт, маржинальність піц і втрати за причинами.</p></div><div class="segmented"><a class="active" href="#">Виторг</a><a href="#">Використання</a><a href="#">Маржа</a></div></header>
-          <section class="grid two">
-            <article class="card"><div class="card-head"><h2>Виторг за днями</h2><span class="tag success">+12% до попереднього періоду</span></div><div class="chart"><span class="bar" style="height:42%"></span><span class="bar" style="height:61%"></span><span class="bar" style="height:55%"></span><span class="bar" style="height:72%"></span><span class="bar" style="height:69%"></span><span class="bar" style="height:91%"></span><span class="bar" style="height:79%"></span></div></article>
-            <article class="table-card"><div class="table-head"><h2>Використання інгредієнтів: план / факт</h2></div><table><thead><tr><th>Інгредієнт</th><th>План</th><th>Факт</th><th>Різниця</th></tr></thead><tbody><tr><td>Моцарела</td><td>18.2 кг</td><td>19.1 кг</td><td><span class="status warn">+4.9%</span></td></tr><tr><td>Пепероні</td><td>6.4 кг</td><td>7.3 кг</td><td><span class="status danger">+14%</span></td></tr><tr><td>Томатний соус</td><td>11.7 л</td><td>11.4 л</td><td><span class="status ok">-2.5%</span></td></tr></tbody></table></article>
+          <header class="page-head">
+            <div class="page-title"><p class="eyebrow">Епік 11 · Звіти</p><h1>Звіти та аналітика</h1><p>Виторг, витрати інгредієнтів, план/факт, маржинальність піц і втрати за причинами.</p></div>
+            <div class="actions">
+              <div class="segmented" aria-label="Період" data-period>
+                <button type="button" class="active" data-period-btn="7d">7 днів</button>
+                <button type="button" data-period-btn="30d">30 днів</button>
+              </div>
+            </div>
+          </header>
+
+          <div class="filters">
+            <label class="field" style="margin:0"><span class="metric-label">Від</span><input type="date" data-range-from /></label>
+            <label class="field" style="margin:0"><span class="metric-label">До</span><input type="date" data-range-to /></label>
+            <button class="btn ghost" type="button" data-range-apply>Застосувати діапазон</button>
+            <span class="muted-line" data-range-label></span>
+          </div>
+
+          <div class="segmented" aria-label="Розділи звітів" data-tabs style="margin-bottom:16px">
+            <button type="button" class="active" data-tab="revenue">Виторг</button>
+            <button type="button" data-tab="usage">Використання</button>
+            <button type="button" data-tab="margin">Маржа</button>
+            <button type="button" data-tab="waste">Втрати</button>
+            <button type="button" data-tab="delivery">Доставки</button>
+          </div>
+
+          <!-- 1) Виторг (RPT-1) -->
+          <section data-pane="revenue">
+            <header class="card-head"><h2>Виторг</h2><button class="btn ghost xs" type="button" data-export-report="revenue">Експорт CSV</button></header>
+            <section class="grid kpi" aria-label="Ключові показники виторгу">
+              <article class="card kpi-card"><span>Замовлення</span><strong data-kpi-orders>0</strong><em class="trend">за період</em></article>
+              <article class="card kpi-card"><span>Виторг</span><strong data-kpi-revenue>0</strong><em class="trend">за період</em></article>
+              <article class="card kpi-card"><span>Середній чек</span><strong data-kpi-aov>0</strong><em class="trend">AOV</em></article>
+            </section>
+            <section class="grid two" style="margin-top:16px">
+              <article class="card">
+                <div class="card-head"><h2>Виторг за днями</h2><span class="tag info" data-chart-period>7 днів</span></div>
+                <div class="chart dynamic" aria-label="Графік виторгу" data-revenue-chart></div>
+              </article>
+              <article class="table-card">
+                <div class="table-head"><h2>Виторг за рецептом</h2></div>
+                <table><thead><tr><th>Рецепт</th><th>Виторг</th></tr></thead><tbody data-by-recipe></tbody></table>
+              </article>
+            </section>
+          </section>
+
+          <!-- 2) Використання (RPT-2) -->
+          <section data-pane="usage" hidden>
+            <header class="card-head"><h2>Використання інгредієнтів</h2><button class="btn ghost xs" type="button" data-export-report="usage">Експорт CSV</button></header>
+            <article class="table-card">
+              <div class="table-head"><h2>План / факт</h2><span class="tag info">Витрати сировини</span></div>
+              <table><thead><tr><th>Інгредієнт</th><th>План</th><th>Факт</th><th>Різниця</th></tr></thead><tbody data-usage></tbody></table>
+            </article>
+          </section>
+
+          <!-- 3) Маржа -->
+          <section data-pane="margin" hidden>
+            <header class="card-head"><h2>Маржинальність</h2><button class="btn ghost xs" type="button" data-export-report="margin">Експорт CSV</button></header>
+            <article class="table-card">
+              <div class="table-head"><h2>Маржа за рецептами</h2><span class="tag info">Ціна · собівартість порції · маржа</span></div>
+              <table><thead><tr><th>Рецепт</th><th>Ціна</th><th>Собівартість / порцію</th><th>Маржа</th><th>Маржа, %</th></tr></thead><tbody data-margin></tbody></table>
+            </article>
+          </section>
+
+          <!-- 4) Втрати (RPT-3) -->
+          <section data-pane="waste" hidden>
+            <header class="card-head"><h2>Втрати</h2><button class="btn ghost xs" type="button" data-export-report="waste">Експорт CSV</button></header>
+            <section class="grid two">
+              <article class="table-card">
+                <div class="table-head"><h2>За причиною</h2></div>
+                <table><thead><tr><th>Причина</th><th>Вартість</th></tr></thead><tbody data-waste-reason></tbody></table>
+              </article>
+              <article class="table-card">
+                <div class="table-head"><h2>За позицією</h2></div>
+                <table><thead><tr><th>Позиція</th><th>Вартість</th></tr></thead><tbody data-waste-item></tbody></table>
+              </article>
+            </section>
+          </section>
+
+          <!-- 5) Доставки (RPT-4) -->
+          <section data-pane="delivery" hidden>
+            <header class="card-head"><h2>Доставки</h2><button class="btn ghost xs" type="button" data-export-report="delivery">Експорт CSV</button></header>
+            <section class="grid kpi" aria-label="Показники доставок">
+              <article class="card kpi-card"><span>Доставлено</span><strong data-del-delivered>0</strong><em class="trend">успішні</em></article>
+              <article class="card kpi-card"><span>Невдалі</span><strong data-del-failed>0</strong><em class="trend down">провалені</em></article>
+              <article class="card kpi-card"><span>Усього</span><strong data-del-total>0</strong><em class="trend">доставок</em></article>
+              <article class="card kpi-card"><span>Вчасно (on-time)</span><strong data-del-ontime>0%</strong><em class="trend">від завершених</em></article>
+            </section>
           </section>
         </main>
       </div>
     </div>
-    <div class="toast" role="status"></div><script src="src/app.js?v=local-save-1"></script>
+    <div class="toast" role="status"></div>
+    <script src="src/app.js?v=reports-1"></script>
+    <script>
+      (function () {
+        if (!window.CRM) return;
+
+        var state = { period: "7d", from: "", to: "", tab: "revenue" };
+        var current = null; // last computed reportData
+
+        function setText(sel, value) {
+          var el = document.querySelector(sel);
+          if (el) el.textContent = value;
+        }
+        function clear(node) { while (node && node.firstChild) node.removeChild(node.firstChild); }
+        function td(text, cls) {
+          var cell = document.createElement("td");
+          if (cls) { var s = document.createElement("span"); s.className = cls; s.textContent = text; cell.appendChild(s); }
+          else cell.textContent = text;
+          return cell;
+        }
+        function row(cells) {
+          var tr = document.createElement("tr");
+          cells.forEach(function (c) { tr.appendChild(c); });
+          return tr;
+        }
+        function emptyRow(tbody, cols, msg) {
+          var tr = document.createElement("tr");
+          var cell = document.createElement("td");
+          cell.colSpan = cols;
+          cell.className = "muted-line";
+          cell.textContent = msg || "Немає даних за період";
+          tr.appendChild(cell);
+          tbody.appendChild(tr);
+        }
+
+        // Filter series to a custom date range if both endpoints are set.
+        function activeSeries(data) {
+          var series = (data.series || []).slice();
+          if (state.from && state.to) {
+            series = series.filter(function (p) { return p.date >= state.from && p.date <= state.to; });
+          }
+          return series;
+        }
+        function rangeRevenue(data) {
+          return activeSeries(data).reduce(function (sum, p) { return sum + CRM.toNumber(p.revenue); }, 0);
+        }
+        function rangeOrders(data) {
+          return activeSeries(data).reduce(function (sum, p) { return sum + CRM.toNumber(p.orders); }, 0);
+        }
+
+        /* ---- RPT-1: Виторг ---- */
+        function renderRevenue(data) {
+          var series = activeSeries(data);
+          var custom = !!(state.from && state.to);
+          var orders = custom ? rangeOrders(data) : data.ordersCount;
+          var revenue = custom ? rangeRevenue(data) : data.revenue;
+          var aov = orders ? revenue / orders : 0;
+          setText("[data-kpi-orders]", CRM.num(orders));
+          setText("[data-kpi-revenue]", CRM.money(revenue));
+          setText("[data-kpi-aov]", CRM.money(aov));
+          setText("[data-chart-period]", custom ? "діапазон" : (state.period === "30d" ? "30 днів" : "7 днів"));
+
+          var chart = document.querySelector("[data-revenue-chart]");
+          clear(chart);
+          var max = series.reduce(function (m, p) { return Math.max(m, CRM.toNumber(p.revenue)); }, 0);
+          if (!series.length) {
+            var hint = document.createElement("span");
+            hint.className = "muted-line";
+            hint.textContent = "Немає даних за період";
+            chart.appendChild(hint);
+          }
+          series.forEach(function (p, i) {
+            var bar = document.createElement("span");
+            bar.className = "bar" + (i % 2 ? " alt" : "");
+            var h = max > 0 ? Math.round((CRM.toNumber(p.revenue) / max) * 100) : 0;
+            bar.style.height = Math.max(h, 2) + "%";
+            bar.title = CRM.formatDate(p.date) + ": " + CRM.money(p.revenue);
+            chart.appendChild(bar);
+          });
+
+          var tbody = document.querySelector("[data-by-recipe]");
+          clear(tbody);
+          var entries = Object.keys(data.byRecipe || {}).map(function (k) { return [k, data.byRecipe[k]]; });
+          entries.sort(function (a, b) { return b[1] - a[1]; });
+          if (!entries.length) emptyRow(tbody, 2);
+          entries.forEach(function (e) { tbody.appendChild(row([td(e[0]), td(CRM.money(e[1]))])); });
+        }
+
+        /* ---- RPT-2: Використання ---- */
+        function diffStatus(plan, fact) {
+          var diff = fact - plan;
+          var pct = plan ? (diff / plan) * 100 : 0;
+          var sign = diff > 0 ? "+" : "";
+          var cls = "status ok";
+          if (pct > 8) cls = "status danger";
+          else if (Math.abs(pct) > 2) cls = "status warn";
+          return { text: sign + (Math.round(pct * 10) / 10) + "%", cls: cls };
+        }
+        function renderUsage(data) {
+          var tbody = document.querySelector("[data-usage]");
+          clear(tbody);
+          var rows = data.usage || [];
+          if (!rows.length) { emptyRow(tbody, 4); return; }
+          rows.forEach(function (u) {
+            var unit = u.unit ? " " + u.unit : "";
+            var d = diffStatus(CRM.toNumber(u.plan), CRM.toNumber(u.fact));
+            tbody.appendChild(row([
+              td(u.item),
+              td(CRM.num(u.plan) + unit),
+              td(CRM.num(u.fact) + unit),
+              td(d.text, d.cls)
+            ]));
+          });
+        }
+
+        /* ---- Маржа ---- */
+        function renderMargin() {
+          var tbody = document.querySelector("[data-margin]");
+          clear(tbody);
+          var recipes = CRM.read("recipes").filter(function (r) { return !r.archived; });
+          if (!recipes.length) { emptyRow(tbody, 5); return; }
+          recipes.forEach(function (r) {
+            var c = CRM.computeRecipeCost(r);
+            var cls = c.marginPct >= 60 ? "status ok" : (c.marginPct >= 35 ? "status warn" : "status danger");
+            tbody.appendChild(row([
+              td(r.name),
+              td(CRM.money(r.price)),
+              td(CRM.money(c.perPortion)),
+              td(CRM.money(c.margin)),
+              td((Math.round(c.marginPct * 10) / 10) + "%", cls)
+            ]));
+          });
+        }
+
+        /* ---- RPT-3: Втрати ---- */
+        function renderWaste(data) {
+          var byReason = document.querySelector("[data-waste-reason]");
+          var byItem = document.querySelector("[data-waste-item]");
+          clear(byReason);
+          clear(byItem);
+          var rEntries = Object.keys(data.wasteByReason || {}).map(function (k) { return [k, data.wasteByReason[k]]; });
+          var iEntries = Object.keys(data.wasteByItem || {}).map(function (k) { return [k, data.wasteByItem[k]]; });
+          rEntries.sort(function (a, b) { return b[1] - a[1]; });
+          iEntries.sort(function (a, b) { return b[1] - a[1]; });
+          if (!rEntries.length) emptyRow(byReason, 2);
+          if (!iEntries.length) emptyRow(byItem, 2);
+          rEntries.forEach(function (e) { byReason.appendChild(row([td(e[0]), td(CRM.money(e[1]))])); });
+          iEntries.forEach(function (e) { byItem.appendChild(row([td(e[0]), td(CRM.money(e[1]))])); });
+        }
+
+        /* ---- RPT-4: Доставки ---- */
+        function renderDelivery(data) {
+          var d = data.delivery || { delivered: 0, failed: 0, total: 0 };
+          var finished = d.delivered + d.failed;
+          var onTime = finished ? Math.round((d.delivered / finished) * 100) : 0;
+          setText("[data-del-delivered]", CRM.num(d.delivered));
+          setText("[data-del-failed]", CRM.num(d.failed));
+          setText("[data-del-total]", CRM.num(d.total));
+          setText("[data-del-ontime]", onTime + "%");
+        }
+
+        function recompute() {
+          current = CRM.reportData(state.period);
+          renderRevenue(current);
+          renderUsage(current);
+          renderMargin();
+          renderWaste(current);
+          renderDelivery(current);
+        }
+
+        /* ---- RPT-5: per-report CSV export ---- */
+        function exportReport(name) {
+          var data = current || CRM.reportData(state.period);
+          if (name === "revenue") {
+            var custom = !!(state.from && state.to);
+            var orders = custom ? rangeOrders(data) : data.ordersCount;
+            var revenue = custom ? rangeRevenue(data) : data.revenue;
+            var rows = [
+              { "Показник": "Замовлення", "Значення": orders },
+              { "Показник": "Виторг", "Значення": revenue },
+              { "Показник": "Середній чек", "Значення": orders ? revenue / orders : 0 }
+            ];
+            Object.keys(data.byRecipe || {}).forEach(function (k) {
+              rows.push({ "Показник": "Рецепт: " + k, "Значення": data.byRecipe[k] });
+            });
+            CRM.exportReportCsv("vytorh", rows, ["Показник", "Значення"]);
+          } else if (name === "usage") {
+            var uRows = (data.usage || []).map(function (u) {
+              return { "Інгредієнт": u.item, "План": u.plan, "Факт": u.fact, "Різниця": (CRM.toNumber(u.fact) - CRM.toNumber(u.plan)), "Одиниця": u.unit || "" };
+            });
+            CRM.exportReportCsv("vykorystannya", uRows, ["Інгредієнт", "План", "Факт", "Різниця", "Одиниця"]);
+          } else if (name === "margin") {
+            var mRows = CRM.read("recipes").filter(function (r) { return !r.archived; }).map(function (r) {
+              var c = CRM.computeRecipeCost(r);
+              return { "Рецепт": r.name, "Ціна": CRM.toNumber(r.price), "Собівартість порції": Math.round(c.perPortion * 100) / 100, "Маржа": Math.round(c.margin * 100) / 100, "Маржа %": Math.round(c.marginPct * 10) / 10 };
+            });
+            CRM.exportReportCsv("marzha", mRows, ["Рецепт", "Ціна", "Собівартість порції", "Маржа", "Маржа %"]);
+          } else if (name === "waste") {
+            var wRows = [];
+            Object.keys(data.wasteByReason || {}).forEach(function (k) { wRows.push({ "Тип": "Причина", "Назва": k, "Вартість": Math.round(data.wasteByReason[k] * 100) / 100 }); });
+            Object.keys(data.wasteByItem || {}).forEach(function (k) { wRows.push({ "Тип": "Позиція", "Назва": k, "Вартість": Math.round(data.wasteByItem[k] * 100) / 100 }); });
+            CRM.exportReportCsv("vtraty", wRows, ["Тип", "Назва", "Вартість"]);
+          } else if (name === "delivery") {
+            var del = data.delivery || { delivered: 0, failed: 0, total: 0 };
+            var finished = del.delivered + del.failed;
+            var dRows = [
+              { "Показник": "Доставлено", "Значення": del.delivered },
+              { "Показник": "Невдалі", "Значення": del.failed },
+              { "Показник": "Усього", "Значення": del.total },
+              { "Показник": "Вчасно %", "Значення": finished ? Math.round((del.delivered / finished) * 100) : 0 }
+            ];
+            CRM.exportReportCsv("dostavky", dRows, ["Показник", "Значення"]);
+          }
+        }
+
+        /* ---- period control ---- */
+        document.querySelectorAll("[data-period-btn]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            document.querySelectorAll("[data-period-btn]").forEach(function (b) { b.classList.remove("active"); });
+            btn.classList.add("active");
+            state.period = btn.dataset.periodBtn;
+            state.from = "";
+            state.to = "";
+            var f = document.querySelector("[data-range-from]");
+            var t = document.querySelector("[data-range-to]");
+            if (f) f.value = "";
+            if (t) t.value = "";
+            setText("[data-range-label]", "");
+            recompute();
+          });
+        });
+
+        /* ---- custom date range ---- */
+        var applyBtn = document.querySelector("[data-range-apply]");
+        if (applyBtn) applyBtn.addEventListener("click", function () {
+          var f = document.querySelector("[data-range-from]");
+          var t = document.querySelector("[data-range-to]");
+          var from = f ? f.value : "";
+          var to = t ? t.value : "";
+          if (!from || !to) { CRM.toast("Вкажіть обидві дати"); return; }
+          if (from > to) { CRM.toast("Початок пізніше за кінець"); return; }
+          state.from = from;
+          state.to = to;
+          // widen the source window so the range is covered by the series
+          state.period = "30d";
+          setText("[data-range-label]", "Діапазон: " + CRM.formatDate(from) + " — " + CRM.formatDate(to));
+          recompute();
+        });
+
+        /* ---- WORKING tabs ---- */
+        document.querySelectorAll("[data-tab]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            document.querySelectorAll("[data-tab]").forEach(function (b) { b.classList.remove("active"); });
+            btn.classList.add("active");
+            state.tab = btn.dataset.tab;
+            document.querySelectorAll("[data-pane]").forEach(function (pane) {
+              pane.hidden = pane.dataset.pane !== state.tab;
+            });
+          });
+        });
+
+        /* ---- per-report export buttons (RPT-5) ---- */
+        document.querySelectorAll("[data-export-report]").forEach(function (btn) {
+          btn.addEventListener("click", function () { exportReport(btn.dataset.exportReport); });
+        });
+
+        /* ---- topbar Excel => real CSV export of the active tab ---- */
+        var excelBtn = document.querySelector("[data-export-active]");
+        if (excelBtn) excelBtn.addEventListener("click", function () { exportReport(state.tab); });
+
+        recompute();
+      })();
+    </script>
   </body>
 </html>

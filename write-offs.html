@@ -16,8 +16,10 @@
           <a data-nav href="inventory.html"><span class="nav-icon">SK</span>Склад</a>
           <a data-nav href="ingredients.html"><span class="nav-icon">IN</span>Інгредієнти</a>
           <a data-nav href="recipes.html"><span class="nav-icon">RC</span>Рецепти</a>
-          <a data-nav href="deliveries.html"><span class="nav-icon">DL</span>Поставки</a>
+          <a data-nav href="deliveries.html"><span class="nav-icon">PS</span>Поставки</a>
           <a data-nav href="orders.html"><span class="nav-icon">OR</span>Замовлення</a>
+          <a data-nav href="customers.html"><span class="nav-icon">CL</span>Клієнти</a>
+          <a data-nav href="customer-deliveries.html"><span class="nav-icon">DL</span>Доставки</a>
           <a data-nav href="write-offs.html"><span class="nav-icon">WO</span>Списання</a>
           <a data-nav href="reports.html"><span class="nav-icon">RP</span>Звіти</a>
           <a data-nav href="admin.html"><span class="nav-icon">ST</span>Налаштування</a>
@@ -42,6 +44,19 @@
             </div>
             <button class="btn ghost" type="button" data-reset="writeoffs">Скинути демо</button>
           </header>
+
+          <article class="card mini-card" data-loss-panel>
+            <div class="card-head">
+              <h2>Втрати за період</h2>
+              <select data-loss-period aria-label="Період втрат">
+                <option value="7">7 днів</option>
+                <option value="30">30 днів</option>
+              </select>
+            </div>
+            <p class="metric-label">Сумарна вартість списань</p>
+            <h2 data-loss-total>0,00 zł</h2>
+            <p class="muted-line"><span data-loss-count>0</span> списань у вибраному періоді (за собівартістю інгредієнтів).</p>
+          </article>
 
           <section class="grid two">
             <article class="table-card">
@@ -81,16 +96,22 @@
                   <input name="qty" value="0.8 кг" data-writeoff-qty />
                 </div>
                 <div class="field">
-                  <label>Причина</label>
-                  <select name="reason">
-                    <option>Термін придатності</option>
-                    <option>Брак кухні</option>
-                    <option>Помилка замовлення</option>
-                    <option>Тест рецепту</option>
-                    <option>Інвентаризаційна різниця</option>
-                    <option>Інше</option>
-                  </select>
+                  <label>Дата</label>
+                  <input type="date" name="date" data-writeoff-date />
                 </div>
+              </div>
+              <div class="field">
+                <label>Причина</label>
+                <select name="reason">
+                  <option>Термін придатності</option>
+                  <option>Брак кухні</option>
+                  <option>Помилка замовлення</option>
+                  <option>Тест рецепту</option>
+                  <option>Інвентаризаційна різниця</option>
+                  <option>Надлишок</option>
+                  <option>Повернення</option>
+                  <option>Інше</option>
+                </select>
               </div>
               <div class="field">
                 <label>Коментар</label>
@@ -119,5 +140,63 @@
     </div>
     <div class="toast" role="status"></div>
     <script src="src/app.js?v=writeoff-audit-1"></script>
+    <script>
+      (function () {
+        if (!window.CRM) return;
+
+        // STK-2: default the explicit date field to today.
+        var dateInput = document.querySelector("[data-writeoff-date]");
+        if (dateInput && !dateInput.value) {
+          dateInput.value = new Date().toISOString().slice(0, 10);
+        }
+
+        // STK-3: compute total leftover VALUE over the selected period.
+        var periodSelect = document.querySelector("[data-loss-period]");
+        var totalNode = document.querySelector("[data-loss-total]");
+        var countNode = document.querySelector("[data-loss-count]");
+
+        function ingredientCost(name) {
+          var ingredients = window.CRM.read("ingredients") || [];
+          for (var i = 0; i < ingredients.length; i += 1) {
+            var ing = ingredients[i];
+            if (ing && String(ing.name || "").trim().toLowerCase() === String(name || "").trim().toLowerCase()) {
+              return window.CRM.toNumber(ing.cost);
+            }
+          }
+          return 0;
+        }
+
+        function renderLoss() {
+          if (!totalNode) return;
+          var days = periodSelect && periodSelect.value === "30" ? 30 : 7;
+          var cutoff = new Date();
+          cutoff.setDate(cutoff.getDate() - days);
+          var writeoffs = window.CRM.read("writeoffs") || [];
+          var total = 0;
+          var count = 0;
+          writeoffs.forEach(function (w) {
+            if (!w || !w.createdAt) return;
+            var when = new Date(w.createdAt);
+            if (isNaN(when.getTime()) || when < cutoff) return;
+            var amount = window.CRM.parseQuantity(w.qty).amount;
+            total += amount * ingredientCost(w.item);
+            count += 1;
+          });
+          totalNode.textContent = window.CRM.money(total);
+          if (countNode) countNode.textContent = String(count);
+        }
+
+        if (periodSelect) periodSelect.addEventListener("change", renderLoss);
+        // Re-compute after the core commits a write-off. The core's submit handler runs
+        // first (it was bound earlier); defer so we read storage after the row is saved.
+        var form = document.querySelector("[data-writeoff-form]");
+        if (form) {
+          form.addEventListener("submit", function () {
+            setTimeout(renderLoss, 0);
+          });
+        }
+        renderLoss();
+      })();
+    </script>
   </body>
 </html>

@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   get "recipes", to: "prototype#recipes"
   get "deliveries", to: "prototype#deliveries"
   get "orders", to: "prototype#orders"
+  get "customers", to: "prototype#customers"
+  get "customer-deliveries", to: "prototype#customer_deliveries", as: "customer_deliveries"
   get "write-offs", to: "prototype#write_offs"
   get "reports", to: "prototype#reports"
   get "admin", to: "prototype#admin"

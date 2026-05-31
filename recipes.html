@@ -16,8 +16,10 @@
           <a data-nav href="inventory.html"><span class="nav-icon">SK</span>Склад</a>
           <a data-nav href="ingredients.html"><span class="nav-icon">IN</span>Інгредієнти</a>
           <a data-nav href="recipes.html"><span class="nav-icon">RC</span>Рецепти</a>
-          <a data-nav href="deliveries.html"><span class="nav-icon">DL</span>Поставки</a>
+          <a data-nav href="deliveries.html"><span class="nav-icon">PS</span>Поставки</a>
           <a data-nav href="orders.html"><span class="nav-icon">OR</span>Замовлення</a>
+          <a data-nav href="customers.html"><span class="nav-icon">CL</span>Клієнти</a>
+          <a data-nav href="customer-deliveries.html"><span class="nav-icon">DL</span>Доставки</a>
           <a data-nav href="write-offs.html"><span class="nav-icon">WO</span>Списання</a>
           <a data-nav href="reports.html"><span class="nav-icon">RP</span>Звіти</a>
           <a data-nav href="admin.html"><span class="nav-icon">ST</span>Налаштування</a>
@@ -38,22 +40,22 @@
           <header class="page-head">
             <div class="page-title">
               <p class="eyebrow">Рецепти, витрати і модифікатори</p>
-              <h1>Як CRM рахує інгредієнти з ордерів</h1>
-              <p>Базовий рецепт дає норму на піцу, а правила модифікаторів читають опис замовлення: подвійний сир, +30%, додаткова курка, гострий соус.</p>
+              <h1>Меню, собівартість і норми інгредієнтів</h1>
+              <p>Базовий рецепт задає норму інгредієнтів на порцію, а CRM рахує собівартість і маржу з цін зі складу. Правила модифікаторів читають опис замовлення: подвійний сир, +30%, додаткова курка, гострий соус.</p>
             </div>
-            <a class="btn primary" href="inventory.html">Перейти до зміни</a>
+            <a class="btn primary" href="orders.html">Перейти до замовлень</a>
           </header>
 
           <section class="grid three">
             <article class="mini-card">
-              <span class="metric-label">1. Ордер</span>
-              <strong>Назва + опис</strong>
-              <p class="muted-line">Беремо тільки нескасовані замовлення з API або ручного вводу.</p>
+              <span class="metric-label">1. Рецепт</span>
+              <strong>База інгредієнтів</strong>
+              <p class="muted-line">Наприклад Піца Гриль = тісто + моцарела + ковбаса + соус.</p>
             </article>
             <article class="mini-card">
-              <span class="metric-label">2. Рецепт</span>
-              <strong>База інгредієнтів</strong>
-              <p class="muted-line">Наприклад Pizza Grill = тісто + моцарела + соус.</p>
+              <span class="metric-label">2. Собівартість</span>
+              <strong>Авто з цін складу</strong>
+              <p class="muted-line">К-сть інгредієнта × собівартість зі складу = витрати на порцію.</p>
             </article>
             <article class="mini-card">
               <span class="metric-label">3. Модифікатор</span>
@@ -66,22 +68,54 @@
             <article class="table-card">
               <div class="table-head">
                 <h2>Активні піци</h2>
-                <button class="btn ghost" type="button" data-reset="recipes">Скинути демо</button>
+                <div class="filters">
+                  <select data-filter aria-label="Категорія">
+                    <option value="all">Усі категорії</option>
+                    <option>Мʼясні</option>
+                    <option>Вегетаріанські</option>
+                    <option>Класичні</option>
+                  </select>
+                  <label class="check-row"><input type="checkbox" data-show-archived /> Архівні</label>
+                  <button class="btn ghost" type="button" data-reset="recipes">Скинути демо</button>
+                </div>
               </div>
               <table>
-                <thead><tr><th>Піца</th><th>Ціна</th><th>Собівартість</th><th>Склад</th></tr></thead>
+                <thead><tr><th>Піца</th><th>Категорія</th><th>Ціна</th><th>Собівартість/порція</th><th>Маржа</th><th>Порції</th><th>Склад</th><th>Дії</th></tr></thead>
                 <tbody data-table="recipes"></tbody>
               </table>
+              <p class="muted-line" data-result-count></p>
             </article>
 
-            <form class="card form-stack" data-entity="recipes">
+            <form class="card form-stack" data-entity="recipes" data-custom-submit="true" data-recipe-form>
               <div class="card-head"><h2>Додати піцу</h2><span class="tag info">Меню</span></div>
               <div class="form-row">
-                <div class="field"><label>Назва піци</label><input name="name" value="Pizza Firmowa" /></div>
-                <div class="field"><label>Ціна продажу</label><input name="price" value="39.99" /></div>
+                <div class="field"><label>Назва піци</label><input name="name" required value="Піца Фірмова" /></div>
+                <div class="field"><label>Категорія</label>
+                  <select name="category">
+                    <option>Мʼясні</option>
+                    <option>Вегетаріанські</option>
+                    <option>Класичні</option>
+                  </select>
+                </div>
               </div>
-              <div class="field"><label>Собівартість</label><input name="cost" value="15.40" /></div>
-              <div class="field"><label>Опис складу</label><textarea name="ingredients">Тісто 1 шт; моцарела 140 г; пепероні 70 г; томатний соус 85 мл</textarea></div>
+              <div class="form-row">
+                <div class="field"><label>Ціна продажу</label><input name="price" required value="39.99" /></div>
+                <div class="field"><label>Порції з рецепту</label><input name="portions" value="1" /></div>
+              </div>
+
+              <div class="field">
+                <label>Інгредієнти (норма на рецепт)</label>
+                <div class="item-rows" data-recipe-items></div>
+                <button class="btn ghost" type="button" data-add-item>+ Додати інгредієнт</button>
+              </div>
+
+              <div class="cost-readout" data-cost-readout>
+                <div><span>Собівартість</span><strong data-cost-total>—</strong></div>
+                <div><span>Собівартість/порція</span><strong data-cost-perportion>—</strong></div>
+                <div><span>Маржа</span><strong data-cost-margin>—</strong></div>
+              </div>
+
+              <div class="field"><label>Інструкція приготування</label><textarea name="instructions">Розкатати тісто, нанести соус, додати начинку, запекти 8 хв.</textarea></div>
               <button class="btn primary" type="submit">Зберегти піцу</button>
             </form>
           </section>
@@ -135,6 +169,132 @@
       </div>
     </div>
     <div class="toast" role="status"></div>
-    <script src="src/app.js?v=recipe-modifiers-1"></script>
+    <script src="src/app.js?v=rebuild-1"></script>
+    <script>
+      (function () {
+        if (!window.CRM) return;
+        var form = document.querySelector("[data-recipe-form]");
+        if (!form) return;
+        var rowsWrap = form.querySelector("[data-recipe-items]");
+        var addBtn = form.querySelector("[data-add-item]");
+        var readout = {
+          total: form.querySelector("[data-cost-total]"),
+          perPortion: form.querySelector("[data-cost-perportion]"),
+          margin: form.querySelector("[data-cost-margin]")
+        };
+
+        function ingredientOptions(selected) {
+          var names = CRM.read("ingredients").map(function (g) { return g.name; });
+          // keep selected value even if its ingredient was archived/removed
+          if (selected && names.indexOf(selected) === -1) names.unshift(selected);
+          var opts = '<option value="">— виберіть інгредієнт —</option>';
+          names.forEach(function (name) {
+            var sel = name === selected ? " selected" : "";
+            opts += '<option value="' + escapeAttr(name) + '"' + sel + ">" + escapeText(name) + "</option>";
+          });
+          return opts;
+        }
+
+        function escapeAttr(value) {
+          return String(value == null ? "" : value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+        function escapeText(value) {
+          return String(value == null ? "" : value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        function addItemRow(item) {
+          item = item || {};
+          var row = document.createElement("div");
+          row.className = "item-row";
+          row.innerHTML =
+            '<select data-item-ingredient aria-label="Інгредієнт">' + ingredientOptions(item.ingredient) + "</select>" +
+            '<input data-item-qty type="text" inputmode="decimal" placeholder="К-сть" value="' + escapeAttr(item.qty != null ? item.qty : "") + '" />' +
+            '<input data-item-unit type="text" placeholder="од." value="' + escapeAttr(item.unit != null ? item.unit : "кг") + '" />' +
+            '<button class="btn ghost xs" type="button" data-remove-item aria-label="Прибрати">✕</button>';
+          rowsWrap.appendChild(row);
+          recompute();
+        }
+
+        function collectItems() {
+          var items = [];
+          rowsWrap.querySelectorAll(".item-row").forEach(function (row) {
+            var ingredient = row.querySelector("[data-item-ingredient]").value.trim();
+            var qty = row.querySelector("[data-item-qty]").value.trim();
+            var unit = row.querySelector("[data-item-unit]").value.trim();
+            if (ingredient || qty) items.push({ ingredient: ingredient, qty: qty, unit: unit });
+          });
+          return items;
+        }
+
+        function recompute() {
+          var draft = {
+            price: form.elements.price ? form.elements.price.value : "",
+            portions: form.elements.portions ? form.elements.portions.value : "",
+            items: collectItems()
+          };
+          var cost = CRM.computeRecipeCost(draft);
+          readout.total.textContent = CRM.money(cost.total);
+          readout.perPortion.textContent = CRM.money(cost.perPortion);
+          readout.margin.textContent = CRM.money(cost.margin) + " (" + cost.marginPct.toFixed(0) + "%)";
+          readout.margin.className = cost.margin >= 0 ? "" : "status danger";
+        }
+
+        function resetRows() {
+          rowsWrap.innerHTML = "";
+          addItemRow();
+        }
+
+        // events
+        addBtn.addEventListener("click", function () { addItemRow(); });
+        rowsWrap.addEventListener("click", function (event) {
+          var btn = event.target.closest("[data-remove-item]");
+          if (!btn) return;
+          var row = btn.closest(".item-row");
+          if (row) row.remove();
+          if (!rowsWrap.querySelector(".item-row")) addItemRow();
+          recompute();
+        });
+        // recompute on any change in rows or price/portions
+        form.addEventListener("input", recompute);
+        form.addEventListener("change", recompute);
+
+        // repopulate dynamic rows when editing an existing recipe (REC-3)
+        form.addEventListener("crm:edit", function (event) {
+          var recipe = event.detail || {};
+          if (form.elements.instructions) form.elements.instructions.value = recipe.instructions || "";
+          rowsWrap.innerHTML = "";
+          var items = recipe.items && recipe.items.length ? recipe.items : [{}];
+          items.forEach(function (it) { addItemRow(it); });
+          recompute();
+        });
+
+        // custom submit: build object and upsert (REC-1/REC-3 create+edit)
+        form.addEventListener("submit", function (event) {
+          event.preventDefault();
+          var name = form.elements.name ? form.elements.name.value.trim() : "";
+          if (!name) { CRM.toast("Вкажіть назву піци"); return; }
+          if (form.elements.price && !form.elements.price.value.trim()) { CRM.toast("Вкажіть ціну продажу"); return; }
+          var obj = {
+            name: name,
+            category: form.elements.category ? form.elements.category.value : "",
+            price: form.elements.price ? form.elements.price.value.trim() : "",
+            portions: form.elements.portions ? form.elements.portions.value.trim() : "1",
+            instructions: form.elements.instructions ? form.elements.instructions.value.trim() : "",
+            items: collectItems()
+          };
+          if (form.dataset.editId) obj.id = form.dataset.editId;
+          CRM.upsert("recipes", obj);
+          CRM.toast(form.dataset.editId ? "Рецепт оновлено" : "Піцу додано до меню");
+          delete form.dataset.editId;
+          form.reset();
+          var head = form.querySelector(".card-head h2");
+          if (head && head.dataset.editLabel) { head.textContent = head.dataset.editLabel; delete head.dataset.editLabel; }
+          resetRows();
+        });
+
+        // initial state: one empty row + live readout
+        resetRows();
+      })();
+    </script>
   </body>
 </html>

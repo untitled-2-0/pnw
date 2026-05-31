@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Вхід | Pizza na Wypasie CRM</title>
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+  <body class="auth-page">
+    <main class="auth-shell">
+      <section class="auth-visual" aria-labelledby="login-title">
+        <div class="brand-lockup">
+          <div class="brand-mark">PW</div>
+          <div><strong>Pizza na Wypasie</strong><span>Адмінський контроль складу і кухні</span></div>
+        </div>
+        <div class="auth-copy">
+          <p class="eyebrow">Адмінська система</p>
+          <h1 id="login-title">Один адмінський центр керування</h1>
+          <p>Адміністратор бачить залишки, рецепти, поставки, замовлення, списання, звіти та керує користувачами в налаштуваннях.</p>
+        </div>
+      </section>
+
+      <section class="auth-form" aria-label="Форма входу">
+        <p class="eyebrow">US-001</p>
+        <h2>Вхід адміністратора</h2>
+        <p>У прототипі використовується один адмінський кабінет. Додаткових користувачів можна створювати в налаштуваннях.</p>
+        <form class="form-stack" action="dashboard.html">
+          <div class="field">
+            <label for="login">Електронна пошта або імʼя користувача</label>
+            <input id="login" name="login" type="text" value="admin@pizza.test" autocomplete="username" />
+          </div>
+          <div class="field">
+            <label for="password">Пароль</label>
+            <input id="password" name="password" type="password" autocomplete="current-password" />
+          </div>
+          <div class="check-row">
+            <label><input type="checkbox" checked /> Запамʼятати мене</label>
+            <a href="forgot-password.html">Забув пароль?</a>
+          </div>
+          <button class="btn primary" type="submit">Увійти</button>
+          <button class="btn ghost" type="button" data-route="dashboard.html">Перейти в демо</button>
+        </form>
+      </section>
+    </main>
+    <script src="src/app.js?v=local-save-1"></script>
+  </body>
+</html>

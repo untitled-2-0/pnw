@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Доставки | Pizza na Wypasie CRM</title>
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+  <body>
+    <div class="app-layout">
+      <aside class="sidebar">
+        <a class="app-brand" href="dashboard.html"><div class="brand-mark">PW</div><div><strong>Pizza na Wypasie</strong><span>Адмінська CRM</span></div></a>
+        <div class="nav-section">Адмін-панель</div>
+        <nav class="side-nav" aria-label="Основна навігація">
+          <a data-nav href="dashboard.html"><span class="nav-icon">DB</span>Дашборд</a>
+          <a data-nav href="inventory.html"><span class="nav-icon">SK</span>Склад</a>
+          <a data-nav href="ingredients.html"><span class="nav-icon">IN</span>Інгредієнти</a>
+          <a data-nav href="recipes.html"><span class="nav-icon">RC</span>Рецепти</a>
+          <a data-nav href="deliveries.html"><span class="nav-icon">PS</span>Поставки</a>
+          <a data-nav href="orders.html"><span class="nav-icon">OR</span>Замовлення</a>
+          <a data-nav href="customers.html"><span class="nav-icon">CL</span>Клієнти</a>
+          <a data-nav href="customer-deliveries.html"><span class="nav-icon">DL</span>Доставки</a>
+          <a data-nav href="write-offs.html"><span class="nav-icon">WO</span>Списання</a>
+          <a data-nav href="reports.html"><span class="nav-icon">RP</span>Звіти</a>
+          <a data-nav href="admin.html"><span class="nav-icon">ST</span>Налаштування</a>
+        </nav>
+      </aside>
+      <div>
+        <header class="topbar">
+          <input class="search" type="search" placeholder="Пошук за замовленням, курʼєром або адресою" />
+          <div class="topbar-actions">
+            <button class="btn ghost" type="button" data-export="customerDeliveries">Експорт Excel</button>
+            <label class="btn ghost">Імпорт CSV<input type="file" accept=".csv,text/csv" data-import="customerDeliveries" hidden /></label>
+          </div>
+        </header>
+
+        <main class="content">
+          <header class="page-head">
+            <div class="page-title">
+              <p class="eyebrow">Епік 9 · Доставка клієнтам</p>
+              <h1>Доставки</h1>
+              <p>Призначай курʼєра й вікно доставки, веди статуси Заплановано → У дорозі → Доставлено/Невдало та фіксуй результат. Статус автоматично відображається на повʼязаному замовленні.</p>
+            </div>
+            <button class="btn ghost" type="button" data-reset="customerDeliveries">Скинути демо</button>
+          </header>
+
+          <section class="grid two">
+            <article class="table-card">
+              <div class="table-head">
+                <h2>Доставки клієнтам</h2>
+                <label class="check-row"><input type="checkbox" data-show-archived /> Показати архівні</label>
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Замовлення</th>
+                    <th>Курʼєр</th>
+                    <th>Адреса</th>
+                    <th>Дата/вікно</th>
+                    <th>Статус</th>
+                    <th>Дії</th>
+                  </tr>
+                </thead>
+                <tbody data-table="customerDeliveries"></tbody>
+              </table>
+            </article>
+
+            <form class="card form-stack" data-entity="customerDeliveries" data-custom-submit="true">
+              <div class="card-head"><h2>Запланувати доставку</h2><span class="tag info">Курʼєр · вікно</span></div>
+              <div class="field">
+                <label>Замовлення</label>
+                <select name="orderId" data-order-select required></select>
+              </div>
+              <div class="form-row">
+                <div class="field"><label>Курʼєр</label><input name="driver" required value="Богдан" /></div>
+                <div class="field"><label>Дата доставки</label><input name="scheduledDate" type="date" required value="2026-05-31" /></div>
+              </div>
+              <div class="field">
+                <label>Адреса</label>
+                <input name="address" data-address-input required value="Краків, вул. Широка 8" />
+              </div>
+              <div class="form-row">
+                <div class="field">
+                  <label>Часове вікно</label>
+                  <select name="window">
+                    <option>12:00–14:00</option>
+                    <option>14:00–16:00</option>
+                    <option>16:00–18:00</option>
+                    <option selected>18:00–20:00</option>
+                    <option>20:00–22:00</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Статус</label>
+                  <select name="status" data-status-select></select>
+                </div>
+              </div>
+              <button class="btn primary" type="submit">Зберегти доставку</button>
+            </form>
+          </section>
+
+          <section class="table-card">
+            <div class="table-head">
+              <h2>Дошка доставок</h2>
+              <span class="tag success">Перетягни справу далі кнопкою «Далі →»</span>
+            </div>
+            <div class="filters">
+              <label class="field" style="margin:0">
+                <span class="metric-label">Дата</span>
+                <input type="date" data-board-date aria-label="Фільтр за датою" />
+              </label>
+              <select data-filter data-board-driver aria-label="Курʼєр">
+                <option value="all">Усі курʼєри</option>
+              </select>
+              <select data-filter data-board-status aria-label="Статус">
+                <option value="all">Усі статуси</option>
+                <option>Заплановано</option>
+                <option>У дорозі</option>
+                <option>Доставлено</option>
+                <option>Невдало</option>
+              </select>
+              <button class="btn ghost" type="button" data-board-clear>Скинути фільтри</button>
+              <span class="muted-line" data-board-count></span>
+            </div>
+            <div class="kanban" data-delivery-board></div>
+          </section>
+
+          <section class="card form-stack" data-outcome-panel hidden>
+            <div class="card-head">
+              <h2>Результат доставки</h2>
+              <span class="tag warning" data-outcome-label>Доставка</span>
+            </div>
+            <p class="muted-line">Залиш примітку курʼєра та збережи результат. Невдалі доставки можна перепланувати, змінивши дату через «Редагувати» у таблиці.</p>
+            <div class="field">
+              <label>Примітка / результат</label>
+              <textarea data-outcome-notes placeholder="Напр.: клієнт не відповів, передзвонили, перенесли на завтра"></textarea>
+            </div>
+            <div class="check-row">
+              <button class="btn primary" type="button" data-outcome-save>Зберегти результат</button>
+              <button class="btn ghost" type="button" data-outcome-cancel>Закрити</button>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+    <div class="toast" role="status"></div>
+    <script src="src/app.js?v=customer-deliveries-1"></script>
+    <script>
+      (function () {
+        if (!window.CRM) return;
+
+        var form = document.querySelector('form[data-entity="customerDeliveries"]');
+        var orderSelect = form ? form.querySelector("[data-order-select]") : null;
+        var addressInput = form ? form.querySelector("[data-address-input]") : null;
+        var statusSelect = form ? form.querySelector("[data-status-select]") : null;
+        var addressTouched = false;
+
+        /* ---------- helpers ---------- */
+        function orderById(id) {
+          return CRM.read("orders").find(function (o) { return String(o.id) === String(id); }) || null;
+        }
+        function addressForOrder(order) {
+          if (!order) return "";
+          var match = CRM.read("customers").find(function (c) {
+            return c.name && order.customerName && c.name.trim().toLowerCase() === String(order.customerName).trim().toLowerCase();
+          });
+          return (match && match.address) || "";
+        }
+        function orderLabelText(order) {
+          if (!order) return "";
+          var name = order.customerName ? " — " + order.customerName : "";
+          return "#" + (order.number || order.id) + name;
+        }
+
+        /* ---------- populate the order <select> ---------- */
+        function fillOrderSelect(selectedId) {
+          if (!orderSelect) return;
+          var orders = CRM.read("orders");
+          orderSelect.innerHTML = '<option value="">— оберіть замовлення —</option>' +
+            orders.map(function (o) {
+              return '<option value="' + o.id + '">' + orderLabelText(o) + "</option>";
+            }).join("");
+          if (selectedId) orderSelect.value = selectedId;
+        }
+
+        /* ---------- populate the status <select> from CRM.DELIVERY_STATUSES ---------- */
+        function fillStatusSelect() {
+          if (!statusSelect) return;
+          statusSelect.innerHTML = (CRM.DELIVERY_STATUSES || ["Заплановано"]).map(function (s) {
+            return '<option' + (s === "Заплановано" ? " selected" : "") + ">" + s + "</option>";
+          }).join("");
+        }
+
+        /* auto-fill address from the order's customer when an order is picked (editable after) */
+        if (orderSelect) {
+          orderSelect.addEventListener("change", function () {
+            var order = orderById(orderSelect.value);
+            if (order && addressInput && !addressTouched) {
+              var addr = addressForOrder(order);
+              if (addr) addressInput.value = addr;
+            }
+          });
+        }
+        if (addressInput) {
+          addressInput.addEventListener("input", function () { addressTouched = true; });
+        }
+
+        /* ---------- custom submit (DEL-1) ---------- */
+        if (form) {
+          form.addEventListener("submit", function (event) {
+            event.preventDefault();
+            var orderId = orderSelect ? orderSelect.value : "";
+            var driver = (form.elements.driver.value || "").trim();
+            var address = (form.elements.address.value || "").trim();
+            var scheduledDate = form.elements.scheduledDate.value || "";
+            if (!orderId || !driver || !address || !scheduledDate) {
+              CRM.toast("Заповніть замовлення, курʼєра, адресу і дату");
+              return;
+            }
+            var order = orderById(orderId);
+            var number = order ? (order.number || order.id) : orderId;
+            var status = statusSelect ? statusSelect.value : "Заплановано";
+            var obj = {
+              orderLabel: "#" + number,
+              orderIds: [orderId],
+              driver: driver,
+              address: address,
+              scheduledDate: scheduledDate,
+              window: form.elements.window.value,
+              status: status,
+              statusHistory: [{ status: status, at: new Date().toISOString() }]
+            };
+            if (form.dataset.editId) obj.id = form.dataset.editId;
+            CRM.upsert("customerDeliveries", obj);
+            CRM.toast(form.dataset.editId ? "Доставку оновлено" : "Доставку заплановано");
+            delete form.dataset.editId;
+            addressTouched = false;
+            form.reset();
+            var head = form.querySelector(".card-head h2");
+            if (head && head.dataset.editLabel) { head.textContent = head.dataset.editLabel; delete head.dataset.editLabel; }
+            fillOrderSelect("");
+            fillStatusSelect();
+          });
+
+          /* repopulate dynamic parts when a row's Редагувати is clicked */
+          form.addEventListener("crm:edit", function (event) {
+            var row = event.detail || {};
+            addressTouched = true; // keep the stored address when editing
+            fillOrderSelect((row.orderIds && row.orderIds[0]) || "");
+            if (statusSelect && row.status) statusSelect.value = row.status;
+            if (addressInput && row.address) addressInput.value = row.address;
+          });
+        }
+
+        /* ---------- DEL-3 / DEL-4: kanban board ---------- */
+        var board = document.querySelector("[data-delivery-board]");
+        var dateFilter = document.querySelector("[data-board-date]");
+        var driverFilter = document.querySelector("[data-board-driver]");
+        var statusFilter = document.querySelector("[data-board-status]");
+        var boardCount = document.querySelector("[data-board-count]");
+        var clearBtn = document.querySelector("[data-board-clear]");
+
+        var outcomePanel = document.querySelector("[data-outcome-panel]");
+        var outcomeLabel = document.querySelector("[data-outcome-label]");
+        var outcomeNotes = document.querySelector("[data-outcome-notes]");
+        var activeOutcomeId = null;
+
+        function fillDriverFilter(rows) {
+          if (!driverFilter) return;
+          var current = driverFilter.value;
+          var drivers = [];
+          rows.forEach(function (d) {
+            if (d.driver && drivers.indexOf(d.driver) === -1) drivers.push(d.driver);
+          });
+          driverFilter.innerHTML = '<option value="all">Усі курʼєри</option>' +
+            drivers.map(function (n) { return "<option>" + escapeText(n) + "</option>"; }).join("");
+          if (current && (current === "all" || drivers.indexOf(current) !== -1)) driverFilter.value = current;
+        }
+
+        function escapeText(value) {
+          return String(value == null ? "" : value)
+            .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+        }
+
+        function buildBoard() {
+          if (!board) return;
+          var all = CRM.read("customerDeliveries").filter(function (d) { return !d.archived; });
+          fillDriverFilter(all);
+
+          var dateVal = dateFilter ? dateFilter.value : "";
+          var driverVal = driverFilter ? driverFilter.value : "all";
+          var statusVal = statusFilter ? statusFilter.value : "all";
+
+          var rows = all.filter(function (d) {
+            if (dateVal && String(d.scheduledDate || "").slice(0, 10) !== dateVal) return false;
+            if (driverVal && driverVal !== "all" && d.driver !== driverVal) return false;
+            if (statusVal && statusVal !== "all" && d.status !== statusVal) return false;
+            return true;
+          });
+
+          var statuses = CRM.DELIVERY_STATUSES || ["Заплановано", "У дорозі", "Доставлено", "Невдало"];
+          board.innerHTML = statuses.map(function (status) {
+            var cards = rows.filter(function (d) { return (d.status || "Заплановано") === status; });
+            var statusClass = status === "Доставлено" ? "ok" : status === "Невдало" ? "danger" : status === "У дорозі" ? "warn" : "info";
+            var cardsHtml = cards.length
+              ? cards.map(function (d) {
+                  var isFinal = d.status === "Доставлено" || d.status === "Невдало";
+                  var advanceBtn = isFinal ? "" :
+                    '<button class="btn ghost xs" type="button" data-board-advance data-id="' + escapeText(d.id) + '">Далі →</button>';
+                  var failBtn = d.status === "Невдало" ? "" :
+                    '<button class="btn danger xs" type="button" data-board-fail data-id="' + escapeText(d.id) + '">Невдало</button>';
+                  var outcomeBtn = '<button class="btn ghost xs" type="button" data-board-outcome data-id="' + escapeText(d.id) + '">Результат</button>';
+                  var notes = d.outcomeNotes ? '<p class="muted-line">Результат: ' + escapeText(d.outcomeNotes) + "</p>" : "";
+                  var outAt = d.outcomeAt ? '<small class="muted-line">' + escapeText(CRM.formatDateTime(d.outcomeAt)) + "</small>" : "";
+                  return '<article class="order-card">' +
+                    "<strong>" + escapeText(d.orderLabel || (d.orderIds || []).join(", ") || "-") + "</strong>" +
+                    '<p class="muted-line">Курʼєр: ' + escapeText(d.driver || "-") + "</p>" +
+                    '<p class="muted-line">' + escapeText(d.address || "-") + "</p>" +
+                    '<p class="muted-line">' + escapeText(CRM.formatDate(d.scheduledDate)) + " · " + escapeText(d.window || "") + "</p>" +
+                    notes + outAt +
+                    '<div class="check-row" style="gap:6px;flex-wrap:wrap">' + advanceBtn + failBtn + outcomeBtn + "</div>" +
+                    "</article>";
+                }).join("")
+              : '<p class="muted-line">Немає доставок</p>';
+            return '<div class="column">' +
+              '<div class="table-head"><h3>' + status + ' <span class="status ' + statusClass + '">' + cards.length + "</span></h3></div>" +
+              cardsHtml +
+              "</div>";
+          }).join("");
+
+          if (boardCount) boardCount.textContent = "На дошці: " + rows.length + " / " + all.length;
+        }
+
+        /* keep the board (and order select) in sync with every core data change:
+           wrap CRM.renderEntity, which is the single funnel for upsert/update/archive/remove. */
+        var originalRender = CRM.renderEntity;
+        CRM.renderEntity = function (entity) {
+          var result = originalRender.apply(this, arguments);
+          if (entity === "customerDeliveries") buildBoard();
+          if (entity === "orders") fillOrderSelect(orderSelect ? orderSelect.value : "");
+          return result;
+        };
+
+        /* board action delegation (DEL-2 advance / Невдало, DEL-4 outcome) */
+        document.addEventListener("click", function (event) {
+          var advance = event.target.closest("[data-board-advance]");
+          if (advance) { CRM.advanceDelivery(advance.dataset.id); return; }
+
+          var fail = event.target.closest("[data-board-fail]");
+          if (fail) {
+            CRM.update("customerDeliveries", fail.dataset.id,
+              { status: "Невдало", outcomeAt: new Date().toISOString() },
+              { action: "delivery-status", detail: "Невдало" });
+            CRM.toast("Доставка позначена як невдала");
+            return;
+          }
+
+          var outcome = event.target.closest("[data-board-outcome]");
+          if (outcome) { openOutcome(outcome.dataset.id); return; }
+        });
+
+        /* ---------- DEL-4: outcome notes panel ---------- */
+        function openOutcome(id) {
+          var row = CRM.byId("customerDeliveries", id);
+          if (!row || !outcomePanel) return;
+          activeOutcomeId = id;
+          if (outcomeLabel) outcomeLabel.textContent = row.orderLabel || "Доставка";
+          if (outcomeNotes) outcomeNotes.value = row.outcomeNotes || "";
+          outcomePanel.hidden = false;
+          outcomePanel.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+        var outcomeSave = document.querySelector("[data-outcome-save]");
+        var outcomeCancel = document.querySelector("[data-outcome-cancel]");
+        if (outcomeSave) {
+          outcomeSave.addEventListener("click", function () {
+            if (!activeOutcomeId) return;
+            CRM.update("customerDeliveries", activeOutcomeId,
+              { outcomeNotes: (outcomeNotes ? outcomeNotes.value : "").trim(), outcomeAt: new Date().toISOString() },
+              { action: "delivery-outcome", detail: "Результат збережено" });
+            CRM.toast("Результат збережено");
+            if (outcomePanel) outcomePanel.hidden = true;
+            activeOutcomeId = null;
+          });
+        }
+        if (outcomeCancel) {
+          outcomeCancel.addEventListener("click", function () {
+            if (outcomePanel) outcomePanel.hidden = true;
+            activeOutcomeId = null;
+          });
+        }
+
+        /* board filters re-render the board (table filtering for driver/status is handled by the core) */
+        if (dateFilter) dateFilter.addEventListener("change", buildBoard);
+        if (driverFilter) driverFilter.addEventListener("change", buildBoard);
+        if (statusFilter) statusFilter.addEventListener("change", buildBoard);
+        if (clearBtn) {
+          clearBtn.addEventListener("click", function () {
+            if (dateFilter) dateFilter.value = "";
+            if (driverFilter) driverFilter.value = "all";
+            if (statusFilter) statusFilter.value = "all";
+            buildBoard();
+            CRM.applyDomFilter();
+          });
+        }
+
+        /* ---------- init ---------- */
+        fillOrderSelect("");
+        fillStatusSelect();
+        buildBoard();
+      })();
+    </script>
+  </body>
+</html>

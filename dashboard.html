@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Дашборд адміністратора | Pizza na Wypasie CRM</title>
+    <title>Дашборд | Pizza na Wypasie CRM</title>
     <link rel="stylesheet" href="src/styles.css" />
   </head>
   <body>
@@ -16,8 +16,10 @@
           <a data-nav href="inventory.html"><span class="nav-icon">SK</span>Склад</a>
           <a data-nav href="ingredients.html"><span class="nav-icon">IN</span>Інгредієнти</a>
           <a data-nav href="recipes.html"><span class="nav-icon">RC</span>Рецепти</a>
-          <a data-nav href="deliveries.html"><span class="nav-icon">DL</span>Поставки</a>
+          <a data-nav href="deliveries.html"><span class="nav-icon">PS</span>Поставки</a>
           <a data-nav href="orders.html"><span class="nav-icon">OR</span>Замовлення</a>
+          <a data-nav href="customers.html"><span class="nav-icon">CL</span>Клієнти</a>
+          <a data-nav href="customer-deliveries.html"><span class="nav-icon">DL</span>Доставки</a>
           <a data-nav href="write-offs.html"><span class="nav-icon">WO</span>Списання</a>
           <a data-nav href="reports.html"><span class="nav-icon">RP</span>Звіти</a>
           <a data-nav href="admin.html"><span class="nav-icon">ST</span>Налаштування</a>
@@ -27,67 +29,69 @@
       <div>
         <header class="topbar">
           <input class="search" type="search" placeholder="Пошук піци, інгредієнта або дії" />
-          <div class="topbar-actions">
-            <a class="btn ghost" href="alerts.html">7 алертів</a>
-            <a class="user-chip" href="profile.html"><span class="avatar">AN</span><strong>Анастасія</strong></a>
-          </div>
+          <div class="topbar-actions"></div>
         </header>
 
         <main class="content">
           <header class="page-head">
             <div class="page-title">
-              <p class="eyebrow">US-010 Дашборд адміністратора</p>
+              <p class="eyebrow">US-010 · Дашборд адміністратора</p>
               <h1>Бізнес одним екраном</h1>
-              <p>Виторг, замовлення, критичні залишки, топ-піци й потреба в дозамовленні з автооновленням кожні 60 секунд.</p>
+              <p>Виторг, замовлення, критичні залишки й топ-піци за обраний період. Дані рахуються з ваших замовлень, складу та доставок.</p>
             </div>
             <div class="actions">
-              <div class="segmented" aria-label="Період">
-                <a class="active" href="#">Сьогодні</a>
-                <a href="#">Тиждень</a>
-                <a href="#">Місяць</a>
+              <div class="segmented" role="tablist" aria-label="Період" data-period>
+                <button type="button" class="active" data-period-btn="today">Сьогодні</button>
+                <button type="button" data-period-btn="7d">7 днів</button>
+                <button type="button" data-period-btn="30d">30 днів</button>
               </div>
-              <button class="btn primary" data-toast="Експорт Excel поставлено в чергу">Експорт</button>
+              <div class="filters" style="gap:8px">
+                <div class="field"><label>Від</label><input type="date" data-range-from aria-label="Дата від" /></div>
+                <div class="field"><label>До</label><input type="date" data-range-to aria-label="Дата до" /></div>
+                <button class="btn ghost" type="button" data-range-apply>Застосувати діапазон</button>
+              </div>
             </div>
           </header>
 
-          <section class="grid kpi" aria-label="Ключові показники">
-            <article class="card kpi-card"><span>Виторг сьогодні</span><strong>8 420 зл</strong><em class="trend">+12%</em></article>
-            <article class="card kpi-card"><span>Замовлення</span><strong>146</strong><em class="trend">+9%</em></article>
-            <article class="card kpi-card"><span>Середній чек</span><strong>57,67 зл</strong><em class="trend down">-3%</em></article>
-            <article class="card kpi-card"><span>Потрібно дозамовити</span><strong>7</strong><em class="trend down">критично</em></article>
+          <section class="filters" aria-label="Швидкі дії" style="margin-bottom:18px">
+            <a class="btn primary" href="orders.html">Нове замовлення</a>
+            <a class="btn ghost" href="ingredients.html">Додати інгредієнт</a>
+            <a class="btn ghost" href="recipes.html">Новий рецепт</a>
+            <span class="muted-line" data-period-label>Період: сьогодні</span>
           </section>
 
-          <section class="grid two" style="margin-top: 18px">
+          <section class="grid kpi" aria-label="Ключові показники">
+            <article class="card kpi-card"><span>Замовлення сьогодні</span><strong data-kpi="todayOrders">0</strong><em class="trend" data-kpi-note>сьогодні</em></article>
+            <article class="card kpi-card"><span>Доставки в очікуванні</span><strong data-kpi="pendingDeliveries">0</strong><em class="trend" data-kpi-note>в роботі</em></article>
+            <article class="card kpi-card"><span>Низький залишок</span><strong data-kpi="lowCount">0</strong><em class="trend down" data-kpi-note>дозамовити</em></article>
+            <article class="card kpi-card"><span>Вартість залишків/списань</span><strong data-kpi="leftoversValue">0</strong><em class="trend" data-kpi-note>списання</em></article>
+            <article class="card kpi-card"><span>Виторг за період</span><strong data-kpi="revenue">0</strong><em class="trend" data-kpi-note>за період</em></article>
+            <article class="card kpi-card"><span>Середній чек</span><strong data-kpi="aov">0</strong><em class="trend" data-kpi-note>середній</em></article>
+          </section>
+
+          <section class="grid two" style="margin-top:18px">
             <article class="card">
               <div class="card-head">
-                <h2>Виторг за 7 днів</h2>
-                <div class="segmented"><a class="active" href="#">7 днів</a><a href="#">30 днів</a></div>
+                <h2 data-chart-title>Виторг за період</h2>
+                <div class="segmented" role="tablist" aria-label="Тип графіка" data-metric>
+                  <button type="button" class="active" data-metric-btn="revenue">Виторг</button>
+                  <button type="button" data-metric-btn="orders">Замовлення</button>
+                </div>
               </div>
-              <div class="chart" aria-label="Виторг chart">
-                <span class="bar" style="height: 45%"></span>
-                <span class="bar" style="height: 58%"></span>
-                <span class="bar" style="height: 51%"></span>
-                <span class="bar" style="height: 70%"></span>
-                <span class="bar" style="height: 64%"></span>
-                <span class="bar" style="height: 88%"></span>
-                <span class="bar" style="height: 76%"></span>
-              </div>
+              <div class="chart dynamic" data-chart aria-label="Графік за період"></div>
+              <p class="muted-line" data-chart-caption></p>
             </article>
 
             <aside class="grid">
-              <article class="notice">
-                <strong>Критичні залишки</strong>
-                <span>Моцарела, пепероні, халапеньйо і 4 позиції нижче мінімального залишку.</span>
-                <a class="btn primary" href="deliveries.html">Створити замовлення</a>
+              <article class="notice" data-alerts>
+                <strong>Сповіщення та алерти</strong>
+                <span class="muted-line" data-alerts-empty hidden>Активних алертів немає — все під контролем.</span>
+                <div class="list" data-alerts-list></div>
               </article>
               <article class="card">
-                <div class="card-head"><h2>Топ-5 піц</h2></div>
-                <div class="list">
-                  <div class="list-row"><strong>Піца Гриль</strong><span>42 шт</span></div>
-                  <div class="list-row"><strong>Куряча BBQ</strong><span>37 шт</span></div>
-                  <div class="list-row"><strong>Сирний шал</strong><span>31 шт</span></div>
-                  <div class="list-row"><strong>Vege Spicy Beef</strong><span>28 шт</span></div>
-                  <div class="list-row"><strong>Кальцоне</strong><span>19 шт</span></div>
+                <div class="card-head"><h2>Топ-5 піц</h2><span class="tag info">за період</span></div>
+                <div class="list" data-top-pizzas>
+                  <div class="list-row"><span class="muted-line">Немає даних за період.</span></div>
                 </div>
               </article>
             </aside>
@@ -96,6 +100,234 @@
       </div>
     </div>
     <div class="toast" role="status"></div>
-    <script src="src/app.js?v=local-save-1"></script>
+    <script src="src/app.js?v=dashboard-2"></script>
+    <script>
+      (function () {
+        if (!window.CRM) return;
+
+        var state = { period: "today", metric: "revenue", from: "", to: "" };
+
+        var fmtDay = function (key) {
+          var d = new Date(key + "T00:00:00");
+          if (isNaN(d.getTime())) return key;
+          return d.toLocaleDateString("uk-UA", { day: "2-digit", month: "2-digit" });
+        };
+        var todayKey = function () { return new Date().toISOString().slice(0, 10); };
+
+        // Build a {date,orders,revenue} series for an arbitrary inclusive date range
+        // directly from orders so custom spans of any length work. Skip cancelled.
+        function rangeSeries(fromKey, toKey) {
+          var orders = CRM.read("orders").filter(function (o) {
+            return !String(o.status || "").startsWith("Скас");
+          });
+          var start = new Date(fromKey + "T00:00:00");
+          var end = new Date(toKey + "T00:00:00");
+          var out = [];
+          if (isNaN(start.getTime()) || isNaN(end.getTime()) || start > end) return out;
+          // guard against an absurd span
+          var maxDays = 366;
+          var cursor = new Date(start);
+          var count = 0;
+          while (cursor <= end && count < maxDays) {
+            var key = cursor.toISOString().slice(0, 10);
+            var dayOrders = orders.filter(function (o) {
+              return String(o.orderDate || "").slice(0, 10) === key;
+            });
+            out.push({
+              date: key,
+              orders: dayOrders.length,
+              revenue: dayOrders.reduce(function (s, o) { return s + CRM.toNumber(o.total || o.price); }, 0)
+            });
+            cursor.setDate(cursor.getDate() + 1);
+            count += 1;
+          }
+          return out;
+        }
+
+        // Resolve the active series + a human label for the current state.
+        function activeSeries() {
+          if (state.period === "custom" && state.from && state.to) {
+            return { series: rangeSeries(state.from, state.to), label: "Період: " + fmtDay(state.from) + " – " + fmtDay(state.to) };
+          }
+          if (state.period === "today") {
+            var t = todayKey();
+            return { series: rangeSeries(t, t), label: "Період: сьогодні" };
+          }
+          var base = CRM.dashboardData(state.period === "30d" ? "30d" : "7d");
+          return { series: base.series || [], label: "Період: останні " + (state.period === "30d" ? "30 днів" : "7 днів") };
+        }
+
+        // Top-5 pizzas by quantity over the orders that fall inside the active series window.
+        function topPizzas(series) {
+          var keys = {};
+          series.forEach(function (p) { keys[p.date] = true; });
+          var counts = {};
+          CRM.read("orders").forEach(function (o) {
+            if (String(o.status || "").startsWith("Скас")) return;
+            if (!keys[String(o.orderDate || "").slice(0, 10)]) return;
+            (o.items || []).forEach(function (it) {
+              if (!it.recipe) return;
+              counts[it.recipe] = (counts[it.recipe] || 0) + CRM.toNumber(it.qty || 1);
+            });
+          });
+          return Object.keys(counts)
+            .map(function (name) { return { name: name, qty: counts[name] }; })
+            .sort(function (a, b) { return b.qty - a.qty; })
+            .slice(0, 5);
+        }
+
+        function renderKpis(series) {
+          var snap = CRM.dashboardData(state.period === "30d" ? "30d" : "7d");
+          var periodRevenue = series.reduce(function (s, p) { return s + CRM.toNumber(p.revenue); }, 0);
+          var periodOrders = series.reduce(function (s, p) { return s + CRM.toNumber(p.orders); }, 0);
+          var aov = periodOrders ? periodRevenue / periodOrders : 0;
+          var values = {
+            // "now"-state metrics, not period dependent
+            todayOrders: snap.todayOrders,
+            pendingDeliveries: snap.pendingDeliveries,
+            lowCount: snap.lowCount,
+            leftoversValue: CRM.money(snap.leftoversValue),
+            // period-dependent metrics derived from the active series
+            revenue: CRM.money(periodRevenue),
+            aov: CRM.money(aov)
+          };
+          Object.keys(values).forEach(function (key) {
+            var el = document.querySelector('[data-kpi="' + key + '"]');
+            if (el) el.textContent = values[key];
+          });
+        }
+
+        function renderChart(series) {
+          var host = document.querySelector("[data-chart]");
+          if (!host) return;
+          host.innerHTML = "";
+          var metric = state.metric;
+          var max = series.reduce(function (m, p) { return Math.max(m, CRM.toNumber(p[metric])); }, 0);
+          if (!series.length) {
+            host.innerHTML = '<span class="muted-line" style="align-self:center">Немає даних за період.</span>';
+          } else {
+            series.forEach(function (p) {
+              var val = CRM.toNumber(p[metric]);
+              var pct = max > 0 ? Math.round((val / max) * 100) : 0;
+              if (pct < 4 && val > 0) pct = 4;
+              var bar = document.createElement("span");
+              bar.className = "bar" + (metric === "orders" ? " alt" : "");
+              bar.style.height = pct + "%";
+              var human = metric === "revenue" ? CRM.money(val) : val + " зам.";
+              bar.title = fmtDay(p.date) + ": " + human;
+              host.appendChild(bar);
+            });
+          }
+          var title = document.querySelector("[data-chart-title]");
+          if (title) title.textContent = (metric === "revenue" ? "Виторг" : "Замовлення") + " за період";
+          var caption = document.querySelector("[data-chart-caption]");
+          if (caption) {
+            var total = series.reduce(function (s, p) { return s + CRM.toNumber(p[metric]); }, 0);
+            caption.textContent = metric === "revenue"
+              ? "Сума за період: " + CRM.money(total) + " · днів: " + series.length
+              : "Замовлень за період: " + total + " · днів: " + series.length;
+          }
+        }
+
+        function renderTopPizzas(series) {
+          var host = document.querySelector("[data-top-pizzas]");
+          if (!host) return;
+          var rows = topPizzas(series);
+          if (!rows.length) {
+            host.innerHTML = '<div class="list-row"><span class="muted-line">Немає даних за період.</span></div>';
+            return;
+          }
+          host.innerHTML = rows.map(function (r) {
+            return '<div class="list-row"><strong>' + escapeText(r.name) + "</strong><span>" + CRM.num(r.qty) + " шт</span></div>";
+          }).join("");
+        }
+
+        function renderAlerts() {
+          var list = document.querySelector("[data-alerts-list]");
+          var empty = document.querySelector("[data-alerts-empty]");
+          if (!list) return;
+          var html = "";
+
+          (CRM.lowStock() || []).forEach(function (ing) {
+            var snap = CRM.snapshot(ing.name);
+            var amount = snap ? snap.display : CRM.num(ing.stock) + " " + (ing.unit || "");
+            html += '<a class="list-row" href="ingredients.html">' +
+              "<strong>" + escapeText(ing.name) + "</strong>" +
+              '<span class="status warn">залишок ' + escapeText(amount) + " (мін " + CRM.num(ing.min) + ")</span></a>";
+          });
+
+          var today = todayKey();
+          CRM.read("customerDeliveries").filter(function (d) {
+            if (d.archived) return false;
+            var sched = String(d.scheduledDate || "").slice(0, 10);
+            return sched && sched < today && ["Доставлено", "Невдало"].indexOf(d.status) === -1;
+          }).forEach(function (d) {
+            var label = d.orderLabel || (d.orderIds || []).join(", ") || "Доставка";
+            html += '<a class="list-row" href="customer-deliveries.html">' +
+              "<strong>" + escapeText(label) + "</strong>" +
+              '<span class="status danger">прострочено · ' + escapeText(CRM.formatDate(d.scheduledDate)) +
+              " · " + escapeText(d.status || "") + "</span></a>";
+          });
+
+          list.innerHTML = html;
+          if (empty) empty.hidden = html !== "";
+        }
+
+        function escapeText(value) {
+          var div = document.createElement("div");
+          div.textContent = value == null ? "" : String(value);
+          return div.innerHTML;
+        }
+
+        function render() {
+          var active = activeSeries();
+          var label = document.querySelector("[data-period-label]");
+          if (label) label.textContent = active.label;
+          renderKpis(active.series);
+          renderChart(active.series);
+          renderTopPizzas(active.series);
+          renderAlerts();
+        }
+
+        // Period segmented control
+        document.querySelectorAll("[data-period-btn]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            document.querySelectorAll("[data-period-btn]").forEach(function (b) { b.classList.remove("active"); });
+            btn.classList.add("active");
+            state.period = btn.dataset.periodBtn;
+            render();
+          });
+        });
+
+        // Custom range
+        var applyBtn = document.querySelector("[data-range-apply]");
+        if (applyBtn) {
+          applyBtn.addEventListener("click", function () {
+            var from = document.querySelector("[data-range-from]");
+            var to = document.querySelector("[data-range-to]");
+            var fv = from ? from.value : "";
+            var tv = to ? to.value : "";
+            if (!fv || !tv) { CRM.toast("Вкажіть обидві дати діапазону"); return; }
+            if (fv > tv) { CRM.toast("Дата 'від' пізніша за 'до'"); return; }
+            state.from = fv; state.to = tv; state.period = "custom";
+            document.querySelectorAll("[data-period-btn]").forEach(function (b) { b.classList.remove("active"); });
+            render();
+          });
+        }
+
+        // Metric (revenue/orders) toggle
+        document.querySelectorAll("[data-metric-btn]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            document.querySelectorAll("[data-metric-btn]").forEach(function (b) { b.classList.remove("active"); });
+            btn.classList.add("active");
+            state.metric = btn.dataset.metricBtn;
+            var active = activeSeries();
+            renderChart(active.series);
+          });
+        });
+
+        render();
+      })();
+    </script>
   </body>
 </html>
