@@ -1,6 +1,11 @@
 <!doctype html>
 <html lang="uk">
-  <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Дашборд складу | Pizza na Wypasie CRM</title><link rel="stylesheet" href="src/styles.css" /></head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Склад | Pizza na Wypasie CRM</title>
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
   <body>
     <div class="app-layout">
       <aside class="sidebar">
@@ -18,18 +23,72 @@
           <a data-nav href="admin.html"><span class="nav-icon">ST</span>Налаштування</a>
         </nav>
       </aside>
+
       <div>
-        <header class="topbar"><input class="search" type="search" placeholder="Пошук партії або постачальника" /><div class="topbar-actions"><a class="btn ghost" href="alerts.html">Алерти терміну придатності</a><a class="user-chip" href="profile.html"><span class="avatar">IR</span><strong>Іра</strong></a></div></header>
-        <main class="content">
-          <header class="page-head"><div class="page-title"><p class="eyebrow">US-013 Дашборд складу</p><h1>Склад без сюрпризів</h1><p>Що замовити, що прийняти сьогодні і які партії використати першими за FEFO.</p></div><a class="btn primary" href="deliveries.html">Створити замовлення постачальнику</a></header>
-          <section class="grid three">
-            <article class="card"><div class="card-head"><h2>Нижче мінімального залишку</h2></div><div class="list"><div class="list-row"><strong>Пепероні</strong><span>+8 кг</span></div><div class="list-row"><strong>Печериці</strong><span>+6 кг</span></div><div class="list-row"><strong>Oliwa czosnkowa</strong><span>+3 l</span></div></div></article>
-            <article class="card"><div class="card-head"><h2>Очікувані поставки</h2></div><div class="list"><div class="list-row"><strong>Сир і молочні продукти</strong><span>сьогодні 09:30</span></div><div class="list-row"><strong>Warzywa fresh</strong><span>завтра 07:40</span></div></div></article>
-            <article class="card"><div class="card-head"><h2>Скоро прострочиться</h2></div><div class="list"><div class="list-row"><strong>Моцарела партія MZ-18</strong><span class="tag warning">2 дні</span></div><div class="list-row"><strong>Соус BBQ партія BQ-04</strong><span class="tag danger">сьогодні</span></div></div></article>
+        <header class="topbar">
+          <input class="search" type="search" placeholder="Пошук товару або інгредієнта" />
+          <div class="topbar-actions">
+            <label class="date-control">Дата <input type="date" data-daily-date /></label>
+            <button class="btn primary" type="button" data-close-shift>Закрити зміну</button>
+            <button class="btn ghost" type="button" data-predict-usage>Перерахувати прогноз</button>
+            <a class="btn ghost" href="deliveries.html">Поставки</a>
+          </div>
+        </header>
+
+        <main class="content inventory-workspace">
+          <header class="page-head compact-head">
+            <div class="page-title">
+              <p class="eyebrow">Щоденний облік складу</p>
+              <h1>Склад зміни</h1>
+            </div>
+            <button class="btn ghost" type="button" data-reset="dailyStock">Скинути демо</button>
+          </header>
+
+          <section class="ops-bar">
+            <div>
+              <span class="tag info" data-daily-summary>Позицій: 0</span>
+              <p class="muted-line" data-daily-mode-label>Ранок: редагуємо тільки початок дня</p>
+            </div>
+            <div class="segmented" aria-label="Режим роботи">
+              <button class="active" type="button" data-daily-mode="morning">Ранок</button>
+              <button type="button" data-daily-mode="delivery">Доставка</button>
+              <button type="button" data-daily-mode="closing">Закриття</button>
+              <button type="button" data-daily-mode="control">Контроль</button>
+            </div>
+            <div class="segmented" aria-label="Фільтри проблем">
+              <button class="active" type="button" data-daily-filter="all">Всі</button>
+              <button type="button" data-daily-filter="variance">Різниця</button>
+              <button type="button" data-daily-filter="empty">Порожні</button>
+              <button type="button" data-daily-filter="low">Нижче мінімуму</button>
+            </div>
+          </section>
+
+          <section class="table-card inventory-table">
+            <div class="table-head">
+              <h2>Таблиця зміни</h2>
+              <span class="tag warning">Факт має пріоритет над прогнозом</span>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Товар</th>
+                  <th>Од.</th>
+                  <th>Початок дня</th>
+                  <th>Доставка</th>
+                  <th>Прогноз з ордерів</th>
+                  <th>Кінець зміни</th>
+                  <th>Факт витрата</th>
+                  <th>Різниця</th>
+                  <th>Статус</th>
+                </tr>
+              </thead>
+              <tbody data-daily-stock-table></tbody>
+            </table>
           </section>
         </main>
       </div>
     </div>
-    <script src="src/app.js?v=local-save-1"></script>
+    <div class="toast" role="status"></div>
+    <script src="src/app.js?v=inventory-ops-1"></script>
   </body>
 </html>

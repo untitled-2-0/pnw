@@ -1,4 +1,14 @@
-<!doctype html><html lang="uk"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Поставки | Pizza na Wypasie CRM</title><link rel="stylesheet" href="src/styles.css" /></head><body><div class="app-layout"><aside class="sidebar">
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Поставки | Pizza na Wypasie CRM</title>
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+  <body>
+    <div class="app-layout">
+      <aside class="sidebar">
         <a class="app-brand" href="dashboard.html"><div class="brand-mark">PW</div><div><strong>Pizza na Wypasie</strong><span>Адмінська CRM</span></div></a>
         <div class="nav-section">Адмін-панель</div>
         <nav class="side-nav" aria-label="Основна навігація">
@@ -12,6 +22,112 @@
           <a data-nav href="reports.html"><span class="nav-icon">RP</span>Звіти</a>
           <a data-nav href="admin.html"><span class="nav-icon">ST</span>Налаштування</a>
         </nav>
-      </aside><div>
-<header class="topbar"><input class="search" type="search" placeholder="Постачальник або номер накладної" /><div class="topbar-actions"><button class="btn ghost" type="button" data-export="deliveries">Експорт Excel</button><label class="btn ghost">Імпорт CSV/Excel<input type="file" accept=".csv,text/csv" data-import="deliveries" hidden /></label></div></header>
-<main class="content"><header class="page-head"><div class="page-title"><p class="eyebrow">Приймання поставки</p><h1>Поставки</h1><p>Додавай поставки, партії, кількість і термін придатності.</p></div><button class="btn ghost" type="button" data-reset="deliveries">Скинути демо</button></header><section class="grid two"><article class="table-card"><div class="table-head"><h2>Журнал поставок</h2></div><table><thead><tr><th>Постачальник</th><th>Накладна</th><th>Інгредієнт</th><th>Кількість</th><th>Термін</th></tr></thead><tbody data-table="deliveries"></tbody></table></article><form class="card form-stack" data-entity="deliveries"><div class="card-head"><h2>Додати поставку</h2><span class="tag info">Склад</span></div><div class="form-row"><div class="field"><label>Постачальник</label><input name="supplier" value="Сир і молочні продукти" /></div><div class="field"><label>Накладна</label><input name="invoice" value="FV/2026/0518" /></div></div><div class="form-row"><div class="field"><label>Інгредієнт</label><input name="item" value="Моцарела" /></div><div class="field"><label>Кількість</label><input name="qty" value="12 кг" /></div></div><div class="field"><label>Термін придатності</label><input name="expiry" type="date" value="2026-05-21" /></div><button class="btn primary" type="submit">Додати поставку</button></form></section></main></div></div><div class="toast" role="status"></div><script src="src/app.js?v=local-save-1"></script></body></html>
+      </aside>
+
+      <div>
+        <header class="topbar">
+          <input class="search" type="search" placeholder="Постачальник, накладна або інгредієнт" />
+          <div class="topbar-actions">
+            <button class="btn primary" type="button" data-post-deliveries>Оприбуткувати все</button>
+            <button class="btn ghost" type="button" data-delivery-template>Шаблон CSV</button>
+            <button class="btn ghost" type="button" data-export="deliveries">Експорт Excel</button>
+            <label class="btn ghost">Імпорт CSV/Excel<input type="file" accept=".csv,text/csv" data-import="deliveries" hidden /></label>
+          </div>
+        </header>
+
+        <main class="content">
+          <header class="page-head">
+            <div class="page-title">
+              <p class="eyebrow">Приймання поставки без ручного переписування</p>
+              <h1>Поставки</h1>
+              <p>Занось позиції з ранкової таблиці або імпортуй CSV/Excel. Після оприбуткування склад сам збільшує залишки по інгредієнтах.</p>
+            </div>
+            <button class="btn ghost" type="button" data-reset="deliveries">Скинути демо</button>
+          </header>
+
+          <section class="grid three">
+            <article class="mini-card">
+              <span class="metric-label">Що робимо з табличкою</span>
+              <strong>Імпорт або швидке введення</strong>
+              <p class="muted-line">Колонки: supplier, invoice, item, qty, expiry.</p>
+            </article>
+            <article class="mini-card">
+              <span class="metric-label">Після перевірки</span>
+              <strong>Оприбуткувати все</strong>
+              <p class="muted-line">Нові позиції додаються на склад, існуючі отримують плюс до залишку.</p>
+            </article>
+            <article class="mini-card">
+              <span class="metric-label">Контроль</span>
+              <strong>Статус у журналі</strong>
+              <p class="muted-line">Рядки позначаються як “оприбутковано”, щоб не провести їх двічі.</p>
+            </article>
+          </section>
+
+          <section class="grid two">
+            <form class="card form-stack" data-entity="deliveries" data-update-stock="true">
+              <div class="card-head">
+                <h2>Швидке приймання</h2>
+                <span class="tag info">Склад оновиться одразу</span>
+              </div>
+              <div class="form-row">
+                <div class="field">
+                  <label>Постачальник</label>
+                  <input name="supplier" value="Сир і молочні продукти" />
+                </div>
+                <div class="field">
+                  <label>Накладна</label>
+                  <input name="invoice" value="FV/2026/0519" />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="field">
+                  <label>Інгредієнт</label>
+                  <select name="item" data-inventory-item-select data-selected="Ser Mozzarella"></select>
+                  <input name="item" data-custom-inventory-item placeholder="Введи свій товар" hidden disabled />
+                </div>
+                <div class="field">
+                  <label>Кількість</label>
+                  <input name="qty" value="12 кг" />
+                </div>
+              </div>
+              <div class="field">
+                <label>Термін придатності</label>
+                <input name="expiry" type="date" value="2026-05-21" />
+              </div>
+              <button class="btn primary" type="submit">Додати і оновити склад</button>
+            </form>
+
+            <article class="notice">
+              <span class="tag warning">Для ранкової таблиці</span>
+              <h2>Як не витрачати годину на переписування</h2>
+              <p>З Excel достатньо зберегти CSV з колонками supplier, invoice, item, qty, expiry. Після імпорту натисни “Оприбуткувати все”, і CRM сама додасть кількість до залишків.</p>
+              <button class="btn ghost" type="button" data-post-deliveries>Провести імпортовані позиції</button>
+            </article>
+          </section>
+
+          <section class="table-card">
+            <div class="table-head">
+              <h2>Журнал поставок</h2>
+              <span class="tag success">Готово для Excel</span>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Постачальник</th>
+                  <th>Накладна</th>
+                  <th>Інгредієнт</th>
+                  <th>Кількість</th>
+                  <th>Термін</th>
+                  <th>Статус</th>
+                </tr>
+              </thead>
+              <tbody data-table="deliveries"></tbody>
+            </table>
+          </section>
+        </main>
+      </div>
+    </div>
+    <div class="toast" role="status"></div>
+    <script src="src/app.js?v=delivery-posting-1"></script>
+  </body>
+</html>

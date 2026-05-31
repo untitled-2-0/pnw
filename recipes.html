@@ -1,6 +1,11 @@
 <!doctype html>
 <html lang="uk">
-  <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Рецепти | Pizza na Wypasie CRM</title><link rel="stylesheet" href="src/styles.css" /></head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Рецепти | Pizza na Wypasie CRM</title>
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
   <body>
     <div class="app-layout">
       <aside class="sidebar">
@@ -18,16 +23,118 @@
           <a data-nav href="admin.html"><span class="nav-icon">ST</span>Налаштування</a>
         </nav>
       </aside>
+
       <div>
-        <header class="topbar"><input class="search" type="search" placeholder="Пошук рецепту" /><div class="topbar-actions"><button class="btn ghost" type="button" data-export="recipes">Експорт Excel</button><label class="btn ghost">Імпорт CSV/Excel<input type="file" accept=".csv,text/csv" data-import="recipes" hidden /></label></div></header>
+        <header class="topbar">
+          <input class="search" type="search" placeholder="Пошук рецепту або модифікатора" />
+          <div class="topbar-actions">
+            <button class="btn ghost" type="button" data-export="recipes">Експорт піц</button>
+            <button class="btn ghost" type="button" data-export="recipeRules">Експорт рецептів</button>
+            <button class="btn ghost" type="button" data-export="modifierRules">Експорт правил</button>
+          </div>
+        </header>
+
         <main class="content">
-          <header class="page-head"><div class="page-title"><p class="eyebrow">Меню та рецепти</p><h1>Рецепти й собівартість</h1><p>Створюй піци, додавай грамування інгредієнтів і контролюй маржу.</p></div><button class="btn ghost" type="button" data-reset="recipes">Скинути демо</button></header>
-          <section class="grid two">
-            <article class="table-card"><div class="table-head"><h2>Активні піци</h2></div><table><thead><tr><th>Піца</th><th>Ціна</th><th>Собівартість</th><th>Склад</th></tr></thead><tbody data-table="recipes"></tbody></table></article>
-            <form class="card form-stack" data-entity="recipes"><div class="card-head"><h2>Додати рецепт</h2><span class="tag info">Версія v1</span></div><div class="form-row"><div class="field"><label>Назва піци</label><input name="name" value="Піца Фірмова" /></div><div class="field"><label>Ціна продажу</label><input name="price" value="39.99" /></div></div><div class="field"><label>Собівартість</label><input name="cost" value="15.40" /></div><div class="field"><label>Інгредієнти та грамування</label><textarea name="ingredients">Тісто 1 шт; моцарела 140 г; пепероні 70 г; томатний соус 85 мл</textarea></div><button class="btn primary" type="submit">Зберегти рецепт</button></form>
+          <header class="page-head">
+            <div class="page-title">
+              <p class="eyebrow">Рецепти, витрати і модифікатори</p>
+              <h1>Як CRM рахує інгредієнти з ордерів</h1>
+              <p>Базовий рецепт дає норму на піцу, а правила модифікаторів читають опис замовлення: подвійний сир, +30%, додаткова курка, гострий соус.</p>
+            </div>
+            <a class="btn primary" href="inventory.html">Перейти до зміни</a>
+          </header>
+
+          <section class="grid three">
+            <article class="mini-card">
+              <span class="metric-label">1. Ордер</span>
+              <strong>Назва + опис</strong>
+              <p class="muted-line">Беремо тільки нескасовані замовлення з API або ручного вводу.</p>
+            </article>
+            <article class="mini-card">
+              <span class="metric-label">2. Рецепт</span>
+              <strong>База інгредієнтів</strong>
+              <p class="muted-line">Наприклад Pizza Grill = тісто + моцарела + соус.</p>
+            </article>
+            <article class="mini-card">
+              <span class="metric-label">3. Модифікатор</span>
+              <strong>Корекція витрати</strong>
+              <p class="muted-line">Подвійний сир додає 100 г, +30% збільшує базову витрату.</p>
+            </article>
           </section>
-        </main></div>
+
+          <section class="grid two">
+            <article class="table-card">
+              <div class="table-head">
+                <h2>Активні піци</h2>
+                <button class="btn ghost" type="button" data-reset="recipes">Скинути демо</button>
+              </div>
+              <table>
+                <thead><tr><th>Піца</th><th>Ціна</th><th>Собівартість</th><th>Склад</th></tr></thead>
+                <tbody data-table="recipes"></tbody>
+              </table>
+            </article>
+
+            <form class="card form-stack" data-entity="recipes">
+              <div class="card-head"><h2>Додати піцу</h2><span class="tag info">Меню</span></div>
+              <div class="form-row">
+                <div class="field"><label>Назва піци</label><input name="name" value="Pizza Firmowa" /></div>
+                <div class="field"><label>Ціна продажу</label><input name="price" value="39.99" /></div>
+              </div>
+              <div class="field"><label>Собівартість</label><input name="cost" value="15.40" /></div>
+              <div class="field"><label>Опис складу</label><textarea name="ingredients">Тісто 1 шт; моцарела 140 г; пепероні 70 г; томатний соус 85 мл</textarea></div>
+              <button class="btn primary" type="submit">Зберегти піцу</button>
+            </form>
+          </section>
+
+          <section class="grid two">
+            <article class="table-card">
+              <div class="table-head"><h2>Базові правила рецептів</h2></div>
+              <table>
+                <thead><tr><th>Піца</th><th>Інгредієнт</th><th>К-сть</th><th>Шукаємо в назві</th></tr></thead>
+                <tbody data-table="recipeRules"></tbody>
+              </table>
+            </article>
+
+            <form class="card form-stack" data-entity="recipeRules">
+              <div class="card-head"><h2>Додати правило рецепту</h2><span class="tag info">AI-підказка</span></div>
+              <div class="form-row">
+                <div class="field"><label>Піца</label><input name="pizza" value="Pizza Mega" /></div>
+                <div class="field"><label>Інгредієнт</label><input name="ingredient" value="Ser Mozzarella" /></div>
+              </div>
+              <div class="form-row">
+                <div class="field"><label>Кількість</label><input name="qty" value="0.20" /></div>
+                <div class="field"><label>Одиниця</label><input name="unit" value="кг" /></div>
+              </div>
+              <div class="field"><label>Ключові слова / regex</label><input name="match" value="mega|мега" /></div>
+              <button class="btn primary" type="submit">Додати правило</button>
+            </form>
+          </section>
+
+          <section class="grid two">
+            <article class="table-card">
+              <div class="table-head"><h2>Правила модифікаторів</h2></div>
+              <table>
+                <thead><tr><th>Ключові слова</th><th>Інгредієнт</th><th>Тип</th><th>К-сть</th><th>Пояснення</th></tr></thead>
+                <tbody data-table="modifierRules"></tbody>
+              </table>
+            </article>
+
+            <form class="card form-stack" data-entity="modifierRules">
+              <div class="card-head"><h2>Додати модифікатор</h2><span class="tag warning">Неточне, але краще за ручний підрахунок</span></div>
+              <div class="field"><label>Ключові слова / regex</label><input name="keyword" value="подвійний сир|double cheese" /></div>
+              <div class="form-row">
+                <div class="field"><label>Інгредієнт</label><input name="ingredient" value="Ser Mozzarella" /></div>
+                <div class="field"><label>Тип</label><select name="mode"><option>add</option><option>multiply</option></select></div>
+              </div>
+              <div class="field"><label>Кількість або коефіцієнт</label><input name="qty" value="0.10" /></div>
+              <div class="field"><label>Пояснення</label><textarea name="note">додає ще 100 г сиру</textarea></div>
+              <button class="btn primary" type="submit">Додати модифікатор</button>
+            </form>
+          </section>
+        </main>
+      </div>
     </div>
-    <div class="toast" role="status"></div><script src="src/app.js?v=local-save-1"></script>
+    <div class="toast" role="status"></div>
+    <script src="src/app.js?v=recipe-modifiers-1"></script>
   </body>
 </html>

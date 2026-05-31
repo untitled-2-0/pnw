@@ -1,7 +1,59 @@
 <main class="content">
-  <header class="page-head"><div class="page-title"><p class="eyebrow">Замовлення та авто-списання</p><h1>Замовлення</h1><p>Створення замовлень із резервуванням залишків.</p></div></header>
+  <header class="page-head">
+    <div class="page-title">
+      <p class="eyebrow">Замовлення та API-синхронізація</p>
+      <h1>Замовлення</h1>
+      <p>Підтягуй замовлення з центру робочого дня, перевіряй піцу, додатки, ціну й параметри.</p>
+    </div>
+  </header>
+
   <section class="grid two">
-    <article class="card"><h2>Поточні замовлення</h2><div class="list"><div class="list-row"><strong>#1052 Сирний шал</strong><span class="tag info">зарезервовано</span></div><div class="list-row"><strong>#1048 Піца Гриль</strong><span class="tag warning">в роботі</span></div></div></article>
-    <form class="card form-stack"><h2>Додати замовлення</h2><div class="field"><label>Тип</label><select><option>Зал</option><option>Із собою</option><option>Доставка</option></select></div><div class="field"><label>Піци</label><select><option>Піца Гриль x1</option><option>Сирний шал x2</option></select></div><button class="btn primary" type="button" data-toast="Замовлення створено">Створити замовлення</button></form>
+    <article class="card form-stack">
+      <div class="card-head">
+        <h2>API синхронізація</h2>
+        <span class="tag info">Центр замовлень</span>
+      </div>
+      <div class="field">
+        <label for="orders-api-endpoint">Endpoint API</label>
+        <input id="orders-api-endpoint" data-api-endpoint placeholder="https://api.example.test/orders?workday={date}" />
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label for="orders-workday">Робочий день</label>
+          <input id="orders-workday" type="date" data-api-workday />
+        </div>
+        <div class="field">
+          <label>Поля, які приймаємо</label>
+          <input value="pizza, additionals, price, parameters" readonly />
+        </div>
+      </div>
+      <div class="check-row">
+        <label><input type="checkbox" data-auto-sync-orders /> Авто-синк кожні 60 секунд</label>
+        <button class="btn primary" type="button" data-sync-orders>Синк зараз</button>
+      </div>
+      <p class="muted-line" data-sync-meta>Очікує синхронізації</p>
+    </article>
+
+    <form class="card form-stack" data-entity="orders">
+      <h2>Додати вручну</h2>
+      <div class="form-row">
+        <div class="field"><label>Номер</label><input name="number" value="1054" /></div>
+        <div class="field"><label>Ціна, zł</label><input name="price" value="42.99" /></div>
+      </div>
+      <div class="field"><label>Піца</label><input name="pizza" value="Піца Гриль x1" /></div>
+      <div class="field"><label>Додатки</label><input name="additionals" value="Соус часниковий, подвійний сир" /></div>
+      <div class="field"><label>Інші параметри</label><textarea name="parameters">Без цибулі, гострий соус окремо.</textarea></div>
+      <button class="btn primary" type="submit">Створити замовлення</button>
+    </form>
+  </section>
+
+  <section class="table-card">
+    <div class="table-head"><h2>Список замовлень</h2></div>
+    <table>
+      <thead>
+        <tr><th>№</th><th>Піца</th><th>Додатки</th><th>Ціна</th><th>Параметри</th><th>Статус</th><th>Джерело</th></tr>
+      </thead>
+      <tbody data-table="orders"></tbody>
+    </table>
   </section>
 </main>

@@ -1,4 +1,41 @@
-<main class="content">
-  <header class="page-head"><div class="page-title"><p class="eyebrow">US-013</p><h1>Склад без сюрпризів</h1><p>Мінімальний залишок, очікувані поставки й термін придатності за FEFO.</p></div><%= link_to "Створити замовлення постачальнику", deliveries_path, class: "btn primary" %></header>
-  <section class="grid three"><article class="card"><h2>Нижче мінімального залишку</h2><div class="list"><div class="list-row"><strong>Пепероні</strong><span>+8 кг</span></div><div class="list-row"><strong>Печериці</strong><span>+6 кг</span></div></div></article><article class="card"><h2>Поставки</h2><div class="list"><div class="list-row"><strong>Сир і молочні продукти</strong><span>09:30</span></div></div></article><article class="card"><h2>Термін придатності</h2><div class="list"><div class="list-row"><strong>Соус BBQ</strong><span class="tag danger">сьогодні</span></div></div></article></section>
+<main class="content inventory-workspace">
+  <header class="page-head compact-head">
+    <div class="page-title">
+      <p class="eyebrow">Щоденний облік складу</p>
+      <h1>Склад зміни</h1>
+    </div>
+    <button class="btn ghost" type="button" data-reset="dailyStock">Скинути демо</button>
+  </header>
+
+  <section class="ops-bar">
+    <div>
+      <span class="tag info" data-daily-summary>Позицій: 0</span>
+      <p class="muted-line" data-daily-mode-label>Ранок: редагуємо тільки початок дня</p>
+    </div>
+    <div class="segmented" aria-label="Режим роботи">
+      <button class="active" type="button" data-daily-mode="morning">Ранок</button>
+      <button type="button" data-daily-mode="delivery">Доставка</button>
+      <button type="button" data-daily-mode="closing">Закриття</button>
+      <button type="button" data-daily-mode="control">Контроль</button>
+    </div>
+    <div class="segmented" aria-label="Фільтри проблем">
+      <button class="active" type="button" data-daily-filter="all">Всі</button>
+      <button type="button" data-daily-filter="variance">Різниця</button>
+      <button type="button" data-daily-filter="empty">Порожні</button>
+      <button type="button" data-daily-filter="low">Нижче мінімуму</button>
+    </div>
+  </section>
+
+  <section class="table-card inventory-table">
+    <div class="table-head">
+      <h2>Таблиця зміни</h2>
+      <span class="tag warning">Факт має пріоритет над прогнозом</span>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Товар</th><th>Од.</th><th>Початок дня</th><th>Доставка</th><th>Прогноз з ордерів</th><th>Кінець зміни</th><th>Факт витрата</th><th>Різниця</th><th>Статус</th></tr>
+      </thead>
+      <tbody data-daily-stock-table></tbody>
+    </table>
+  </section>
 </main>

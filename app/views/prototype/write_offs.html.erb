@@ -1,4 +1,55 @@
 <main class="content">
-  <header class="page-head"><div class="page-title"><p class="eyebrow">Епік 7</p><h1>Ручне списання браку</h1><p>Причина, партія, кількість і автор у журналі аудиту.</p></div><button class="btn primary" data-toast="Списання збережено">Додати списання</button></header>
-  <section class="grid two"><form class="card form-stack"><div class="card-head"><h2>Додати списання</h2><span class="tag warning">Брак / прострочення</span></div><div class="field"><label>Інгредієнт</label><select><option>Моцарела MZ-18</option></select></div><div class="field"><label>Причина</label><select><option>Прострочення</option><option>Брак</option></select></div></form><article class="table-card"><div class="table-head"><h2>Останні</h2></div><table><tr><th>Час</th><th>Інгредієнт</th><th>К-сть</th></tr><tr><td>12:10</td><td>Моцарела</td><td>0.8 кг</td></tr></table></article></section>
+  <header class="page-head">
+    <div class="page-title">
+      <p class="eyebrow">Складська операція з аудитом</p>
+      <h1>Списання</h1>
+      <p>Обери товар зі списку, перевір залишок, побач наслідок списання і підтвердь операцію перед зміною складу.</p>
+    </div>
+  </header>
+
+  <section class="grid two">
+    <article class="table-card">
+      <div class="table-head"><h2>Журнал списань</h2><span class="tag success">Аудит увімкнено</span></div>
+      <table>
+        <thead>
+          <tr><th>Дата/час</th><th>Інгредієнт</th><th>Кількість</th><th>Причина</th><th>Було → стало</th><th>Автор</th><th>Статус</th></tr>
+        </thead>
+        <tbody data-table="writeoffs"></tbody>
+      </table>
+    </article>
+
+    <form class="card form-stack" data-entity="writeoffs" data-writeoff-form>
+      <div class="card-head"><h2>Додати списання</h2><span class="tag warning">Потребує підтвердження</span></div>
+      <div class="field">
+        <label>Інгредієнт</label>
+        <select name="item" data-inventory-item-select data-selected="Ser Mozzarella"></select>
+        <input name="item" data-custom-inventory-item placeholder="Введи свій товар" hidden disabled />
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Кількість</label><input name="qty" value="0.8 кг" data-writeoff-qty /></div>
+        <div class="field">
+          <label>Причина</label>
+          <select name="reason">
+            <option>Термін придатності</option>
+            <option>Брак кухні</option>
+            <option>Помилка замовлення</option>
+            <option>Тест рецепту</option>
+            <option>Інвентаризаційна різниця</option>
+            <option>Інше</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Коментар</label><textarea name="comment" placeholder="Партія, деталі браку або пояснення"></textarea></div>
+      <div class="form-row">
+        <div class="field"><label>Автор</label><input name="author" value="Іра" readonly /></div>
+        <div class="field"><label>Поточний залишок</label><input value="обери інгредієнт" data-current-stock readonly /></div>
+      </div>
+      <article class="notice compact">
+        <span class="tag warning">Вплив на склад</span>
+        <h2><span data-current-stock>0</span> → <span data-after-stock>0</span></h2>
+        <p class="muted-line" data-writeoff-warning>Списання одразу зменшить залишок після підтвердження.</p>
+      </article>
+      <button class="btn primary" type="submit">Підтвердити і списати</button>
+    </form>
+  </section>
 </main>

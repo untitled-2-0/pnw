@@ -1,4 +1,14 @@
-<!doctype html><html lang="uk"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Списання | Pizza na Wypasie CRM</title><link rel="stylesheet" href="src/styles.css" /></head><body><div class="app-layout"><aside class="sidebar">
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Списання | Pizza na Wypasie CRM</title>
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+  <body>
+    <div class="app-layout">
+      <aside class="sidebar">
         <a class="app-brand" href="dashboard.html"><div class="brand-mark">PW</div><div><strong>Pizza na Wypasie</strong><span>Адмінська CRM</span></div></a>
         <div class="nav-section">Адмін-панель</div>
         <nav class="side-nav" aria-label="Основна навігація">
@@ -12,6 +22,102 @@
           <a data-nav href="reports.html"><span class="nav-icon">RP</span>Звіти</a>
           <a data-nav href="admin.html"><span class="nav-icon">ST</span>Налаштування</a>
         </nav>
-      </aside><div>
-<header class="topbar"><input class="search" type="search" placeholder="Пошук списання" /><div class="topbar-actions"><button class="btn ghost" type="button" data-export="writeoffs">Експорт Excel</button><label class="btn ghost">Імпорт CSV/Excel<input type="file" accept=".csv,text/csv" data-import="writeoffs" hidden /></label></div></header>
-<main class="content"><header class="page-head"><div class="page-title"><p class="eyebrow">Ручні списання</p><h1>Списання</h1><p>Додавай списання браку, прострочення або тестів рецепту.</p></div><button class="btn ghost" type="button" data-reset="writeoffs">Скинути демо</button></header><section class="grid two"><article class="table-card"><div class="table-head"><h2>Журнал списань</h2></div><table><thead><tr><th>Інгредієнт</th><th>Кількість</th><th>Причина</th><th>Автор</th></tr></thead><tbody data-table="writeoffs"></tbody></table></article><form class="card form-stack" data-entity="writeoffs"><div class="card-head"><h2>Додати списання</h2><span class="tag warning">Брак / прострочення</span></div><div class="field"><label>Інгредієнт</label><input name="item" value="Моцарела партія MZ-18" /></div><div class="form-row"><div class="field"><label>Кількість</label><input name="qty" value="0.8 кг" /></div><div class="field"><label>Причина</label><select name="reason"><option>Термін придатності</option><option>Брак кухні</option><option>Тест рецепту</option></select></div></div><div class="field"><label>Автор</label><input name="author" value="Олег" /></div><button class="btn primary" type="submit">Додати списання</button></form></section></main></div></div><div class="toast" role="status"></div><script src="src/app.js?v=local-save-1"></script></body></html>
+      </aside>
+
+      <div>
+        <header class="topbar">
+          <input class="search" type="search" placeholder="Пошук списання" />
+          <div class="topbar-actions">
+            <button class="btn ghost" type="button" data-export="writeoffs">Експорт Excel</button>
+            <label class="btn ghost">Імпорт CSV/Excel<input type="file" accept=".csv,text/csv" data-import="writeoffs" hidden /></label>
+          </div>
+        </header>
+
+        <main class="content">
+          <header class="page-head">
+            <div class="page-title">
+              <p class="eyebrow">Складська операція з аудитом</p>
+              <h1>Списання</h1>
+              <p>Обери товар зі списку, перевір залишок, побач наслідок списання і підтвердь операцію перед зміною складу.</p>
+            </div>
+            <button class="btn ghost" type="button" data-reset="writeoffs">Скинути демо</button>
+          </header>
+
+          <section class="grid two">
+            <article class="table-card">
+              <div class="table-head">
+                <h2>Журнал списань</h2>
+                <span class="tag success">Аудит увімкнено</span>
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Дата/час</th>
+                    <th>Інгредієнт</th>
+                    <th>Кількість</th>
+                    <th>Причина</th>
+                    <th>Було → стало</th>
+                    <th>Автор</th>
+                    <th>Статус</th>
+                  </tr>
+                </thead>
+                <tbody data-table="writeoffs"></tbody>
+              </table>
+            </article>
+
+            <form class="card form-stack" data-entity="writeoffs" data-writeoff-form>
+              <div class="card-head">
+                <h2>Додати списання</h2>
+                <span class="tag warning">Потребує підтвердження</span>
+              </div>
+              <div class="field">
+                <label>Інгредієнт</label>
+                <select name="item" data-inventory-item-select data-selected="Ser Mozzarella"></select>
+                <input name="item" data-custom-inventory-item placeholder="Введи свій товар" hidden disabled />
+              </div>
+              <div class="form-row">
+                <div class="field">
+                  <label>Кількість</label>
+                  <input name="qty" value="0.8 кг" data-writeoff-qty />
+                </div>
+                <div class="field">
+                  <label>Причина</label>
+                  <select name="reason">
+                    <option>Термін придатності</option>
+                    <option>Брак кухні</option>
+                    <option>Помилка замовлення</option>
+                    <option>Тест рецепту</option>
+                    <option>Інвентаризаційна різниця</option>
+                    <option>Інше</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <label>Коментар</label>
+                <textarea name="comment" placeholder="Партія, деталі браку або пояснення"></textarea>
+              </div>
+              <div class="form-row">
+                <div class="field">
+                  <label>Автор</label>
+                  <input name="author" value="Іра" readonly />
+                </div>
+                <div class="field">
+                  <label>Поточний залишок</label>
+                  <input value="обери інгредієнт" data-current-stock readonly />
+                </div>
+              </div>
+              <article class="notice compact">
+                <span class="tag warning">Вплив на склад</span>
+                <h2><span data-current-stock>0</span> → <span data-after-stock>0</span></h2>
+                <p class="muted-line" data-writeoff-warning>Списання одразу зменшить залишок після підтвердження.</p>
+              </article>
+              <button class="btn primary" type="submit">Підтвердити і списати</button>
+            </form>
+          </section>
+        </main>
+      </div>
+    </div>
+    <div class="toast" role="status"></div>
+    <script src="src/app.js?v=writeoff-audit-1"></script>
+  </body>
+</html>
