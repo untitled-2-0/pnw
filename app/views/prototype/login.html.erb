@@ -8,7 +8,7 @@
     <p>Додаткових користувачів можна створити після входу в налаштуваннях.</p>
     <%= form_with url: dashboard_path, method: :get, class: "form-stack" do %>
       <div class="field"><label>Електронна пошта або імʼя користувача</label><input value="admin@pizza.test"></div>
-      <div class="field"><label>Пароль</label><input type="password" value="wypasione123"></div>
+      <div class="field"><label>Пароль</label><input type="password"></div>
       <div class="check-row"><label><input type="checkbox" checked> Запамʼятати мене</label><%= link_to "Забув пароль?", forgot_password_path %></div>
       <button class="btn primary" type="submit">Увійти</button>
     <% end %>
