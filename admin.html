@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Налаштування | Pizza na Wypasie CRM</title>
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+  <body>
+    <div class="app-layout">
+      <aside class="sidebar">
+        <a class="app-brand" href="dashboard.html"><div class="brand-mark">PW</div><div><strong>Pizza na Wypasie</strong><span>Адмінська CRM</span></div></a>
+        <div class="nav-section">Адмін-панель</div>
+        <nav class="side-nav" aria-label="Основна навігація">
+          <a data-nav href="dashboard.html"><span class="nav-icon">DB</span>Дашборд</a>
+          <a data-nav href="inventory.html"><span class="nav-icon">SK</span>Склад</a>
+          <a data-nav href="ingredients.html"><span class="nav-icon">IN</span>Інгредієнти</a>
+          <a data-nav href="recipes.html"><span class="nav-icon">RC</span>Рецепти</a>
+          <a data-nav href="deliveries.html"><span class="nav-icon">PS</span>Поставки</a>
+          <a data-nav href="orders.html"><span class="nav-icon">OR</span>Замовлення</a>
+          <a data-nav href="customers.html"><span class="nav-icon">CL</span>Клієнти</a>
+          <a data-nav href="customer-deliveries.html"><span class="nav-icon">DL</span>Доставки</a>
+          <a data-nav href="write-offs.html"><span class="nav-icon">WO</span>Списання</a>
+          <a data-nav href="reports.html"><span class="nav-icon">RP</span>Звіти</a>
+          <a data-nav href="admin.html"><span class="nav-icon">ST</span>Налаштування</a>
+        </nav>
+      </aside>
+      <div>
+        <header class="topbar">
+          <input class="search" type="search" placeholder="Пошук користувача" />
+          <div class="topbar-actions">
+            <button class="btn ghost" type="button" data-export="users">Експорт користувачів</button>
+            <label class="btn ghost">Імпорт CSV<input type="file" accept=".csv,text/csv" data-import="users" hidden /></label>
+          </div>
+        </header>
+
+        <main class="content">
+          <header class="page-head">
+            <div class="page-title">
+              <p class="eyebrow">Епік 12 · Налаштування</p>
+              <h1>Налаштування системи</h1>
+              <p>Користувачі та доступ, валюта й одиниці, мова інтерфейсу, сповіщення та журнал аудиту. Прототип: автентифікація демо-рівня без сервера.</p>
+            </div>
+          </header>
+
+          <div class="settings-layout">
+            <nav class="settings-menu" aria-label="Розділи налаштувань">
+              <a class="active" href="#users">Користувачі та доступ</a>
+              <a href="#general">Загальні налаштування</a>
+              <a href="#notifications">Сповіщення</a>
+              <a href="#audit">Журнал аудиту</a>
+            </nav>
+
+            <div class="form-stack">
+              <section id="users" class="grid two">
+                <article class="table-card">
+                  <div class="table-head">
+                    <h2>Користувачі</h2>
+                    <label class="check-row"><input type="checkbox" data-show-archived /> Показати архівних</label>
+                  </div>
+                  <table>
+                    <thead><tr><th>ПІБ</th><th>Електронна пошта</th><th>Доступ</th><th>Статус</th><th>Дії</th></tr></thead>
+                    <tbody data-table="users"></tbody>
+                  </table>
+                </article>
+
+                <form class="card form-stack" data-entity="users">
+                  <div class="card-head"><h2>Додати користувача</h2><span class="tag info">Доступ</span></div>
+                  <div class="field"><label>ПІБ</label><input name="name" required value="Новий користувач" /></div>
+                  <div class="field"><label>Електронна пошта</label><input name="email" type="email" required value="user@pizza.test" /></div>
+                  <div class="field"><label>Рівень доступу</label>
+                    <select name="access">
+                      <option>Повний доступ</option>
+                      <option>Склад і поставки</option>
+                      <option>Замовлення і списання</option>
+                      <option>Звіти без редагування</option>
+                    </select>
+                  </div>
+                  <div class="field"><label>Статус</label>
+                    <select name="status">
+                      <option>Активний</option>
+                      <option>Очікує запрошення</option>
+                      <option>Заблокований</option>
+                    </select>
+                  </div>
+                  <button class="btn primary" type="submit">Додати користувача</button>
+                </form>
+              </section>
+
+              <section id="general" class="card form-stack">
+                <div class="card-head"><h2>Загальні налаштування</h2><span class="tag info">Валюта · одиниці · мова</span></div>
+                <form class="form-stack" data-custom-submit="true" data-settings-form>
+                  <div class="form-row">
+                    <div class="field"><label>Валюта</label><input name="currency" data-setting="currency" value="zł" /></div>
+                    <div class="field"><label>Мова інтерфейсу</label>
+                      <select data-language-select>
+                        <option value="uk">Українська</option>
+                        <option value="pl">Польська</option>
+                        <option value="en">Англійська</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="field"><label>Одиниці виміру</label><input name="units" data-setting="units" value="кг, л, шт" /></div>
+                    <div class="field"><label>Тайм-аут сесії (хв)</label><input name="sessionMinutes" data-setting="sessionMinutes" type="number" value="30" /></div>
+                  </div>
+                  <div class="field"><label>Категорії</label><input name="categories" data-setting="categories" value="Сир, М'ясо, Овочі, Соуси, Напої" /></div>
+                  <button class="btn primary" type="submit">Зберегти налаштування</button>
+                </form>
+              </section>
+
+              <section id="notifications" class="card form-stack">
+                <div class="card-head"><h2>Сповіщення</h2><span class="tag info">Канали</span></div>
+                <form class="form-stack" data-custom-submit="true" data-settings-form>
+                  <label class="check-row"><span>В застосунку (in-app)</span><input type="checkbox" data-setting="notifInApp" checked /></label>
+                  <label class="check-row"><span>Email</span><input type="checkbox" data-setting="notifEmail" checked /></label>
+                  <label class="check-row"><span>Push</span><input type="checkbox" data-setting="notifPush" /></label>
+                  <div class="field"><label>Тихі години</label><input name="quietHours" data-setting="quietHours" value="22:00–08:00" /></div>
+                  <div class="check-row">
+                    <button class="btn primary" type="submit">Зберегти сповіщення</button>
+                    <button class="btn ghost" type="button" data-toast="Тестове сповіщення надіслано">Тестове сповіщення</button>
+                  </div>
+                </form>
+              </section>
+
+              <section id="audit" class="table-card">
+                <div class="table-head"><h2>Журнал аудиту</h2><span class="tag success">user + час · кожна зміна</span></div>
+                <table>
+                  <thead><tr><th>Дата/час</th><th>Користувач</th><th>Дія</th><th>Обʼєкт</th><th>Деталі</th></tr></thead>
+                  <tbody data-table="audit"></tbody>
+                </table>
+              </section>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <div class="toast" role="status"></div>
+    <script src="src/app.js?v=settings-1"></script>
+    <script>
+      (function () {
+        if (!window.CRM) return;
+        // hydrate settings forms
+        var settings = CRM.settings();
+        document.querySelectorAll("[data-setting]").forEach(function (field) {
+          var key = field.dataset.setting;
+          if (field.type === "checkbox") field.checked = !!settings[key];
+          else if (settings[key] !== undefined) field.value = settings[key];
+        });
+        document.querySelectorAll("[data-settings-form]").forEach(function (form) {
+          form.addEventListener("submit", function (event) {
+            event.preventDefault();
+            var patch = {};
+            form.querySelectorAll("[data-setting]").forEach(function (field) {
+              patch[field.dataset.setting] = field.type === "checkbox" ? field.checked : field.value.trim();
+            });
+            CRM.saveSettings(patch);
+            CRM.toast("Налаштування збережено");
+          });
+        });
+        // settings menu active state
+        document.querySelectorAll(".settings-menu a").forEach(function (link) {
+          link.addEventListener("click", function () {
+            document.querySelectorAll(".settings-menu a").forEach(function (a) { a.classList.remove("active"); });
+            link.classList.add("active");
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

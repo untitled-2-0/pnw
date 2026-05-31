@@ -1,49 +1,92 @@
 const currentPage = window.location.pathname.split("/").pop() || "index.html";
 
+/* --- SRS enhancement: storage keys + demo-grade auth gate (client-only) --- */
+const sessionKey = "pizza-crm:session";
+const settingsKey = "pizza-crm:settings";
+const auditKey = "pizza-crm:audit";
+const AUTH_PUBLIC = ["", "index.html", "login.html", "forgot-password.html"];
+const ID_ENTITIES = ["ingredients", "recipes", "orders", "customers", "customerDeliveries", "users", "deliveries", "writeoffs"];
+let showArchived = false;
+if (!AUTH_PUBLIC.includes(currentPage)) {
+  try {
+    if (!JSON.parse(localStorage.getItem(sessionKey) || "null")) {
+      window.location.replace("index.html");
+    }
+  } catch (guardError) {
+    /* ignore corrupt session */
+  }
+}
+
 const initialData = {
   orders: [
     {
+      id: "ord-1052",
       externalId: "demo-1052",
       number: "1052",
+      customerName: "Олег Коваль",
+      customerContact: "+48 600 100 200",
+      orderDate: "2026-05-31",
+      deliveryDate: "2026-05-31",
+      items: [{ recipe: "Сирний шал", qty: "2", price: "36.99" }],
+      total: "73.98",
       pizza: "Сирний шал x2",
       additionals: "Соус часниковий, подвійний сир",
-      price: "73.98",
-      parameters: "Із собою, без цибулі",
+      notes: "Із собою, без цибулі",
       status: "Нове",
       source: "Локально",
-      syncedAt: ""
+      syncedAt: "",
+      statusHistory: [{ status: "Нове", at: "2026-05-31T09:10:00" }]
     },
     {
+      id: "ord-1048",
       externalId: "demo-1048",
       number: "1048",
+      customerName: "Марія Поліщук",
+      customerContact: "maria@mail.test",
+      orderDate: "2026-05-31",
+      deliveryDate: "2026-05-31",
+      items: [{ recipe: "Піца Гриль", qty: "1", price: "36.99" }],
+      total: "36.99",
       pizza: "Піца Гриль x1",
       additionals: "Гострий соус окремо",
-      price: "36.99",
-      parameters: "Зал, стіл 4",
-      status: "В роботі",
+      notes: "Зал, стіл 4",
+      status: "У виробництві",
       source: "Локально",
-      syncedAt: ""
+      syncedAt: "",
+      statusHistory: [{ status: "Нове", at: "2026-05-31T08:00:00" }, { status: "У виробництві", at: "2026-05-31T08:20:00" }]
     },
     {
+      id: "ord-1050",
       externalId: "demo-1050",
       number: "1050",
+      customerName: "Андрій Зінчук",
+      customerContact: "+48 511 222 333",
+      orderDate: "2026-05-30",
+      deliveryDate: "2026-05-31",
+      items: [{ recipe: "Куряча BBQ", qty: "1", price: "38.49" }],
+      total: "38.49",
       pizza: "Кальцоне x1",
       additionals: "Без додатків",
-      price: "38.99",
-      parameters: "Доставка, списано за рецептом",
+      notes: "Доставка, списано за рецептом",
       status: "Готово",
       source: "Локально",
-      syncedAt: ""
+      syncedAt: "",
+      statusHistory: [{ status: "Нове", at: "2026-05-30T18:00:00" }, { status: "Готово", at: "2026-05-30T18:40:00" }]
     }
   ],
   ingredients: [
-    { name: "Моцарела", category: "Сир", unit: "кг", stock: "22.5", min: "12", supplier: "Сир і молочні продукти" },
-    { name: "Пепероні", category: "М'ясо", unit: "кг", stock: "5.8", min: "8", supplier: "М'ясний двір" },
-    { name: "Томатний соус", category: "Соуси", unit: "л", stock: "14.2", min: "10", supplier: "Соуси Польща" }
+    { id: "ing-moc", name: "Моцарела", category: "Сир", unit: "кг", stock: "22.5", min: "12", cost: "38", supplier: "Сир і молочні продукти" },
+    { id: "ing-pep", name: "Пепероні", category: "М'ясо", unit: "кг", stock: "5.8", min: "8", cost: "52", supplier: "М'ясний двір" },
+    { id: "ing-sos", name: "Томатний соус", category: "Соуси", unit: "л", stock: "14.2", min: "10", cost: "12", supplier: "Соуси Польща" },
+    { id: "ing-tis", name: "Тісто", category: "Основа", unit: "шт", stock: "120", min: "40", cost: "3.5", supplier: "Пекарня" },
+    { id: "ing-kov", name: "Ковбаса", category: "М'ясо", unit: "кг", stock: "9.4", min: "6", cost: "35", supplier: "М'ясний двір" },
+    { id: "ing-kur", name: "Курка філе", category: "М'ясо", unit: "кг", stock: "9.7", min: "6", cost: "41", supplier: "М'ясний двір" },
+    { id: "ing-bbq", name: "Соус BBQ", category: "Соуси", unit: "л", stock: "7.5", min: "4", cost: "18", supplier: "Соуси Польща" }
   ],
   recipes: [
-    { name: "Піца Гриль", price: "36.99", cost: "13.20", ingredients: "Тісто 1 шт; моцарела 140 г; ковбаса 90 г" },
-    { name: "Куряча BBQ", price: "38.49", cost: "14.80", ingredients: "Тісто 1 шт; курка 110 г; соус BBQ 70 мл" }
+    { id: "rec-grill", name: "Піца Гриль", category: "Мʼясні", price: "36.99", portions: "1", instructions: "Розкатати тісто, нанести соус, додати сир і ковбасу, запекти 8 хв.", items: [{ ingredient: "Тісто", qty: "1", unit: "шт" }, { ingredient: "Моцарела", qty: "0.14", unit: "кг" }, { ingredient: "Ковбаса", qty: "0.09", unit: "кг" }, { ingredient: "Томатний соус", qty: "0.085", unit: "л" }] },
+    { id: "rec-bbq", name: "Куряча BBQ", category: "Мʼясні", price: "38.49", portions: "1", instructions: "Тісто, соус BBQ, курка, сир. Запекти 9 хв.", items: [{ ingredient: "Тісто", qty: "1", unit: "шт" }, { ingredient: "Курка філе", qty: "0.11", unit: "кг" }, { ingredient: "Соус BBQ", qty: "0.07", unit: "л" }, { ingredient: "Моцарела", qty: "0.12", unit: "кг" }] },
+    { id: "rec-cheese", name: "Сирний шал", category: "Вегетаріанські", price: "36.99", portions: "1", instructions: "Тісто, соус, подвійний сир. Запекти 8 хв.", items: [{ ingredient: "Тісто", qty: "1", unit: "шт" }, { ingredient: "Моцарела", qty: "0.2", unit: "кг" }, { ingredient: "Томатний соус", qty: "0.08", unit: "л" }] }
   ],
   recipeRules: [
     { pizza: "Pizza Grill", ingredient: "Ser Mozzarella", qty: "0.14", unit: "кг", match: "pizza grill|гриль" },
@@ -59,8 +102,16 @@ const initialData = {
     { keyword: "гострий соус|sos ostry", ingredient: "Sos Ostry", mode: "add", qty: "0.03", note: "додає 30 мл гострого соусу" }
   ],
   users: [
-    { name: "Анастасія", email: "admin@pizza.test", access: "Повний доступ", status: "Активний" },
-    { name: "Іра", email: "ira@pizza.test", access: "Склад і поставки", status: "Активний" }
+    { id: "usr-1", name: "Анастасія", email: "admin@pizza.test", access: "Повний доступ", status: "Активний" },
+    { id: "usr-2", name: "Іра", email: "ira@pizza.test", access: "Склад і поставки", status: "Активний" }
+  ],
+  customers: [
+    { id: "cus-1", name: "Олег Коваль", contact: "+48 600 100 200", address: "Краків, вул. Длуга 12" },
+    { id: "cus-2", name: "Марія Поліщук", contact: "maria@mail.test", address: "Краків, вул. Коротка 4" },
+    { id: "cus-3", name: "Андрій Зінчук", contact: "+48 511 222 333", address: "Краків, вул. Широка 8" }
+  ],
+  customerDeliveries: [
+    { id: "cdl-1", orderLabel: "#1050", orderIds: ["ord-1050"], driver: "Богдан", address: "Краків, вул. Широка 8", scheduledDate: "2026-05-31", window: "18:00–18:30", status: "Заплановано", outcomeNotes: "", statusHistory: [{ status: "Заплановано", at: "2026-05-31T09:00:00" }] }
   ],
   deliveries: [
     { supplier: "Сир і молочні продукти", invoice: "FV/2026/0518", item: "Моцарела", qty: "12 кг", expiry: "2026-05-21", postedAt: "" }
@@ -413,10 +464,10 @@ function storageKey(entity) {
 
 function readRows(entity) {
   const stored = localStorage.getItem(storageKey(entity));
-  if (stored) return JSON.parse(stored);
+  if (stored) return ensureIds(entity, JSON.parse(stored));
   const rows = initialData[entity] || [];
   localStorage.setItem(storageKey(entity), JSON.stringify(rows));
-  return rows;
+  return ensureIds(entity, rows);
 }
 
 function writeRows(entity, rows) {
@@ -489,30 +540,85 @@ function rowStatus(row, entity) {
   }
   if (entity === "orders") {
     const status = row.status || "Нове";
-    const className = status === "Готово" ? "ok" : status === "В роботі" ? "warn" : "info";
+    const ok = ["Готово", "Доставлено"];
+    const warn = ["В роботі", "Підтверджено", "У виробництві", "У доставці"];
+    const danger = ["Скасовано"];
+    const className = ok.includes(status) ? "ok" : danger.includes(status) ? "danger" : warn.includes(status) ? "warn" : "info";
+    return `<span class="status ${className}">${escapeHtml(status)}</span>`;
+  }
+  if (entity === "customerDeliveries") {
+    const status = row.status || "Заплановано";
+    const className = status === "Доставлено" ? "ok" : status === "Невдало" ? "danger" : status === "У дорозі" ? "warn" : "info";
     return `<span class="status ${className}">${escapeHtml(status)}</span>`;
   }
   return escapeHtml(row.status || "");
 }
 
 const renderers = {
-  orders: (row) => `<tr>
-    <td>#${escapeHtml(row.number)}</td>
-    <td>${escapeHtml(row.pizza || row.items)}</td>
-    <td>${escapeHtml(row.additionals || "-")}</td>
-    <td>${escapeHtml(row.price || "0")} zł</td>
-    <td>${escapeHtml(row.parameters || row.note || "-")}</td>
-    <td>${rowStatus(row, "orders")}</td>
-    <td>${escapeHtml(row.source || "Локально")}</td>
-  </tr>`,
-  ingredients: (row) => `<tr><td>${escapeHtml(row.name)}</td><td>${escapeHtml(row.category)}</td><td>${escapeHtml(row.stock)} ${escapeHtml(row.unit)}</td><td>${escapeHtml(row.min)} ${escapeHtml(row.unit)}</td><td>${escapeHtml(row.supplier)}</td><td>${rowStatus(row, "ingredients")}</td></tr>`,
-  recipes: (row) => `<tr><td>${escapeHtml(row.name)}</td><td>${escapeHtml(row.price)} зл</td><td>${escapeHtml(row.cost)} зл</td><td>${escapeHtml(row.ingredients)}</td></tr>`,
+  orders: (row) => {
+    const itemsText = row.items && row.items.length
+      ? row.items.map((it) => `${it.recipe} ×${it.qty}`).join(", ")
+      : (row.pizza || "-");
+    return `<tr data-tags="${escapeHtml((row.status || "Нове") + " " + (row.source || ""))}">
+      <td>#${escapeHtml(row.number)}</td>
+      <td>${escapeHtml(row.customerName || "-")}${row.customerContact ? `<small>${escapeHtml(row.customerContact)}</small>` : ""}</td>
+      <td>${escapeHtml(itemsText)}${row.additionals ? `<small>${escapeHtml(row.additionals)}</small>` : ""}</td>
+      <td>${escapeHtml(money(row.total || row.price || "0"))}</td>
+      <td>${escapeHtml(formatDate(row.orderDate))}</td>
+      <td>${escapeHtml(formatDate(row.deliveryDate))}</td>
+      <td>${rowStatus(row, "orders")}</td>
+      <td>${escapeHtml(row.source || "Локально")}</td>
+      ${actionsCell("orders", row, `<button class="btn ghost xs" type="button" data-row-action="order-detail" data-id="${escapeHtml(row.id)}">Деталі</button>`)}
+    </tr>`;
+  },
+  ingredients: (row) => {
+    const low = toNumber(row.stock) <= toNumber(row.min);
+    return `<tr data-tags="${escapeHtml((row.category || "") + " " + (row.supplier || "") + (low ? " low" : ""))}">
+      <td>${escapeHtml(row.name)}</td>
+      <td>${escapeHtml(row.category)}</td>
+      <td>${escapeHtml(row.stock)} ${escapeHtml(row.unit)}</td>
+      <td>${escapeHtml(row.min)} ${escapeHtml(row.unit)}</td>
+      <td>${row.cost ? escapeHtml(money(row.cost)) : "-"}</td>
+      <td>${escapeHtml(row.supplier)}</td>
+      <td>${rowStatus(row, "ingredients")}</td>
+      ${actionsCell("ingredients", row)}
+    </tr>`;
+  },
+  recipes: (row) => {
+    const cost = computeRecipeCost(row);
+    const marginClass = cost.margin >= 0 ? "ok" : "danger";
+    const itemsText = row.items && row.items.length
+      ? row.items.map((it) => `${it.ingredient} ${it.qty}${it.unit || ""}`).join("; ")
+      : (row.ingredients || "");
+    return `<tr data-tags="${escapeHtml(row.category || "")}">
+      <td>${escapeHtml(row.name)}</td>
+      <td>${escapeHtml(row.category || "-")}</td>
+      <td>${escapeHtml(money(row.price))}</td>
+      <td>${escapeHtml(money(cost.perPortion))}</td>
+      <td><span class="status ${marginClass}">${escapeHtml(money(cost.margin))} (${cost.marginPct.toFixed(0)}%)</span></td>
+      <td>${escapeHtml(row.portions || "1")}</td>
+      <td>${escapeHtml(itemsText)}</td>
+      ${actionsCell("recipes", row, `<button class="btn ghost xs" type="button" data-row-action="duplicate" data-entity="recipes" data-id="${escapeHtml(row.id)}">Копія</button>`)}
+    </tr>`;
+  },
   recipeRules: (row) => `<tr><td>${escapeHtml(row.pizza)}</td><td>${escapeHtml(row.ingredient)}</td><td>${escapeHtml(row.qty)} ${escapeHtml(row.unit)}</td><td>${escapeHtml(row.match)}</td></tr>`,
   modifierRules: (row) => `<tr><td>${escapeHtml(row.keyword)}</td><td>${escapeHtml(row.ingredient)}</td><td>${escapeHtml(row.mode)}</td><td>${escapeHtml(row.qty)}</td><td>${escapeHtml(row.note)}</td></tr>`,
-  users: (row) => `<tr><td>${escapeHtml(row.name)}</td><td>${escapeHtml(row.email)}</td><td>${escapeHtml(row.access)}</td><td><span class="status ok">${escapeHtml(row.status || "Активний")}</span></td></tr>`,
+  users: (row) => `<tr data-tags="${escapeHtml(row.access || "")}"><td>${escapeHtml(row.name)}</td><td>${escapeHtml(row.email)}</td><td>${escapeHtml(row.access)}</td><td><span class="status ok">${escapeHtml(row.status || "Активний")}</span></td>${actionsCell("users", row)}</tr>`,
+  customers: (row) => {
+    const orders = readRows("orders").filter((o) => o.customerName && row.name && sameText(o.customerName, row.name)).length;
+    return `<tr><td>${escapeHtml(row.name)}</td><td>${escapeHtml(row.contact || "-")}</td><td>${escapeHtml(row.address || "-")}</td><td>${orders}</td>${actionsCell("customers", row)}</tr>`;
+  },
+  customerDeliveries: (row) => `<tr data-tags="${escapeHtml((row.status || "") + " " + (row.driver || ""))}">
+      <td>${escapeHtml(row.orderLabel || (row.orderIds || []).join(", ") || "-")}</td>
+      <td>${escapeHtml(row.driver || "-")}</td>
+      <td>${escapeHtml(row.address || "-")}</td>
+      <td>${escapeHtml(formatDate(row.scheduledDate))} ${escapeHtml(row.window || "")}</td>
+      <td>${rowStatus(row, "customerDeliveries")}</td>
+      ${actionsCell("customerDeliveries", row, `<button class="btn ghost xs" type="button" data-row-action="delivery-advance" data-id="${escapeHtml(row.id)}">Далі →</button>`)}
+    </tr>`,
   deliveries: (row) => `<tr><td>${escapeHtml(row.supplier)}</td><td>${escapeHtml(row.invoice)}</td><td>${escapeHtml(row.item)}</td><td>${escapeHtml(row.qty)}</td><td>${escapeHtml(row.expiry)}</td><td>${row.postedAt ? '<span class="status ok">оприбутковано</span>' : '<span class="status warn">очікує</span>'}</td></tr>`,
-  writeoffs: (row) => `<tr>
-    <td>${escapeHtml(row.createdAt ? new Date(row.createdAt).toLocaleString("uk-UA", { dateStyle: "short", timeStyle: "short" }) : "-")}</td>
+  writeoffs: (row) => `<tr data-tags="${escapeHtml(row.reason || "")}">
+    <td>${escapeHtml(row.createdAt ? formatDateTime(row.createdAt) : (row.date || "-"))}</td>
     <td>${escapeHtml(row.item)}</td>
     <td>${escapeHtml(row.qty)}</td>
     <td>${escapeHtml(row.reason)}${row.comment ? `, ${escapeHtml(row.comment)}` : ""}</td>
@@ -524,10 +630,11 @@ const renderers = {
 
 function renderEntity(entity) {
   const tbody = document.querySelector(`[data-table="${entity}"]`);
-  if (!tbody) return;
-  const rows = readRows(entity);
+  if (!tbody || !renderers[entity]) return;
+  const rows = readRows(entity).filter((row) => (showArchived ? true : !row.archived));
   tbody.innerHTML = rows.map(renderers[entity]).join("");
   applyLanguage(tbody);
+  applyDomFilter();
 }
 
 function exportEntity(entity) {
@@ -575,16 +682,48 @@ async function importEntity(entity, file) {
     toast("Файл порожній або має неправильний формат");
     return;
   }
-  const imported = lines.map((line) => {
-    return headers.reduce((row, header, index) => {
+  const rows = readRows(entity);
+  let created = 0;
+  let updated = 0;
+  let skipped = 0;
+  const errors = [];
+  lines.forEach((line, lineIndex) => {
+    const obj = headers.reduce((row, header, index) => {
       row[header.trim()] = (line[index] || "").trim();
       return row;
     }, {});
+    const keyValue = obj.name || obj.number || obj.email || obj.item;
+    if (!keyValue) {
+      skipped += 1;
+      errors.push(`Рядок ${lineIndex + 2}: пропущено — немає ключового поля (name/number/email/item)`);
+      return;
+    }
+    const matchIndex = rows.findIndex((r) =>
+      (obj.id && String(r.id) === obj.id) ||
+      (r.name && obj.name && sameText(r.name, obj.name)) ||
+      (r.number && obj.number && sameText(r.number, obj.number)) ||
+      (r.email && obj.email && sameText(r.email, obj.email))
+    );
+    if (matchIndex >= 0) {
+      rows[matchIndex] = { ...rows[matchIndex], ...obj };
+      updated += 1;
+    } else {
+      obj.id = obj.id || uid(entity.slice(0, 3));
+      rows.unshift(obj);
+      created += 1;
+    }
   });
-  const rows = [...readRows(entity), ...imported];
   writeRows(entity, rows);
+  ensureIds(entity, rows);
   renderEntity(entity);
-  toast(`Імпортовано рядків: ${imported.length}`);
+  logAudit(entity, "", "import", `створено ${created}, оновлено ${updated}, пропущено ${skipped}`);
+  const summary = document.querySelector(`[data-import-summary="${entity}"]`);
+  if (summary) {
+    summary.hidden = false;
+    summary.innerHTML = `Імпорт CSV: створено <strong>${created}</strong>, оновлено <strong>${updated}</strong>, пропущено <strong>${skipped}</strong>.` +
+      (errors.length ? `<br><small>${errors.slice(0, 5).map(escapeHtml).join("<br>")}</small>` : "");
+  }
+  toast(`Імпорт: +${created}, оновлено ${updated}, пропущено ${skipped}`);
 }
 
 function parseQuantity(value) {
@@ -1217,10 +1356,15 @@ document.querySelectorAll(".topbar-actions").forEach((actions) => {
 document.querySelectorAll("[data-entity]").forEach((form) => {
   const entity = form.dataset.entity;
   renderEntity(entity);
+  if (form.dataset.customSubmit === "true") return; // page handles its own submit
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-    const rows = readRows(entity);
+    if (!validateForm(form)) {
+      toast("Заповніть обовʼязкові поля");
+      return;
+    }
     const row = objectFromForm(form);
+    const editId = form.dataset.editId;
     if (entity === "writeoffs") {
       const impact = getStockSnapshot(row.item);
       const parsed = parseQuantity(row.qty);
@@ -1239,10 +1383,24 @@ document.querySelectorAll("[data-entity]").forEach((form) => {
     if (entity === "deliveries" && form.dataset.updateStock === "true" && applyDeliveryToStock(row)) {
       row.postedAt = new Date().toISOString();
     }
-    rows.unshift(row);
-    writeRows(entity, rows);
-    renderEntity(entity);
-    toast(entity === "deliveries" && row.postedAt ? "Поставку додано і склад оновлено" : entity === "writeoffs" ? "Списання проведено і склад оновлено" : "Запис додано");
+    if (editId) {
+      row.id = editId;
+      updateRow(entity, editId, row);
+      delete form.dataset.editId;
+      const head = form.querySelector(".card-head h2");
+      if (head && head.dataset.editLabel) {
+        head.textContent = head.dataset.editLabel;
+        delete head.dataset.editLabel;
+      }
+      toast("Запис оновлено");
+    } else {
+      upsert(entity, row);
+      toast(entity === "deliveries" && row.postedAt
+        ? "Поставку додано і склад оновлено"
+        : entity === "writeoffs"
+          ? "Списання проведено і склад оновлено"
+          : "Запис додано");
+    }
     if (entity === "writeoffs") updateWriteoffImpact(form);
   });
 });
@@ -1336,3 +1494,521 @@ document.querySelectorAll("[data-api-endpoint], [data-api-workday], [data-auto-s
 });
 
 hydrateOrderApiSettings();
+
+/* =========================================================================
+   SRS-CONFORMANCE ENHANCEMENTS (client-only prototype, localStorage)
+   Auth, audit, settings/formatting, generic search+filter, edit+archive,
+   validation, recipe costing, customers, customer deliveries, order workflow,
+   stock deduction, dashboard + report compute, and a window.CRM API.
+   ========================================================================= */
+
+/* ---------- ids ---------- */
+function uid(prefix) {
+  return `${prefix || "id"}-${Date.now().toString(36)}${Math.floor(Math.random() * 1e4).toString(36)}`;
+}
+function ensureIds(entity, rows) {
+  if (!ID_ENTITIES.includes(entity) || !Array.isArray(rows)) return rows;
+  let changed = false;
+  rows.forEach((row) => {
+    if (row && !row.id) {
+      row.id = row.externalId || uid(entity.slice(0, 3));
+      changed = true;
+    }
+  });
+  if (changed) localStorage.setItem(storageKey(entity), JSON.stringify(rows));
+  return rows;
+}
+
+/* ---------- generic CRUD with audit ---------- */
+function getRow(entity, id) {
+  return readRows(entity).find((r) => String(r.id) === String(id));
+}
+function upsert(entity, obj, opts = {}) {
+  const rows = readRows(entity);
+  let created = false;
+  const idx = obj.id ? rows.findIndex((r) => String(r.id) === String(obj.id)) : -1;
+  if (idx >= 0) {
+    rows[idx] = { ...rows[idx], ...obj };
+  } else {
+    obj.id = obj.id || uid(entity.slice(0, 3));
+    rows.unshift(obj);
+    created = true;
+  }
+  writeRows(entity, rows);
+  if (opts.audit !== false) logAudit(entity, obj.id, created ? "create" : "update", opts.detail);
+  renderEntity(entity);
+  return { obj, created };
+}
+function updateRow(entity, id, patch, opts = {}) {
+  const rows = readRows(entity);
+  const idx = rows.findIndex((r) => String(r.id) === String(id));
+  if (idx < 0) return null;
+  rows[idx] = { ...rows[idx], ...patch };
+  writeRows(entity, rows);
+  if (opts.audit !== false) logAudit(entity, id, opts.action || "update", opts.detail);
+  renderEntity(entity);
+  return rows[idx];
+}
+function archiveRow(entity, id, archived) {
+  return updateRow(entity, id, { archived: !!archived }, { action: archived ? "archive" : "restore" });
+}
+function removeRow(entity, id) {
+  writeRows(entity, readRows(entity).filter((r) => String(r.id) !== String(id)));
+  logAudit(entity, id, "delete");
+  renderEntity(entity);
+}
+
+/* ---------- audit log (NFR-4) ---------- */
+function logAudit(entity, entityId, action, detail) {
+  let rows = [];
+  try { rows = JSON.parse(localStorage.getItem(auditKey) || "[]"); } catch (e) { rows = []; }
+  rows.unshift({
+    id: uid("aud"),
+    entity,
+    entityId: entityId || "",
+    action,
+    user: (getSession() && getSession().name) || "Адмін",
+    timestamp: new Date().toISOString(),
+    detail: detail || ""
+  });
+  localStorage.setItem(auditKey, JSON.stringify(rows.slice(0, 800)));
+  renderAudit();
+}
+function readAudit() {
+  try { return JSON.parse(localStorage.getItem(auditKey) || "[]"); } catch (e) { return []; }
+}
+function renderAudit() {
+  const tbody = document.querySelector("[data-table='audit']");
+  if (!tbody) return;
+  tbody.innerHTML = readAudit().slice(0, 200).map((r) => `<tr>
+    <td>${escapeHtml(formatDateTime(r.timestamp))}</td>
+    <td>${escapeHtml(r.user)}</td>
+    <td>${escapeHtml(r.action)}</td>
+    <td>${escapeHtml(r.entity)} ${escapeHtml(r.entityId)}</td>
+    <td>${escapeHtml(r.detail || "-")}</td>
+  </tr>`).join("");
+}
+
+/* ---------- settings + formatting (SET / NFR-7) ---------- */
+function loadSettings() {
+  const defaults = {
+    currency: "zł",
+    locale: "uk-UA",
+    sessionMinutes: 30,
+    categories: "Сир, М'ясо, Овочі, Соуси, Напої",
+    units: "кг, л, шт",
+    notifInApp: true,
+    notifEmail: true,
+    notifPush: false,
+    quietHours: "22:00–08:00"
+  };
+  try {
+    const stored = localStorage.getItem(settingsKey);
+    return stored ? { ...defaults, ...JSON.parse(stored) } : defaults;
+  } catch (e) {
+    return defaults;
+  }
+}
+function saveSettings(next) {
+  localStorage.setItem(settingsKey, JSON.stringify({ ...loadSettings(), ...next }));
+  logAudit("settings", "", "update");
+}
+function num(value) {
+  return new Intl.NumberFormat(loadSettings().locale, { maximumFractionDigits: 2 }).format(toNumber(value));
+}
+function money(value) {
+  return `${num(value)} ${loadSettings().currency}`;
+}
+function formatDate(value) {
+  if (!value) return "-";
+  const date = new Date(String(value).length <= 10 ? `${value}T00:00:00` : value);
+  if (Number.isNaN(date.getTime())) return String(value);
+  return date.toLocaleDateString(loadSettings().locale, { dateStyle: "medium" });
+}
+function formatDateTime(value) {
+  if (!value) return "-";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value);
+  return date.toLocaleString(loadSettings().locale, { dateStyle: "short", timeStyle: "short" });
+}
+
+/* ---------- session / auth (AUTH, demo-grade) ---------- */
+function getSession() {
+  try { return JSON.parse(localStorage.getItem(sessionKey) || "null"); } catch (e) { return null; }
+}
+function setSession(user) {
+  localStorage.setItem(sessionKey, JSON.stringify({ ...user, loginAt: new Date().toISOString() }));
+}
+function clearSession() {
+  localStorage.removeItem(sessionKey);
+}
+function initLogin() {
+  if (!AUTH_PUBLIC.includes(currentPage)) return;
+  const isLogin = ["", "index.html", "login.html"].includes(currentPage);
+  if (!isLogin) return;
+  const form = document.querySelector(".auth-form form") || document.querySelector("form.form-stack");
+  if (form) {
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const login = (form.querySelector("[name='login'], #login") || {}).value || "admin@pizza.test";
+      setSession({ name: (login.split("@")[0] || "Адмін"), email: login });
+      logAudit("auth", login, "login");
+      window.location.href = "dashboard.html";
+    });
+  }
+  // demo button(s) carry data-route; set a session before the generic nav fires
+  document.querySelectorAll("[data-route]").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.stopImmediatePropagation();
+      event.preventDefault();
+      setSession({ name: "Демо", email: "demo@pizza.test" });
+      logAudit("auth", "demo", "login");
+      window.location.href = button.dataset.route;
+    }, true);
+  });
+}
+function injectLogout() {
+  if (AUTH_PUBLIC.includes(currentPage)) return;
+  const actions = document.querySelector(".topbar-actions");
+  if (actions && !actions.querySelector("[data-logout]")) {
+    const session = getSession();
+    if (session && session.name) {
+      const chip = document.createElement("span");
+      chip.className = "user-chip";
+      chip.innerHTML = `<span class="avatar">${escapeHtml((session.name[0] || "A").toUpperCase())}</span><strong>${escapeHtml(session.name)}</strong>`;
+      actions.append(chip);
+    }
+    const button = document.createElement("button");
+    button.className = "btn ghost";
+    button.type = "button";
+    button.dataset.logout = "true";
+    button.textContent = "Вийти";
+    actions.append(button);
+  }
+  document.querySelectorAll("[data-logout]").forEach((button) =>
+    button.addEventListener("click", () => {
+      logAudit("auth", (getSession() || {}).email || "", "logout");
+      clearSession();
+      window.location.href = "index.html";
+    })
+  );
+}
+
+/* ---------- generic search + filter (works on every page) ---------- */
+function applyDomFilter() {
+  const main = document.querySelector("main") || document.body;
+  const query = (document.querySelector(".search")?.value || "").trim().toLowerCase();
+  const filters = [...main.querySelectorAll("[data-filter]")]
+    .map((sel) => (sel.value || "").trim().toLowerCase())
+    .filter((value) => value && value !== "all");
+  main.querySelectorAll("[data-table] tr").forEach((row) => {
+    const text = row.textContent.toLowerCase();
+    const tags = (row.dataset.tags || "").toLowerCase();
+    const matchQuery = !query || text.includes(query);
+    const matchFilters = filters.every((value) => tags.includes(value) || text.includes(value));
+    row.hidden = !(matchQuery && matchFilters);
+  });
+  const counter = document.querySelector("[data-result-count]");
+  if (counter) {
+    const rows = [...main.querySelectorAll("[data-table] tr")];
+    counter.textContent = `Показано: ${rows.filter((r) => !r.hidden).length} / ${rows.length}`;
+  }
+}
+
+/* ---------- row action buttons + delegation ---------- */
+function actionsCell(entity, row, extra) {
+  const buttons = [];
+  if (extra) buttons.push(extra);
+  if (row.archived) {
+    buttons.push(`<button class="btn ghost xs" type="button" data-row-action="restore" data-entity="${entity}" data-id="${escapeHtml(row.id)}">Відновити</button>`);
+  } else {
+    buttons.push(`<button class="btn ghost xs" type="button" data-row-action="edit" data-entity="${entity}" data-id="${escapeHtml(row.id)}">Редагувати</button>`);
+    buttons.push(`<button class="btn danger xs" type="button" data-row-action="archive" data-entity="${entity}" data-id="${escapeHtml(row.id)}">Архів</button>`);
+  }
+  return `<td class="row-actions">${buttons.join("")}</td>`;
+}
+document.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-row-action]");
+  if (!button) return;
+  const action = button.dataset.rowAction;
+  const entity = button.dataset.entity;
+  const id = button.dataset.id;
+  event.preventDefault();
+  if (action === "archive") {
+    archiveRow(entity, id, true);
+    toast("Переміщено в архів");
+  } else if (action === "restore") {
+    archiveRow(entity, id, false);
+    toast("Відновлено з архіву");
+  } else if (action === "duplicate") {
+    const row = getRow(entity, id);
+    if (row) {
+      const copy = { ...row };
+      delete copy.id;
+      copy.name = `${copy.name || ""} (копія)`.trim();
+      upsert(entity, copy);
+      toast("Створено копію");
+    }
+  } else if (action === "edit") {
+    const row = getRow(entity, id);
+    const form = document.querySelector(`form[data-entity="${entity}"]`);
+    if (row && form) {
+      form.dataset.editId = id;
+      Object.entries(row).forEach(([key, value]) => {
+        const field = form.elements[key];
+        if (field && typeof value !== "object") field.value = value;
+      });
+      form.dispatchEvent(new CustomEvent("crm:edit", { detail: row }));
+      const head = form.querySelector(".card-head h2");
+      if (head && !head.dataset.editLabel) {
+        head.dataset.editLabel = head.textContent;
+        head.textContent = "Редагувати запис";
+      }
+      form.scrollIntoView({ behavior: "smooth", block: "center" });
+      toast("Редагування: змініть поля і збережіть");
+    }
+  } else if (action === "delivery-advance") {
+    advanceDelivery(id);
+  } else if (action === "order-detail") {
+    document.dispatchEvent(new CustomEvent("crm:order-detail", { detail: getRow("orders", id) }));
+  }
+});
+
+/* ---------- validation (NFR-5) ---------- */
+function validateForm(form) {
+  let ok = true;
+  form.querySelectorAll("[required], [data-required]").forEach((field) => {
+    const empty = !String(field.value || "").trim();
+    field.classList.toggle("invalid", empty);
+    if (empty) ok = false;
+  });
+  return ok;
+}
+
+/* ---------- recipe costing + margin (REC-2) ---------- */
+function computeRecipeCost(recipe) {
+  const portions = Math.max(toNumber(recipe.portions) || 1, 1);
+  let total = 0;
+  const items = recipe.items || [];
+  if (items.length) {
+    const ingredients = readRows("ingredients");
+    items.forEach((item) => {
+      const ingredient = ingredients.find((g) => sameText(g.name, item.ingredient));
+      total += (ingredient ? toNumber(ingredient.cost) : 0) * toNumber(item.qty);
+    });
+  } else {
+    total = toNumber(recipe.cost);
+  }
+  const perPortion = total / portions;
+  const price = toNumber(recipe.price);
+  const margin = price - perPortion;
+  const marginPct = price ? (margin / price) * 100 : 0;
+  return { total, perPortion, margin, marginPct };
+}
+
+/* ---------- order workflow + stock deduction (ORD-2 / REC-4 / STK-1) ---------- */
+const ORDER_STATUSES = ["Нове", "Підтверджено", "У виробництві", "Готово", "У доставці", "Доставлено", "Скасовано"];
+const DELIVERY_STATUSES = ["Заплановано", "У дорозі", "Доставлено", "Невдало"];
+function deductOrderFromStock(order) {
+  if (!order || order.stockDeducted) return;
+  (order.items || []).forEach((item) => {
+    const recipe = readRows("recipes").find((r) => sameText(r.name, item.recipe));
+    if (!recipe || !recipe.items) return;
+    recipe.items.forEach((ri) => {
+      const qty = toNumber(ri.qty) * toNumber(item.qty);
+      if (qty > 0) applyWriteoffToStock({ item: ri.ingredient, qty: `${qty} ${ri.unit || ""}` });
+    });
+  });
+  updateRow("orders", order.id, { stockDeducted: true }, { action: "produce", detail: "Списано інгредієнти за рецептом" });
+}
+function restockOrder(order) {
+  if (!order || !order.stockDeducted) return;
+  (order.items || []).forEach((item) => {
+    const recipe = readRows("recipes").find((r) => sameText(r.name, item.recipe));
+    if (!recipe || !recipe.items) return;
+    recipe.items.forEach((ri) => {
+      const qty = toNumber(ri.qty) * toNumber(item.qty);
+      if (qty > 0) applyDeliveryToStock({ item: ri.ingredient, qty: `${qty} ${ri.unit || ""}`, supplier: "" });
+    });
+  });
+  updateRow("orders", order.id, { stockDeducted: false }, { action: "restock", detail: "Повернено інгредієнти на склад" });
+}
+function setOrderStatus(orderId, status) {
+  const order = getRow("orders", orderId);
+  if (!order) return;
+  const history = (order.statusHistory || []).concat({ status, at: new Date().toISOString() });
+  updateRow("orders", orderId, { status, statusHistory: history }, { action: "status", detail: status });
+  if (status === "У виробництві") deductOrderFromStock(getRow("orders", orderId));
+  if (status === "Скасовано") restockOrder(getRow("orders", orderId));
+}
+
+/* ---------- customer deliveries (DEL) ---------- */
+function advanceDelivery(id) {
+  const delivery = getRow("customerDeliveries", id);
+  if (!delivery) return;
+  const index = DELIVERY_STATUSES.indexOf(delivery.status || "Заплановано");
+  const next = DELIVERY_STATUSES[Math.min(index + 1, DELIVERY_STATUSES.length - 1)];
+  const patch = {
+    status: next,
+    statusHistory: (delivery.statusHistory || []).concat({ status: next, at: new Date().toISOString() })
+  };
+  if (next === "Доставлено" || next === "Невдало") patch.outcomeAt = new Date().toISOString();
+  updateRow("customerDeliveries", id, patch, { action: "delivery-status", detail: next });
+  reflectDeliveryToOrders({ ...delivery, ...patch });
+  toast(`Доставка: ${next}`);
+}
+function reflectDeliveryToOrders(delivery) {
+  (delivery.orderIds || []).forEach((orderId) => {
+    if (delivery.status === "У дорозі") quietOrderStatus(orderId, "У доставці");
+    if (delivery.status === "Доставлено") quietOrderStatus(orderId, "Доставлено");
+  });
+}
+function quietOrderStatus(orderId, status) {
+  const order = getRow("orders", orderId);
+  if (!order) return;
+  const history = (order.statusHistory || []).concat({ status, at: new Date().toISOString() });
+  updateRow("orders", orderId, { status, statusHistory: history }, { action: "status", detail: status });
+}
+
+/* ---------- dashboard + reports compute (DASH / RPT) ---------- */
+function dashboardData(period) {
+  const orders = readRows("orders").filter((o) => !String(o.status || "").startsWith("Скас"));
+  const today = new Date().toISOString().slice(0, 10);
+  const ingredients = readRows("ingredients").filter((i) => !i.archived);
+  const low = ingredients.filter((i) => toNumber(i.stock) <= toNumber(i.min));
+  const leftoversValue = readRows("writeoffs").reduce((sum, w) => {
+    const ingredient = ingredients.find((g) => sameText(g.name, w.item));
+    return sum + parseQuantity(w.qty).amount * (ingredient ? toNumber(ingredient.cost) : 0);
+  }, 0);
+  const revenue = orders.reduce((sum, o) => sum + toNumber(o.total || o.price), 0);
+  const days = period === "30d" ? 30 : 7;
+  const series = [];
+  for (let i = days - 1; i >= 0; i -= 1) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    const key = date.toISOString().slice(0, 10);
+    const dayOrders = orders.filter((o) => String(o.orderDate || "").slice(0, 10) === key);
+    series.push({
+      date: key,
+      orders: dayOrders.length,
+      revenue: dayOrders.reduce((sum, o) => sum + toNumber(o.total || o.price), 0)
+    });
+  }
+  return {
+    todayOrders: orders.filter((o) => String(o.orderDate || "").slice(0, 10) === today).length,
+    ordersCount: orders.length,
+    pendingDeliveries: readRows("customerDeliveries").filter((d) => !["Доставлено", "Невдало"].includes(d.status)).length,
+    lowCount: low.length,
+    lowItems: low,
+    leftoversValue,
+    revenue,
+    aov: orders.length ? revenue / orders.length : 0,
+    series
+  };
+}
+function reportData(period) {
+  const base = dashboardData(period);
+  const orders = readRows("orders").filter((o) => !String(o.status || "").startsWith("Скас"));
+  const byRecipe = {};
+  orders.forEach((o) => (o.items || []).forEach((item) => {
+    byRecipe[item.recipe] = (byRecipe[item.recipe] || 0) + toNumber(item.price) * toNumber(item.qty);
+  }));
+  const usage = readRows("dailyStock").map((r) => ({
+    item: r.item,
+    plan: toNumber(r.predicted),
+    fact: toNumber(r.start) + toNumber(r.delivery) - toNumber(r.end),
+    unit: r.unit
+  }));
+  const wasteByReason = {};
+  const wasteByItem = {};
+  readRows("writeoffs").forEach((w) => {
+    const ingredient = readRows("ingredients").find((g) => sameText(g.name, w.item));
+    const value = parseQuantity(w.qty).amount * (ingredient ? toNumber(ingredient.cost) : 0);
+    wasteByReason[w.reason || "Інше"] = (wasteByReason[w.reason || "Інше"] || 0) + value;
+    wasteByItem[w.item] = (wasteByItem[w.item] || 0) + value;
+  });
+  const deliveries = readRows("customerDeliveries");
+  return {
+    ...base,
+    byRecipe,
+    usage,
+    wasteByReason,
+    wasteByItem,
+    delivery: {
+      delivered: deliveries.filter((d) => d.status === "Доставлено").length,
+      failed: deliveries.filter((d) => d.status === "Невдало").length,
+      total: deliveries.length
+    }
+  };
+}
+function exportReportCsv(name, rowsArray, headers) {
+  const csv = [headers.join(","), ...rowsArray.map((row) => headers.map((h) => csvEscape(row[h])).join(","))].join("\n");
+  const blob = new Blob(["﻿", csv], { type: "text/csv;charset=utf-8" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = `${name}-${new Date().toISOString().slice(0, 10)}.csv`;
+  link.click();
+  URL.revokeObjectURL(link.href);
+  toast("Звіт експортовано");
+}
+
+/* ---------- wiring for the new generic behaviors ---------- */
+document.querySelectorAll(".search").forEach((input) => input.addEventListener("input", applyDomFilter));
+document.querySelectorAll("[data-filter]").forEach((select) => select.addEventListener("change", applyDomFilter));
+document.querySelectorAll("[data-show-archived]").forEach((checkbox) =>
+  checkbox.addEventListener("change", () => {
+    showArchived = checkbox.checked;
+    document.querySelectorAll("[data-table]").forEach((tbody) => renderEntity(tbody.dataset.table));
+  })
+);
+["customers", "customerDeliveries", "audit"].forEach((entity) => renderEntity(entity));
+initLogin();
+injectLogout();
+document.querySelectorAll("[data-language-select]").forEach((select) =>
+  select.addEventListener("change", () => {
+    localStorage.setItem(appLanguageKey, select.value);
+    window.location.reload();
+  })
+);
+renderAudit();
+applyDomFilter();
+
+/* ---------- public API for page-specific inline scripts ---------- */
+window.CRM = {
+  read: readRows,
+  write: writeRows,
+  upsert,
+  update: updateRow,
+  archive: archiveRow,
+  remove: removeRow,
+  byId: getRow,
+  audit: logAudit,
+  readAudit,
+  toast,
+  money,
+  num,
+  formatDate,
+  formatDateTime,
+  settings: loadSettings,
+  saveSettings,
+  session: getSession,
+  login: setSession,
+  logout: () => { clearSession(); window.location.href = "index.html"; },
+  computeRecipeCost,
+  deductOrderFromStock,
+  restockOrder,
+  setOrderStatus,
+  advanceDelivery,
+  renderEntity,
+  snapshot: getStockSnapshot,
+  lowStock: () => readRows("ingredients").filter((i) => !i.archived && toNumber(i.stock) <= toNumber(i.min)),
+  dashboardData,
+  reportData,
+  exportReportCsv,
+  applyDomFilter,
+  parseQuantity,
+  toNumber,
+  uid,
+  ORDER_STATUSES,
+  DELIVERY_STATUSES
+};
